@@ -1,0 +1,29 @@
+.label {
+  font-weight: bold;
+  margin-top: 10px;
+  padding-left: 8px;
+  font-size: 14px;
+}
+.inputBox {
+  width: 100%;
+  margin-top: 6px;
+  padding: 18px 24px;
+  border-radius: 10px;
+  border: 2px solid var(--grey-3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background-color: white;
+  font-size: 14px;
+}
+.inputBox:hover {
+  border: 2px solid var(--primary);
+}
+.fieldError {
+  color: var(--error);
+  font-size: 14px;
+  text-transform: capitalize;
+  margin-top: 8px;
+  padding-left: 8px;
+}

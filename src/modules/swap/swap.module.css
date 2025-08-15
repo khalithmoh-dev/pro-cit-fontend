@@ -1,0 +1,21 @@
+.container {
+  width: 100%;
+}
+.checkboxInput {
+  height: 16px;
+  width: 16px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: 2px solid var(--primary-dark);
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+.checkboxInput:checked {
+  background-color: var(--primary-dark);
+  border-color: var(--primary-dark);
+  box-shadow:
+    inset rgb(255, 255, 255) -2px -2px 0px 0px,
+    inset rgb(255, 255, 255) 2px 2px 0px 0px;
+}

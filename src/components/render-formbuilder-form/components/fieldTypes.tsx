@@ -1,0 +1,34 @@
+import Checkbox from './view/checkbox';
+import Email from './view/email';
+import FileUpload from './view/file-upload';
+import Number from './view/number';
+import PlainText from './view/plain-text';
+import Select from './view/single-select';
+import MultiLineText from './view/text-area';
+import Url from './view/url';
+import MultiSelectView from './view/multi-select';
+import Rating from './view/rating';
+import MultiStringInput from './view/multi-string';
+import SectionHeader from './view/section-header';
+import DateView from './view/date';
+import NestedForm from './view/nested-form';
+import TimeView from './view/time';
+
+const fieldTypes = new Map<string, React.FC<any>>();
+fieldTypes.set('plainText', PlainText);
+fieldTypes.set('multiLineText', MultiLineText);
+fieldTypes.set('number', Number);
+fieldTypes.set('email', Email);
+fieldTypes.set('url', Url);
+fieldTypes.set('checkbox', Checkbox);
+fieldTypes.set('date', DateView);
+fieldTypes.set('time', TimeView);
+fieldTypes.set('file', FileUpload);
+fieldTypes.set('singleSelect', Select);
+fieldTypes.set('multiSelect', MultiSelectView);
+fieldTypes.set('rating', Rating);
+fieldTypes.set('multiString', MultiStringInput);
+fieldTypes.set('sectionHeader', SectionHeader);
+fieldTypes.set('nestedForm', NestedForm);
+
+export default fieldTypes;

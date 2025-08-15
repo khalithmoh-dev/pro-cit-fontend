@@ -1,0 +1,20 @@
+.fieldContainer {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  max-height: calc(100vh - 165px);
+  overflow-y: auto;
+  height: auto;
+}
+.fieldContainerWrapper {
+  border: 1px solid var(--grey-3);
+  padding: 5px 0;
+}
+.fieldBox {
+  width: 50%;
+  padding: 10px;
+}
+.fullWidthFieldBox {
+  width: 100%;
+  padding: 10px;
+}

@@ -1,0 +1,122 @@
+.container {
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(0, 0, 0, 0.405);
+  position: fixed;
+  left: 0;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 11;
+}
+
+.dialogContainer {
+  padding: 20px;
+  background-color: aliceblue;
+  border-radius: 10px;
+  max-height: 90vh;
+  overflow: auto;
+}
+.large {
+  width: 95%;
+  max-width: 1000px;
+}
+.extraLarge {
+  width: 95%;
+  max-width: 1600px;
+}
+.small {
+  width: 95%;
+  max-width: 600px;
+}
+.headerContainer {
+  padding-bottom: 10px;
+  font-size: 26px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+}
+.closeIcon {
+  padding: 2px;
+}
+.bodyContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+.actionContainer {
+  width: 100%;
+  padding-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+.fieldBox {
+  width: 100%;
+}
+.fieldBox50 {
+  width: calc(50% - 8px);
+}
+.fieldBox30 {
+  width: calc(33% - 5px);
+}
+.fieldBox25 {
+  width: calc(25% - 12px);
+}
+.fieldBox100 {
+  width: 100%;
+}
+.hide {
+  display: none;
+}
+
+/* ========================================================================================== */
+
+/* ========================================= OLD ======================================== */
+/* .container{
+      height: 100vh;
+      width: 100vw;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background-color: white;
+  }
+  .headerContainer{
+      padding: 15px 20px;
+      font-size: 30px;
+      font-weight: bold;
+      position: fixed;
+      top: 0;
+      left: 0;
+      border-bottom: 2px solid var(--grey-3);
+      width: 100%;
+  
+  }
+  .bodyContainer{
+      height: auto;
+      max-height: 100vh;
+      width: 100vw;
+      padding: 80px 20px 60px;
+      display: flex;
+      flex-wrap: wrap;
+  
+  }
+  .actionContainer{
+      width: 100%;
+      padding: 20px;
+      display: flex;
+      justify-content: end;
+      gap: 10px;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+  }
+  .fieldBox {
+      width: calc(50% - 10px);
+      padding: 10px;
+    }
+    .fullWidthFieldBox {
+      width: 100%;
+      padding: 10px;
+    } */

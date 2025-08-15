@@ -1,0 +1,39 @@
+/* DropdownMenu.module.css */
+.dropdown {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.toggleBtn {
+  padding: 8px 12px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.options {
+  position: absolute;
+  top: 120%;
+  right: 0;
+  z-index: 1;
+  list-style: none;
+  margin: 0;
+  background-color: #ffffff;
+  border-radius: 10px;
+  border: 1px solid rgb(206, 206, 206);
+  padding: 8px 0;
+}
+
+.options li {
+  padding: 8px 12px;
+  cursor: pointer;
+  padding: 10px 20px;
+  font-weight: 400;
+  text-wrap: nowrap;
+  font-size: 14px;
+}
+
+.options li:hover {
+  background-color: #f0f0f0;
+}

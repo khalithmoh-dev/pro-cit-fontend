@@ -1,0 +1,27 @@
+.tableRow {
+  border: 1px solid var(--grey-3);
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 100px;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  font-weight: 400;
+  height: 45px;
+  font-size: 14px;
+}
+
+.tableRow:hover {
+  border: 1px solid var(--primary);
+}
+.tableRow span {
+  background-color: var(--primary-light);
+  width: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: var(--primary);
+  margin-left: 10px;
+  padding: 7px 0px;
+}

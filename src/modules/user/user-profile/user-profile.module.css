@@ -1,0 +1,61 @@
+.container {
+  height: 100%;
+  padding: 20px;
+}
+.profileBox {
+  border: 1px solid var(--grey-3);
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.nameContainer {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.profilePhotoCircle {
+  text-transform: uppercase;
+  height: 80px;
+  width: 80px;
+  background-color: rgba(52, 200, 52, 0.153);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 30px;
+  color: var(--primary);
+}
+.userName {
+  font-size: 28px;
+  font-weight: 400;
+  color: var(--dark);
+}
+.detailsCardContainer {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  flex-wrap: wrap;
+}
+.detailsCard {
+  padding: 16px 0;
+  /* background-color: var(--grey-2);
+    border: 1px solid var(--grey-3); */
+  text-transform: capitalize;
+  min-width: 30%;
+}
+.cardHead {
+  font-weight: 700;
+  font-size: 14px;
+}
+.cardText {
+  font-weight: 400;
+  margin-top: 5px;
+}
+.buttonContainer {
+  display: flex;
+  gap: 20px;
+}

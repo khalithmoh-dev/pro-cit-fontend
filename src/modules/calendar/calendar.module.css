@@ -1,0 +1,49 @@
+.eventTag {
+  padding: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+.eventTag:hover {
+  background-color: rgb(4, 114, 192);
+}
+.attendanceMarked {
+  background-color: rgb(158, 158, 158);
+  border: none;
+}
+.attendanceMarked:hover {
+  background-color: rgb(117, 117, 117);
+}
+.filterContainer {
+  top: 67px;
+  right: 190px;
+  z-index: 10;
+  display: flex;
+  gap: 10px;
+  background-color: white;
+}
+.holidayCell {
+  background-color: red !important;
+  font-weight: bold;
+  cursor: not-allowed;
+  color: white;
+}
+
+.holidayCell:hover {
+  background-color: rgb(207, 16, 16) !important;
+}
+.holidayTag {
+  background-color: transparent;
+  border: none;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  cursor: not-allowed;
+}
+.holidayTag:hover {
+  background-color: transparent;
+}
+.calendarContainer {
+  height: calc(100vh - 130px);
+  overflow-y: auto;
+}

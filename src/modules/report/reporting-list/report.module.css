@@ -1,0 +1,79 @@
+/* report.module.css */
+
+.year {
+    border: 2px;
+    border-style: dotted;
+    border-color: #38d9c9;
+    border-radius: 6px;
+    width: 100%;
+    font-weight: 300;
+    justify-content: start;
+    display: flex;
+    margin-top: 0px;
+    cursor: pointer;
+}
+
+.dialogScroll {
+  overflow-y: scroll;
+  padding: 0 !important;
+  width: 1400px !important;
+}
+
+@media(max-width:1024px){
+  .dialogScroll{
+    width: 800px !important;
+}
+}
+
+.GenerateChallanheader {
+  font-size: 18px !important;
+  display: flex;
+  gap: 16px;
+  font-size: 30px;
+  justify-content: space-between;
+  background-color: #0465ac;
+  color: #fff;
+  padding: 15px;
+}
+.collection{
+  display: grid;
+  /* height: 100px; */
+  grid-template-columns: repeat(5, 1fr);
+  /* grid-template-rows: 100px; */
+}
+
+.collection10{
+  display: grid;
+  /* height: 100px; */
+  grid-template-columns: repeat(4, 1fr);
+  /* grid-template-rows: 100px; */
+}
+
+.collection2{
+  display: grid;
+  height: 100px;
+  grid-template-columns: repeat(4, 14rem);
+  grid-template-rows: 100px;
+}
+.collection3{
+  display: grid;
+  height: 100px;
+  grid-template-columns: repeat(2, 14rem);
+  grid-template-rows: 100px;
+}
+.collectionColumn{
+  height: 150px;
+  overflow-y: scroll;
+}
+.academySelect {
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+  color: #555;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+  height: 40px;
+  margin: auto;
+  margin-bottom: 15px;
+}

@@ -1,0 +1,106 @@
+.multiSelectContainer {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.optionsList {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.listOption {
+  padding: 10px 15px;
+  border: 1px solid lightgray;
+  margin-top: 6px;
+  border-radius: 5px;
+}
+.activeOption {
+  background-color: green;
+  color: white;
+}
+
+.optionItem:last-child {
+  border-bottom: none;
+}
+
+.closeButton {
+  padding: 10px;
+  background-color: var(--primary-dark);
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+
+.closeButton:hover {
+  background-color: var(--primary);
+}
+
+.fieldLabel {
+  /* line-height: 18px; */
+  font-weight: 700;
+  color: var(--dark);
+  text-transform: capitalize;
+  padding-left: 8px;
+  margin-top: 15px;
+  font-size: 14px;
+}
+.textInput {
+  padding: 18px 24px;
+  border: 2px solid var(--grey-3);
+  outline: none;
+  width: 100%;
+  border-radius: 10px;
+  margin-top: 5px;
+  cursor: pointer;
+}
+.textInput::placeholder {
+  color: black;
+}
+.textInput:hover {
+  border: 2px solid var(--primary);
+}
+.textInput:active {
+  border: 2px solid var(--primary-dark);
+}
+.fieldError {
+  color: var(--error);
+  font-size: 14px;
+  margin-top: 4px;
+  padding-left: 8px;
+}
+.inputFieldError {
+  border: 2px solid var(--error);
+}

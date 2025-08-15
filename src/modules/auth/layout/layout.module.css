@@ -1,0 +1,72 @@
+.container {
+  height: calc(100vh - 5px);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  background-color: white;
+}
+.leftBox {
+  height: 100%;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+.rightBox {
+  flex: 1;
+  max-width: 450px;
+  display: flex;
+  padding: 0 20px;
+}
+.image {
+  width: 100%;
+}
+.orgLogo {
+  height: 50px;
+  padding: 0 10px;
+  width: max-content;
+  background-color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  position: fixed;
+  left: 10px;
+  top: 10px;
+  z-index: 10;
+}
+.formContainer {
+  flex: 1;
+  min-width: 250px;
+  padding-right: 20px;
+}
+
+.fieldContainer {
+  margin-top: 20px;
+}
+.forgotPasswordText {
+  font-weight: 400;
+  color: var(--grey-4);
+  margin-top: 20px;
+  cursor: pointer;
+  margin-left: 5px;
+}
+.loginButton {
+  margin-top: 20px;
+}
+/* ================================================================================= */
+@media screen and (max-width: 850px) {
+  .container {
+    flex-direction: column;
+    padding-top: 50px;
+  }
+  .leftBox {
+    flex: 0;
+  }
+  .rightBox {
+    width: 100%;
+  }
+}

@@ -1,0 +1,56 @@
+.container {
+    padding: 0 20px;
+    width: 100%;
+  }
+  .tableContainer{
+    max-height: calc(100vh - 185px);
+    overflow-y: scroll;
+  }
+
+  .formCategory {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    justify-content: space-between  ;
+  }
+
+  .paymentDetails{
+    margin-bottom: 4px;
+  }
+
+
+  /* StudentInfo.css */
+
+.studentInfoContainer {
+  padding: 16px 0;
+  max-width: 100%;
+  margin: 16px 0;
+}
+
+.studentInfoTitle {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.25rem;
+  margin-bottom: 16px;
+}
+
+.studentInfoGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  font-size: 0.875rem; /* Equivalent to text-sm */
+}
+
+.studentInfoGrid div {
+  display: flex;
+  justify-content: space-between;
+}
+
+
+@media(max-width:479px){
+  .studentInfoGrid {
+    display: grid;
+    grid-template-columns: 1fr !important;
+  
+  }
+}

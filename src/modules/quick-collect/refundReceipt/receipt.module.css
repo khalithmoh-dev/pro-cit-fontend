@@ -1,0 +1,64 @@
+.receipt-container {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+  }
+  
+  .receipt-table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  .receipt-header {
+    border-collapse: collapse;
+    width: 100%;
+    float: left;
+    border: 2px solid #000;
+  }
+  
+  .receipt-header-content {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 0 auto;
+  }
+  
+  .receipt-logo-cell {
+    width: 20%;
+    text-align: center;
+    vertical-align: middle;
+  }
+  
+  .receipt-info {
+    width: 75%;
+    text-align: center;
+  }
+  
+  .receipt-institute-name {
+    font-size: 18px;
+    font-weight: 700;
+  }
+  
+  .receipt-address,
+  .receipt-phone {
+    font-size: 8pt;
+  }
+  
+  .receipt-line {
+    border: 1px solid #000;
+    margin: 10px 0;
+  }
+  
+  .receipt-title-table {
+    border-collapse: collapse;
+    width: 100%;
+    border: dashed 2px #151111;
+    justify-content: center;
+    display: flex;
+  }
+  
+  .receipt-title {
+    text-align: center;
+    font-size: 10pt;
+    font-weight: bold;
+    border: 5px dashed orange
+  }
+  

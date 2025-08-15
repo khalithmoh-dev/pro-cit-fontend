@@ -1,0 +1,37 @@
+.container {
+  height: 45px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid var(--grey-3);
+  outline: none;
+  gap: 2px;
+  border-radius: 100px;
+  padding: 0 20px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.container input[type='date'] {
+  position: relative;
+  width: 0;
+  visibility: hidden;
+  right: 100px;
+  top: 15px;
+}
+
+.custom-date-picker {
+  background-color: var(--light-grey);
+  padding: 10px;
+  border-radius: 100px;
+  cursor: pointer;
+  text-align: center;
+  text-wrap: nowrap;
+}
+.container:hover {
+  border: 1px solid var(--primary);
+}
+.active {
+  color: var(--primary-dark);
+  border: 1px solid var(--primary-dark);
+}

@@ -1,0 +1,16 @@
+.container {
+  width: 100%;
+}
+.tableContainer {
+  max-height: calc(100vh - 185px);
+  overflow-y: scroll;
+}
+.detailsContainer {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 10px;
+  color: gray;
+  background-color: white;
+  margin-bottom: 10px;
+  font-size: 14px;
+}

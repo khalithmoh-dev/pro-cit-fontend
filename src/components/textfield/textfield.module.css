@@ -1,0 +1,32 @@
+.fieldLabel {
+  /* line-height: 18px; */
+  font-weight: 700;
+  color: var(--dark);
+  text-transform: capitalize;
+  padding-left: 8px;
+  margin-top: 15px;
+  font-size: 14px;
+}
+.textInput {
+  padding: 18px 24px;
+  border: 2px solid var(--grey-3);
+  outline: none;
+  width: 100%;
+  border-radius: 10px;
+  margin-top: 5px;
+}
+.textInput:hover {
+  border: 2px solid var(--primary);
+}
+.textInput:active {
+  border: 2px solid var(--primary-dark);
+}
+.fieldError {
+  color: var(--error);
+  font-size: 14px;
+  margin-top: 4px;
+  padding-left: 8px;
+}
+.inputFieldError {
+  border: 2px solid var(--error);
+}

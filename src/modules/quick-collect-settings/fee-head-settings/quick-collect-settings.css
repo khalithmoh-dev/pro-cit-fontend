@@ -1,0 +1,163 @@
+/* Tab navigation styles */
+.tabs {
+ width: 250px;
+  border-bottom: 2px solid #ccc;
+  overflow: scroll;
+}
+
+.academySelect {
+  width: 100%;
+  padding: 4px;
+  font-size: 14px;
+  color: #555;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+  height: 35px;
+  /* margin: auto; */
+  /* margin-bottom: 15px; */
+  gap: 14px;
+}
+
+/* Individual tab styles */
+.tab {
+  padding: 10px 20px;
+  cursor: pointer;
+  /* transition: background-color 0.3s ease; */
+}
+
+/* Active tab styling */
+.tab.active {
+  color: white;
+  background-color: #0d6efd; /* Active tab color */
+  font-weight: bold;
+  border-radius: 6px;
+}
+.parentGroup{
+  font-size: 12px;
+  align-items: center;
+  display: flex;
+  margin-bottom: 6px;
+}
+/* Tab content area */
+.tab-content {
+  padding: 20px;
+  border: 1px solid #ccc;
+  margin-top: 10px;
+  background-color: #f9f9f9;
+}
+
+
+.table-container {
+  margin: 20px;
+  padding: 10px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th, td {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+
+
+
+
+h1 {
+  text-align: center;
+  color: #333;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Dark background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* To make sure it's on top */
+}
+
+.modal-content {
+  background-color: white;
+  border-radius: 5px;
+  width: 70%;
+  text-align: center;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.cancel {
+  margin-top: 10px;
+  padding: 8px 15px;
+ border: 2px solid #0465ac;
+  color: #0465ac;
+  cursor: pointer;
+  border-radius: 5px;
+  background-color: white;
+}
+
+.add {
+  margin-top: 10px;
+  padding: 10px 15px;
+ background-color:  #0465ac;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  border: none;
+}
+
+.buttonnote{
+  justify-content: end;
+  display: flex;
+  gap: 14px;
+}
+
+/* .grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  justify-content: space-between;
+  margin-top: 30px;
+  align-items: center;
+  padding: 8px;
+}
+
+.grid-container div:hover {
+  background-color: #b4a2a2; 
+  cursor: pointer; 
+} */
+
+
+.notespan {
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+  margin-top: 6px;
+  gap: 4px;
+
+}
+
+.notecontant {
+  font-size: 14px;
+  display: flex;
+  font-weight: 600;
+  align-items: center;
+  gap: 4px;
+
+}

@@ -1,0 +1,16 @@
+.editContainer {
+  width: 100%;
+  background-color: red;
+  display: flex;
+  gap: 20px;
+}
+.leftBox {
+  display: flex;
+  flex-direction: column;
+  background-color: blue;
+}
+.rightBox {
+  display: flex;
+  flex-direction: column;
+  background-color: green;
+}

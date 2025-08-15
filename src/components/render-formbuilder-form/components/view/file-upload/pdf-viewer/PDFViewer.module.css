@@ -1,0 +1,10 @@
+/* Add this CSS in your corresponding CSS file */
+.viewer-container {
+  text-align: center;
+}
+
+.pdf-viewer {
+  height: 750px;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  margin-top: 20px;
+}

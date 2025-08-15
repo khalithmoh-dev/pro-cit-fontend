@@ -1,0 +1,38 @@
+.tableFilter {
+  border: 1px solid var(--grey-3);
+  cursor: pointer;
+  padding: 8px 20px;
+  border-radius: 100px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-weight: 400;
+  width: min-content;
+}
+.tableFilter:hover {
+  border: 1px solid var(--primary);
+}
+.datePickerContainer {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.datePickerContainer input {
+  padding: 16px;
+  outline: none;
+  border-radius: 5px;
+  border: 1px solid var(--grey-3);
+  min-width: 200px;
+}
+.datePickerContainer input:hover {
+  border: 2px solid var(--primary);
+}
+.datePickerContainer input:active {
+  border: 2px solid var(--primary-dark);
+}
+.filterDate {
+  font-size: 14px;
+  color: var(--primary);
+}

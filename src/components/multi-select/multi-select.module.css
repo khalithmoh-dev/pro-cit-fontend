@@ -1,0 +1,76 @@
+/* DropdownMenu.module.css */
+.dropdown {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  width: 100%;
+}
+
+.options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1;
+  list-style: none;
+  margin: 0;
+  background-color: #ffffff;
+  border-left: 1px solid var(--grey-3);
+  border-right: 1px solid var(--grey-3);
+  width: 100%;
+  border-radius: 10px;
+  max-height: 250px;
+  overflow-y: scroll;
+}
+
+.option {
+  padding: 8px 12px;
+  cursor: pointer;
+  padding: 10px 20px;
+  font-weight: 400;
+  width: 100%;
+  border-bottom: 2px solid var(--grey-3);
+}
+
+.option:hover {
+  background-color: rgb(171, 217, 180);
+}
+.selected {
+  background-color: rgb(30, 153, 55);
+  color: white;
+}
+.fieldLabel {
+  line-height: 17px;
+  font-weight: 700;
+  color: var(--dark);
+  text-transform: capitalize;
+  padding-left: 8px;
+  font-size: 14px;
+  margin-top: 10px;
+}
+.selectedOptions {
+  display: flex;
+  justify-content: space-between;
+  padding: 18px 24px;
+  border: 2px solid var(--grey-3);
+  outline: none;
+  width: 100%;
+  border-radius: 10px;
+  margin-top: 10px;
+  background-color: #ffffff;
+}
+.selectedOptions:hover {
+  border: 2px solid var(--primary);
+}
+.selectedOptions:active {
+  border: 2px solid var(--primary-dark);
+}
+.fieldError {
+  color: var(--error);
+  font-size: 14px;
+  text-transform: capitalize;
+  margin-top: 8px;
+  padding-left: 8px;
+}
+.errorInput {
+  border: 2px solid var(--error);
+}

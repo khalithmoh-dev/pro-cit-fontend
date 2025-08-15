@@ -1,0 +1,40 @@
+.container {
+  width: 100%;
+}
+.checkboxInput {
+  height: 15px;
+  width: 15px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: 2px solid var(--primary-dark);
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+.checkboxInput:checked {
+  background-color: var(--primary-dark);
+  border-color: var(--primary-dark);
+  box-shadow:
+    inset rgb(255, 255, 255) -2px -2px 0px 0px,
+    inset rgb(255, 255, 255) 2px 2px 0px 0px;
+}
+.detailsContainer {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 10px;
+  color: gray;
+  background-color: white;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+.allSelectContainer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 2px 10px;
+  color: gray;
+  background-color: white;
+  margin-bottom: 10px;
+  font-size: 14px;
+  gap: 10px;
+}

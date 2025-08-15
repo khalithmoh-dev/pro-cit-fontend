@@ -1,0 +1,68 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.buttonContainer {
+  display: flex;
+  gap: 20px;
+}
+.fieldLabel {
+  line-height: 18px;
+  font-weight: 700;
+  color: var(--dark);
+  text-transform: capitalize;
+  padding-left: 8px;
+  margin-top: 10px;
+}
+.inputWrapper {
+  display: flex;
+  justify-content: space-between;
+  padding: 19px 24px;
+  border: 2px solid var(--grey-3);
+  width: 100%;
+  border-radius: 10px;
+  margin-top: 10px;
+  background-color: white;
+}
+.inputWrapper span {
+  cursor: pointer;
+  font-size: 12px;
+}
+.textInput {
+  outline: none;
+  border: none;
+}
+.inputWrapper:hover {
+  border: 2px solid var(--primary);
+}
+.fieldError {
+  color: var(--error);
+  font-size: 14px;
+  text-transform: capitalize;
+  margin-top: 8px;
+  padding-left: 8px;
+}
+.inputFieldError {
+  border: 2px solid var(--error);
+}
+.uploadIndicator {
+  margin-top: 4px;
+  width: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.uploadIndicator:hover {
+  width: 150px;
+  overflow: unset;
+  text-overflow: unset;
+  margin-left: 5px;
+  color: rgb(27, 103, 179);
+}
+.downloadButton {
+  margin-top: 4px;
+}
+.downloadButton:hover {
+  margin-top: 4px;
+  color: rgb(36, 91, 163);
+}

@@ -1,0 +1,214 @@
+.container {
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(0, 0, 0, 0.405);
+  position: fixed;
+  left: 0;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 11;
+}
+
+.dialogContainer {
+
+  background-color: aliceblue;
+  border-radius: 10px;
+  max-height: 90vh;
+  overflow: auto;
+}
+
+.large {
+  width: 95%;
+  max-width: 1000px;
+}
+
+.extraLarge {
+  width: 95%;
+  max-width: 1600px;
+}
+
+.small {
+  width: 95%;
+  max-width: 600px;
+}
+
+.headerContainer {
+  padding-bottom: 10px;
+  font-size: 26px;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  background-color: #1a81c1;
+  padding: 10px;
+  color: white;
+}
+
+.closeIcon {
+  padding: 2px;
+  cursor: pointer;
+}
+
+.bodyContainer {
+  /* display: flex; */
+  flex-wrap: wrap;
+  gap: 15px;
+  padding: 20px;
+  background-color: #fff;
+}
+
+.maxigenerate {
+  margin-top: 0px;
+  justify-content: end;
+  display: flex;
+  margin-bottom: 10px;
+  color: #555;
+  font-size: 14px;
+}
+
+.actionContainer {
+  width: 100%;
+  padding-top: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.fieldBox {
+  width: 100%;
+}
+
+.fieldBox50 {
+  width: calc(50% - 8px);
+}
+
+.fieldBox30 {
+  width: calc(33% - 5px);
+}
+
+.fieldBox25 {
+  width: calc(25% - 12px);
+}
+
+.fieldBox100 {
+  width: 100%;
+}
+
+.hide {
+  display: none;
+}
+
+.submitButton {
+  width: 90px;
+}
+
+.buttonLoading {
+  cursor: not-allowed;
+}
+
+
+.cetegroyname {
+  display: flex;
+  gap: 20px;
+  /* Adjust the gap between the elements */
+  align-items: center;
+  /* Vertically center the items */
+  /* Ensure items wrap in case of small screens */
+}
+
+.formcontainer label {
+  margin-right: 10px;
+  /* Space between label and input */
+  display: flex;
+  flex-direction: column;
+  /* Stack label and input vertically */
+  justify-content: center;
+}
+
+.ellipsisButton {
+  background-color: #1a81c1;
+  color: #fff;
+  border: none;
+  padding: 8px;
+}
+
+.formcontainer input,
+.formcontainer select {
+  width: 150px;
+  /* Set width of inputs */
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.generatetext {
+  font-size: 14px;
+  margin-top: 15px !important;
+  font-weight: 600;
+}
+
+.academySelect {
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+  color: #555;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+  height: 40px;
+  margin: auto;
+  margin-bottom: 15px;
+}
+
+
+.formInput {
+  width: 170px;
+  padding: 8px;
+  font-size: 14px;
+  color: #555;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+}
+
+.formInputselect {
+  width: 70px;
+  padding: 8px;
+  font-size: 14px;
+  color: #555;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+}
+
+
+.formcontainer select {
+  cursor: pointer;
+}
+
+/* ================================================================================================= */
+@media screen and (max-width: 1000px) {
+  .fieldBox {
+    width: calc(33% - 8px);
+  }
+}
+
+@media screen and (max-width: 770px) {
+  .fieldBox {
+    width: calc(50% - 8px);
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .fieldBox {
+    width: 100%;
+  }
+}
+
+.departmentMain {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .12);
+  margin: 10px 0px;
+}

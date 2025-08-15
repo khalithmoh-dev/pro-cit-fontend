@@ -1,0 +1,7 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'asia-south1-docker.pkg.dev/glass-hydra-430707-d2/docimages/citfront', '.']
+options:
+  logging: CLOUD_LOGGING_ONLY
+images:
+  - 'asia-south1-docker.pkg.dev/glass-hydra-430707-d2/docimages/citfront'

@@ -1,0 +1,11 @@
++------------------+        +----------------+         +------------------+
+|  React Frontend  |------->|  Express/Node  |-------->|  MongoDB Database |
++------------------+        +----------------+         +------------------+
+       |                           |                            |
+User Login/Signup           Validate User                Store/Retrieve User
+       |                           |                            |
+Send Credentials            Hash Passwords                Handle User Data
+       |                           |                            |
+Receive JWT Token           Generate JWT Token             Verify User
+       |                           |
+Store JWT Token            Send Token to Frontend

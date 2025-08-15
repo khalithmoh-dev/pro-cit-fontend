@@ -1,0 +1,21 @@
+.scheduleDetailContainer {
+  border-radius: 8px;
+  max-width: 600px;
+  padding-left: 10px;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.details p {
+  margin: 0;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.details p strong {
+  color: #444;
+}

@@ -1,0 +1,38 @@
+.container {
+  padding: 0 20px;
+  width: 100%;
+}
+
+.tabContainer {
+  display: flex;
+  /* width: 100%; */
+  height: 40px;
+  border-bottom: 1px solid lightgray;
+  gap: 10px;
+  /* background-color: rgb(170, 170, 170); */
+  margin: 10px 0 20px;
+}
+
+.tabName {
+  /* flex: 1; */
+  background-color: rgb(180, 210, 255);
+  display: flex;
+  width: 100px;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  cursor: pointer;
+  text-transform: capitalize;
+  color: rgb(42, 42, 42);
+}
+
+.activeTabName {
+  background-color: rgb(65, 113, 187);
+  color: rgb(255, 255, 255);
+}
+
+.tabName:hover {
+  background-color: rgb(65, 113, 187);
+  color: rgb(255, 255, 255);
+}

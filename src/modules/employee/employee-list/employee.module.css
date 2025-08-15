@@ -1,0 +1,10 @@
+.container {
+  width: 100%;
+}
+.hideContainer {
+  display: none;
+}
+.tableContainer {
+  max-height: calc(100vh - 185px);
+  overflow-y: scroll;
+}

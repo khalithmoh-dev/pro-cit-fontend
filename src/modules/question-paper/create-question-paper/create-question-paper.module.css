@@ -1,0 +1,305 @@
+:root {
+  --spacing-xxs: 4px;
+  --spacing-xs: 8px;
+  --spacing-sm: 12px;
+  --spacing-md: 16px;
+  --spacing-lg: 20px;
+  --spacing-xl: 30px;
+  --spacing-xxl: 40px;
+}
+
+.container {
+  padding: var(--spacing-lg);
+  background-color: aliceblue;
+}
+
+.dialogContainer {
+  padding: var(--spacing-lg);
+  background-color: aliceblue;
+  border-radius: 10px;
+  max-height: 90vh;
+  overflow: auto;
+}
+
+.large {
+  width: 95%;
+  max-width: 1000px;
+}
+
+.extraLarge {
+  width: 95%;
+  max-width: 1600px;
+}
+
+.small {
+  width: 95%;
+  max-width: 600px;
+}
+
+.headerContainer {
+  padding-bottom: var(--spacing-sm);
+  font-size: 26px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+}
+
+.closeIcon {
+  padding: 2px;
+}
+
+.bodyContainer {
+  display: flex;
+  gap: var(--spacing-md);
+  width: 100%;
+}
+
+.actionContainer {
+  width: 100%;
+  padding-top: var(--spacing-lg);
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-sm);
+}
+
+.fieldBox {
+  width: 100%;
+  padding: var(--spacing-md);
+}
+
+.fieldBox50 {
+  width: calc(50% - var(--spacing-sm));
+}
+
+.fieldBox30 {
+  width: calc(33% - var(--spacing-sm));
+}
+
+.fieldBox25 {
+  width: calc(25% - var(--spacing-sm));
+}
+
+.fieldBox100 {
+  width: 100%;
+}
+
+.hide {
+  display: none;
+}
+
+.questionContainer {
+  margin-bottom: var(--spacing-lg);
+  padding: var(--spacing-sm);
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.flexRow {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.flexRow > * {
+  flex: 1;
+}
+
+.questionsContainer {
+  margin-top: var(--spacing-lg);
+}
+
+.questionItem {
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.subQuestionItem {
+  margin-left: var(--spacing-md);
+  margin-top: var(--spacing-sm);
+  padding: var(--spacing-md);
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.subQuestionActions,
+.questionActions {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-md);
+}
+
+.addQuestionButton {
+  margin-top: var(--spacing-xl);
+  text-align: center;
+}
+
+.flexRow {
+  display: flex;
+  align-items: center; /* Center vertically */
+}
+
+.textAreaRow {
+  margin-bottom: var(--spacing-lg);
+}
+
+/* create-question-paper.module.css */
+
+/* Container for the choices section */
+.choicesContainer {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.choicesContainer h3 {
+  margin: 0 0 10px;
+  font-size: 18px;
+  color: #333;
+}
+
+.existingChoicesContainer {
+  margin-top: 20px;
+}
+
+.existingChoicesContainer h4 {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+/* Each choice item display */
+.choiceItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px;
+  background-color: #ffffff;
+  border: 1px solid #dcdcdc;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.choiceItem span {
+  color: #444;
+}
+
+.choiceItem button {
+  padding: 4px 8px;
+  font-size: 12px;
+}
+
+/* Button styles */
+button {
+  padding: 10px 16px;
+  font-size: 14px;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+button.secondary {
+  background-color: #ff4d4d;
+}
+
+button.secondary:hover {
+  background-color: #cc0000;
+}
+
+/* Aligns with any existing button style in main action container */
+.actionContainer button {
+  margin-top: 10px;
+  margin-right: 5px;
+}
+
+/* create-question-paper.module.css */
+
+/* Container for the choices section */
+.choicesContainer {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.choicesContainer h3 {
+  margin: 0 0 10px;
+  font-size: 18px;
+  color: #333;
+}
+
+.existingChoicesContainer {
+  margin-top: 20px;
+}
+
+.existingChoicesContainer h4 {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+/* Each choice item display */
+.choiceItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px;
+  background-color: #ffffff;
+  border: 1px solid #dcdcdc;
+  border-radius: 4px;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.choiceItem span {
+  color: #444;
+}
+
+.choiceItem button {
+  padding: 4px 8px;
+  font-size: 12px;
+}
+
+/* Button styles */
+button {
+  padding: 10px 16px;
+  font-size: 14px;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+button.secondary {
+  background-color: #ff4d4d;
+}
+
+button.secondary:hover {
+  background-color: #cc0000;
+}
+
+/* Aligns with any existing button style in main action container */
+.actionContainer button {
+  margin-top: 10px;
+  margin-right: 5px;
+}
+
+

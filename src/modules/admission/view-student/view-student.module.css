@@ -1,0 +1,115 @@
+.pageName {
+  display: flex;
+  gap: 20px;
+  font-size: 18px;
+  font-weight: bold;
+  padding-top: 10px;
+  align-items: center;
+  padding-left: 10px;
+}
+.backButton {
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 8px;
+}
+.backButton:hover {
+  background-color: rgb(237, 237, 237);
+}
+.container {
+  display: flex;
+  background-color: rgb(255, 255, 255);
+  margin-top: 10px;
+}
+.menuBox {
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 10px 20px;
+  overflow-y: scroll;
+}
+.profileBox {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+.userImage {
+  height: 180px;
+  width: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid lightgray;
+}
+.image {
+  height: 180px;
+  width: 180px;
+}
+.userName {
+  font-weight: bold;
+}
+.menuItemContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  overflow-y: scroll;
+}
+.menuItemContainer::-webkit-scrollbar {
+  display: none;
+}
+.menuItemBox {
+  padding: 15px 20px;
+  border-radius: 8px;
+  border-bottom: 1px solid rgb(223, 223, 223);
+  border-left: 1px solid rgb(223, 223, 223);
+  cursor: default;
+}
+.activeMenuBox {
+  border: 1px solid rgb(223, 223, 223);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: rgb(224, 240, 254);
+}
+.menuItemBox:hover {
+  background-color: rgb(224, 240, 254);
+}
+.contentBox {
+  flex: 1;
+  padding: 20px 40px 0px;
+}
+.contentPageName {
+  border: 1px solid rgb(223, 223, 223);
+  background-color: rgb(224, 240, 254);
+  width: 250px;
+  padding: 10px 20px;
+}
+.tableContainer {
+  display: flex;
+  flex-direction: column;
+}
+.tableContainer {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 165px);
+  overflow-y: scroll;
+}
+.tableRow {
+  display: flex;
+  border: 1px solid lightgray;
+  margin-top: 5px;
+  font-size: 14px;
+}
+.tableLeft {
+  width: 250px;
+  padding: 15px 20px;
+}
+.tableRight {
+  width: 500px;
+  padding: 15px 20px;
+  border-left: 1px solid lightgray;
+}
+.viewButton {
+  padding: 0 5px;
+  font-size: 12px;
+  margin-left: 10px;
+}

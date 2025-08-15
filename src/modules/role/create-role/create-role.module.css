@@ -1,0 +1,53 @@
+.container {
+  height: 100%;
+  padding: 20px;
+}
+.headerContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.left {
+  display: flex;
+  font-weight: 700;
+  align-items: center;
+  gap: 16px;
+}
+.iconButton {
+  cursor: pointer;
+}
+.contentBox {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+.checkboxInput {
+  height: 19px;
+  width: 19px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: 3px solid var(--primary-dark);
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+.checkboxInput:checked {
+  background-color: var(--primary-dark);
+  border-color: var(--primary-dark);
+  box-shadow:
+    inset rgb(255, 255, 255) -2px -2px 0px 0px,
+    inset rgb(255, 255, 255) 2px 2px 0px 0px;
+}
+.tableContainer {
+  height: calc(100vh - 250px);
+  overflow: auto;
+}
+.fieldContainer {
+  width: 49%;
+}
+.inputBox {
+  display: flex;
+  gap: 10px;
+}

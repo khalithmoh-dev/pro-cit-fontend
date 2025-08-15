@@ -1,0 +1,77 @@
+.container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.chatbotContainer {
+  height: 500px;
+  width: 350px;
+  /* border: 1px solid grey; */
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+}
+.fabBottonContainer {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+.fabBotton {
+  background-color: rgb(224 224 224);
+  height: 50px;
+  width: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  color: rgb(0, 0, 0);
+  box-shadow:
+    0px 3px 5px -1px rgba(0, 0, 0, 0.2),
+    0px 6px 10px 0px rgba(0, 0, 0, 0.14),
+    0px 1px 18px 0px rgba(0, 0, 0, 0.12);
+}
+
+/* ========================== Header ========================= */
+.headerContainer {
+  padding: 18px;
+  background-color: #081f2c;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  color: white;
+  font-weight: 700;
+  font-size: 20px;
+}
+/* ========================== bodyContainer ========================= */
+.bodyContainer {
+  flex: 1;
+  padding: 1px 2px;
+  /* background-color: #081f2c; */
+}
+.chatbotBody {
+  height: 100%;
+  width: 100%;
+  background-color: rgb(237, 238, 238);
+  /* background-color: red; */
+}
+
+/* ========================== searchContainer ========================= */
+.searchContainer {
+  display: flex;
+  align-items: center;
+  background-color: rgb(237, 238, 238);
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+.searchContainer input {
+  padding: 20px;
+  flex: 1;
+  outline: none;
+  border: none;
+  background-color: transparent;
+}
+.sendIcon {
+  padding: 0 15px;
+}

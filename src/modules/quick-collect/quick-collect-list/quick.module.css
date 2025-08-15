@@ -1,0 +1,561 @@
+/* quick.module.css */
+
+.container {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  background-color: #fef8f3;
+}
+
+.tableName {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.mainContainer {
+  display: flex;
+  /* flex-direction: column; */
+  gap: 10px;
+  padding: 15px;
+  background-color: #fef4e8;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.select {
+  width: 220px;
+  padding: 8px;
+  font-size: 14px;
+  color: #555;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+  height: 40px;
+  margin: auto;
+}
+
+@media(max-width:1024px){
+  .select{
+ 
+    width: 100%;
+}
+}
+
+@media(max-width:320px){
+  .select{
+ 
+    width: 100%;
+}
+}
+
+.formInput {
+  /* width: 220px; */
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+  color: #555;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+}
+
+.mainContainer > div {
+  /* display: flex; */
+  gap: 20px;
+}
+
+p {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #666;
+  text-align: center;
+}
+.dialogScroll {
+  overflow-y: scroll;
+  padding: 0 !important;
+}
+.paddingModal {
+  padding: 0 16px;
+}
+
+.Payment {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Adds space between input groups */
+}
+
+/* Group for two inputs on the same line */
+.inputGroupRow {
+  display: flex;
+  justify-content: space-between; /* Distribute space between inputs */
+  gap: 20px; /* Space between the two input fields */
+}
+
+/* Style for each input group */
+.inputGroup {
+  flex: 1; /* Make both inputs take equal width */
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px; /* Space between label and input */
+}
+
+
+
+.container {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  background-color: #fef8f3;
+}
+
+.tableName {
+  font-size: 24px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.tableContainer {
+  margin-top: 20px;
+  overflow-x: auto;
+}
+.cetory{
+  display: flex;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.table th, .table td {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.table th {
+  background-color: #f1f1f1;
+  font-weight: bold;
+}
+
+.table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.table tr:nth-child(odd) {
+  background-color: #e1ebf7;
+}
+
+.openLink {
+  color: green;
+  cursor: pointer;
+}
+
+
+.openLink {
+  color: green;
+  cursor: pointer;
+}
+
+.detailContainer {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.closeButton {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.detailTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 17px 0px;
+  display: block;
+  overflow: scroll;
+
+}
+.detailTable th{
+  font-size: 14px !important;
+}
+.detailTable th, .detailTable td {
+  padding: 8px;
+  border: 1px solid #ddd;
+  text-align: left;
+  font-size: 13px;
+  width: 10%;
+}
+
+.tableHeadingDetail th{
+  font-weight: 400;
+  /* overflow: scroll;
+  display: block; */
+}
+.academyInfoContainer {
+  padding: 16px 0;
+  max-width: 100%;
+  margin: 16px 0;
+}
+.studentDetails{
+  margin-top: 10px;
+}
+.detailTable th {
+  background-color: #f1f1f1;
+}
+.studentDetailsTable{
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+.studentDetailsTable th, .studentDetailsTable td {
+  padding: 8px;
+  border: 1px solid #ddd;
+  text-align: left !important;
+}
+.yearHead{
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #0465ac;
+  color: #fff;
+  font-size: 20px;
+  font-weight: bold;
+  justify-content: space-between;
+  display: flex;
+}
+
+.academicYears{
+  display: flex;
+  align-items: center;
+}
+.AssignFeeStructure{
+  padding: 4px;
+  align-items: center;
+  display: flex;
+  gap:9px;
+  height: 36px;
+  border: 2px solid #0465ac;
+}
+.AssignFeecancel{
+  padding: 10px;
+  align-items: center;
+  display: flex;
+  gap:9px;
+  height: 36px;
+  margin-top: 22px;  
+  border: 2px solid #0465ac;
+}
+.studentInfoGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 30px;
+  row-gap: 16px;
+  font-size: 0.875rem;
+  margin-top: 10px;
+}
+
+.studentInfoGrid div {
+  display: flex;
+  justify-content: space-between;
+}
+.ConcessionDetails{
+  display: grid;
+  grid-template-columns: 6fr 6fr 1fr;
+  align-items: center;
+  column-gap: 30px;
+  row-gap: 16px;
+  font-size: 0.875rem;
+  margin-top: 10px;
+}
+.UpdateChallanDetails {
+  display: grid;
+  grid-template-columns: 4fr 4fr 4fr;
+  align-items: center;
+  column-gap: 25px;
+}
+
+.academicDetails {
+  display: grid;
+  grid-template-columns: 4fr 4fr 4fr;
+  align-items: center;
+}
+
+.academicDetails select {
+  width: 150px;  /* Set width of inputs */
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.parentGroup{
+  font-size: 12px;
+}
+.UpdateChallanDetails .Verifybtn{
+  margin-top: 20px;
+  display: contents;
+}
+
+.Generatechallan{
+  display: contents;
+}
+
+.generatetext{
+  font-size: 14px;
+  margin-top: 15px !important;
+  font-weight: 600;
+}
+.GenerateChallanheader {
+  font-size: 18px !important;
+  display: flex;
+  gap: 16px;
+  font-size: 30px;
+  justify-content: space-between;
+  background-color: #0465ac;
+  color: #fff;
+  padding: 15px;
+}
+.GenerateChallanheader span {
+  cursor: pointer;
+}
+.Generateinput{
+  display: flex;
+}
+.Generatebtn{
+  display: flex;
+  gap: 8px;
+  justify-content: end;
+}
+.maxigenerate{
+  margin-top: 0px;
+  justify-content: end;
+  display: flex;
+  margin-bottom: 10px;
+}
+.Generatebtncancel{
+ 
+  border:2px solid #0465ac;
+  width: 100px;
+  align-items: center;
+  justify-content: center;
+}
+.academySelect {
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+  color: #555;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+  height: 40px;
+  margin: auto;
+  margin-bottom: 15px;
+}
+
+.dateSelect {
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+  color: #555;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+  height: 40px;
+  margin: auto;
+  margin-bottom: 15px;
+}
+
+
+.studentInfoGrid label {
+  width: 100%;
+}
+.academyTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+.academyTable th, .academyTable td {
+  padding: 8px;
+  border: 1px solid #ddd;
+  text-align: left;
+  font-size: 13px;
+}
+.academyTable th {
+  background-color: #f1f1f1;
+}
+.inputError{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.addConcession{
+  border: none;
+  color: #0465ac;
+  cursor: pointer;
+  background-color: transparent;
+}
+.fieldError{
+  color: red;
+  margin: 5px 5px;
+}
+.addmore{
+  margin: 10px 0px;
+  float: right;
+}
+.addmore button{
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background-color: transparent;
+  border: none;
+  color: #333;
+}
+.addmore button:hover{
+  background-color: transparent;
+}
+
+.RemarksDiv{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 4px;
+}
+.addbtnConcession{
+  float: right;
+}
+.filehandel{
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.yearTotalamout{
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .12);
+    border-radius: 3px;
+    margin-left: 10px;
+    cursor: pointer;
+    padding: 5px;
+}
+.yearTotalamout .year{
+  font-weight: bold;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #333;
+}
+.feeUpdate{
+  display: flex;
+  font-weight: bold ;
+  flex-direction: column;
+  align-items: center;
+  color: #0465ac;
+  cursor: pointer;
+}
+.feeUpdate span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.selectAction{
+  padding: 7px 0px;
+  font-size: 14px;
+  color: #555;
+  font-weight: 600;
+  background-color: transparent;
+  border: solid 1px #ccc;
+}
+.assignfeeslatect{
+  padding: 7px 0px;
+  font-size: 14px;
+  color: #555;
+  font-weight: 600;
+  background-color: transparent;
+  border-bottom: solid 1px #ccc;
+}
+
+@media(max-width:479px){
+  .studentInfoGrid {
+    display: grid;
+    grid-template-columns: 1fr !important;
+  
+  }
+}
+
+.addMorebutton{
+  background-color: transparent;
+  border: none;
+  color: #0465ac;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.closeFieldButton{
+  background-color: transparent;
+  border: none;
+  color: red;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.studentData {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+
+@media(max-width:1440px){
+  .studentDetails{
+    flex-wrap: wrap;
+  }
+}
+
+@media(max-width:1024px){
+  .studentData{
+    display: grid;
+    gap: 8px;
+    grid-template-columns: repeat(2, 1fr);
+}
+.mainContainer{
+  display: grid;
+}
+  
+}
+
+@media(max-width:320px){
+  .studentData{
+    grid-template-columns: repeat(1, 1fr);
+}
+}
+
+
+.studentData2{
+  display: flex;
+  gap: 8px;
+
+}
+
+@media(max-width:1024px){
+  .studentData2{
+    display: grid;
+    gap: 8px;
+    grid-template-columns: repeat(2, 1fr);
+    width: 100%;
+}
+ 
+}
+
+@media(max-width:320px){
+  .studentData2{
+    grid-template-columns: repeat(1, 1fr);
+}
+}
