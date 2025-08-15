@@ -3,7 +3,7 @@ import LogoIcon from '../../icon-components/LogoIcon';
 import style from './layout.module.css';
 import { useEffect, useState } from 'react';
 import SidebarComponent from './sidebar';
-import HeaderComponent from './header';
+// import HeaderComponent from './header';
 
 interface PropsIF {
   children?: JSX.Element[] | JSX.Element;
@@ -17,7 +17,7 @@ const Layout: React.FC<PropsIF> = ({ children }) => {
       <div className={style.container}>
         <SidebarComponent />
         <div className={style.headerContainer}>
-          <HeaderComponent />
+          {/* <HeaderComponent /> */}
           <div className={style.contentContainer}>{children}</div>
         </div>
       </div>
