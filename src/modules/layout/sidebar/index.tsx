@@ -217,33 +217,55 @@ export const transformNavData = (data: ModuleIF[]): MainMenuItem[] => {
 // };
 
 
-import style from './sidebar.module.css';
+import style from "./sidebar.module.css";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import React, { useState, useEffect } from "react";
-import { Nav, Button, Collapse } from "react-bootstrap";
-import useAuthStore from '../../../store/authStore';
-import * as Icons from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { Nav, Button, Collapse, Form } from "react-bootstrap";
+import useAuthStore from "../../../store/authStore";
 import { ChevronDown } from "lucide-react";
+import Icon from "../../../components/Icons";
+import { createPortal } from "react-dom";
 
 export default function SidebarComponent() {
   const location = useLocation();
   const navigate = useNavigate();
-  const [aNavBar, setANavBar] = useState<Record<string, any[]>>({});
+  const [aNavBar, setANavBar] = useState<
+    Record<string, { icon?: string; children: any[] }>
+  >({});
   const { user, logout } = useAuthStore();
-  const [openMenu, setOpenMenu] = useState<Record<string, boolean>>({});
+  const [openMenu, setOpenMenu] = useState<string | null>(null);
+  const [collapsed, setCollapsed] = useState(false);
+  const [activePopoverMenu, setActivePopoverMenu] = useState<string | null>(null);
+  const [popoverPos, setPopoverPos] = useState<{ top: number; left: number }>({ top: 0, left: 0 });
+  const popoverRef = useRef<HTMLDivElement | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState<any[]>([]);
+  
+  
+  // Search filter
+  
+  useEffect(() => {
+    if (!searchTerm) {
+      setSearchResults([]);
+      return;
+    }
 
-  // Helper: Dynamic Lucide Icon Renderer
-  const DynamicIcon = ({ name, size = 18 }: { name?: string; size?: number }) => {
-    if (!name || !(name in Icons)) return null;
-    const LucideIcon = Icons[name as keyof typeof Icons];
-    return <LucideIcon size={size} />;
-  };
+    const results: any[] = [];
+    Object.keys(aNavBar).forEach(menu => {
+      aNavBar[menu].children.forEach(sub => {
+        if (sub.name.toLowerCase().includes(searchTerm.toLowerCase())) {
+          results.push(sub);
+        }
+      });
+    });
+    setSearchResults(results);
+  }, [searchTerm, aNavBar]);
 
   // Build menu data
   useEffect(() => {
     if (user?.role?.modules) {
       const navBar = user.role.modules
-        .filter(m => !m.deleted) // ✅ Only non-deleted
+        .filter((m) => !m.deleted)
         .reduce((acc, module) => {
           if (module.menuType === "mainMenu") {
             if (!acc[module.name]) {
@@ -263,89 +285,217 @@ export default function SidebarComponent() {
   }, [user?.role?.modules]);
 
   const toggleMenu = (menuKey: string) => {
-    setOpenMenu(prev => (prev === menuKey ? null : menuKey));
+    setOpenMenu((prev) => (prev === menuKey ? null : menuKey));
   };
+
+  const handleMainMenuClick = (menuKey: string, e: React.MouseEvent<HTMLButtonElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setPopoverPos({ top: rect.top, left: rect.right }); // ✅ place next to button
+    setActivePopoverMenu((prev) => (prev === menuKey ? null : menuKey));
+  };
+
+  const closePopover = () => setActivePopoverMenu(null);
+
+  // Close popover on outside click
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (popoverRef.current && !popoverRef.current.contains(e.target as Node)) {
+        setActivePopoverMenu(null);
+      }
+    };
+    if (activePopoverMenu) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [activePopoverMenu]);
 
   const navLinkClass = (path: string) =>
     `d-flex align-items-center gap-2 px-3 py-2 rounded text-decoration-none ${
-      location.pathname === path ? "bg-light fw-semibold" : "text-dark"
+      location.pathname === path ? `${style.activeLink} bg-light text-success !important fw-semibold` : "text-dark"
     }`;
+  
 
   return (
     <aside
       className="border-end bg-white d-flex flex-column"
-      style={{ width: '260px', height: '100vh' }}
+      style={{ width: collapsed ? "80px" : "260px", height: "100vh" }}
     >
-      {/* Scrollable Nav Section */}
-      <div style={{ overflowY: 'auto', flex: 1 }}>
-        {/* Logo */}
-        <div className="p-3 text-success fw-bold fs-4 d-flex align-items-center justify-content-center" onClick={() => navigate('/dashboard')}>
+      {/* Logo Row with collapse toggle */}
+      <div className="p-3 d-flex align-items-center justify-content-between border-bottom">
+        <div
+          className="text-success fw-bold fs-4"
+          style={{ cursor: "pointer" }}
+          onClick={() => navigate("/dashboard")}
+        >
           CIT
         </div>
+     
 
-        {/* Menu */}
-        <Nav className="flex-column">
-          {Object.keys(aNavBar).map((eachNav) => (
-            <React.Fragment key={eachNav}>
-              {/* Main Menu */}
-              <Button
-                variant="link"
-                className="d-flex align-items-center gap-2 px-3 py-2 text-dark w-100 text-start text-decoration-none"
-                onClick={() => toggleMenu(eachNav)}
-              >
-                <DynamicIcon name={aNavBar[eachNav].icon} size={20} />
-                {eachNav}
-                <ChevronDown
-                  size={16}
-                  className={`ms-auto ${openMenu === eachNav ? 'rotate-180' : ''}`}
-                  style={{ transition: 'transform 0.2s' }}
-                />
-              </Button>
-
-              {/* Submenu */}
-              <Collapse in={openMenu === eachNav}>
-                <div className="ms-4">
-                  {aNavBar[eachNav].children.map((eachSideNav, index) => (
-                    <Link
-                      key={index}
-                      to={eachSideNav.path || "#"}
-                      className={navLinkClass(eachSideNav.path || "#")}
-                    >
-                      <DynamicIcon name={eachSideNav.icon} size={16} />
-                      {eachSideNav.name}
-                    </Link>
-                  ))}
-                </div>
-              </Collapse>
-            </React.Fragment>
-          ))}
-        </Nav>
-      </div>
-
-      {/* Fixed Profile Section */}
-      <div className="p-3 border-top" style={{ flexShrink: 0 }}>
-        <div className="d-flex align-items-center gap-2">
-          <div className={style.profileText}>
-            {user?.user?.firstName?.[0]}
-            {user?.user?.lastName?.[0]}
-          </div>
-          <div>
-            <div className="fw-medium">
-              {`${user?.user?.firstName || ''} ${user?.user?.lastName || ''}`}
-            </div>
-            <div className="text-muted" style={{ fontSize: '0.9rem' }}>
-              {user?.user?.email}
-            </div>
-          </div>
-        </div>
         <Button
-          variant="outline-secondary"
-          className="w-100 mt-3"
-          onClick={logout}
+          variant="link"
+          className="p-0"
+          onClick={() => setCollapsed(!collapsed)}
         >
-          Log out
+          <Icon
+            name={collapsed ? 'ChevronRight' :'ChevronLeft'}
+            size={20}
+            className={`${collapsed ? "rotate-90" : ""}`}
+            style={{ transition: "transform 0.2s" }}
+          />
         </Button>
       </div>
+        {/* 🔍 Search Bar */}
+       {!collapsed && <div className="px-3 pb-2 pt-2">
+     <Form.Control
+       type="text"
+       placeholder="Search..."
+       value={searchTerm}
+       onChange={(e) => setSearchTerm(e.target.value)}
+     />
+   </div>}
+      {/* Menu Section */}
+      {searchTerm ? (
+          <Nav className="flex-column">
+            {searchResults.length > 0 ? (
+              searchResults.map((sub, idx) => (
+                <Link
+                  key={idx}
+                  to={sub.path || "#"}
+                  className={navLinkClass(sub.path || "#")}
+                >
+                  <Icon name={sub.icon} size={16} />
+                  {sub.name}
+                </Link>
+              ))
+            ) : (
+              <div className="px-3 text-muted">No matches found</div>
+            )}
+          </Nav>
+        ) : 
+      <div style={{ overflowY: "auto", flex: 1 }}>
+        <Nav className="flex-column">
+          {Object.keys(aNavBar).map((eachNav) => {
+            const menu = aNavBar[eachNav];
+
+            if (collapsed) {
+              return (
+                <div key={eachNav} className="position-relative">
+                  <Button
+                    variant="link"
+                    className="d-flex align-items-center justify-content-center py-3 text-dark w-100 text-decoration-none"
+                    onClick={(e) => handleMainMenuClick(eachNav, e)}
+                  >
+                    <Icon name={menu.icon} size={20} />
+                  </Button>
+                </div>
+              );
+            }
+
+            // Expanded mode
+            return (
+              <React.Fragment key={eachNav}>
+                <Button
+                  variant="link"
+                  className="d-flex align-items-center justify-content-between gap-5 px-3 py-2 text-dark w-100 text-start text-decoration-none"
+                  onClick={() => toggleMenu(eachNav)}
+                >
+                  <span className="d-flex align-items-center gap-3">
+                    <Icon name={menu.icon} size={20} />
+                    {eachNav}
+                  </span>
+                  <span>
+                    <Icon
+                      name={openMenu === eachNav ? 'ChevronUp' : 'ChevronDown'}
+                      size={16}
+                      className={`ms-auto ${openMenu === eachNav ? "rotate-180" : ""}`}
+                      style={{ transition: "transform 0.2s" }}
+                    />
+                  </span>
+                </Button>
+
+                <Collapse in={openMenu === eachNav}>
+                  <div className="ms-4">
+                    {menu.children.map((sub, i) => (
+                      <Link
+                        key={i}
+                        to={sub.path || "#"}
+                        className={navLinkClass(sub.path || "#")}
+                      >
+                        <Icon name={sub.icon} size={16} />
+                        <span>{sub.name}</span>
+                      </Link>
+                    ))}
+                  </div>
+                </Collapse>
+              </React.Fragment>
+            );
+          })}
+        </Nav>
+      </div>}
+
+      {/* Profile Section */}
+      {!collapsed && (
+        <div className="p-3 border-top" style={{ flexShrink: 0 }}>
+          <div className="d-flex align-items-center gap-2">
+            <div className={style.profileText}>
+              {user?.user?.firstName?.[0]}
+              {user?.user?.lastName?.[0]}
+            </div>
+            <div>
+              <div className="fw-medium">
+                {`${user?.user?.firstName || ""} ${user?.user?.lastName || ""}`}
+              </div>
+              <div className="text-muted" style={{ fontSize: "0.9rem" }}>
+                {user?.user?.email}
+              </div>
+            </div>
+          </div>
+          <Button
+            variant="outline-secondary"
+            className="w-100 mt-3"
+            onClick={logout}
+          >
+            Log out
+          </Button>
+        </div>
+      )}
+
+      {/* Floating Popover (collapsed mode only) */}
+      {activePopoverMenu &&
+        collapsed &&
+        createPortal(
+          <div
+            ref={popoverRef}
+            className="position-fixed bg-white border rounded shadow p-2"
+            style={{
+              top: `${popoverPos.top}px`,
+              left: `${popoverPos.left}px`,
+              minWidth: "220px",
+              zIndex: 1050,
+            }}
+          >
+            <div className="fw-semibold mb-2">{activePopoverMenu}</div>
+            {aNavBar[activePopoverMenu].children.map((sub, i) => (
+              <Link
+                key={i}
+                to={sub.path || "#"}
+                className="d-flex align-items-center gap-2 text-dark text-decoration-none mb-2"
+                onClick={closePopover}
+              >
+                <Icon name={sub.icon} size={16} />
+                {sub.name}
+              </Link>
+            ))}
+          </div>,
+          document.body
+        )}
     </aside>
   );
 }
+
+
+
+
+
