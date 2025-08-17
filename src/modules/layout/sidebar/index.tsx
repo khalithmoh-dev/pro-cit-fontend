@@ -187,7 +187,7 @@ export const transformNavData = (data: ModuleIF[]): MainMenuItem[] => {
       })),
     });
   });
-
+console.log('mainMenuItems',mainMenuItems)
   return mainMenuItems;
 };
 
@@ -266,25 +266,57 @@ export default function SidebarComponent({ theme, toggleTheme }: SidebarProps) {
   // Build menu data
   useEffect(() => {
     if (user?.role?.modules) {
-      const navBar = user.role.modules
-        .filter((m) => !m.deleted)
-        .reduce((acc, module) => {
-          if (module.menuType === "mainMenu") {
-            if (!acc[module.name]) {
-              acc[module.name] = { icon: module.icon, children: [] };
-            }
-          } else if (module.permissions?.read) {
-            if (!acc[module.mainMenu]) {
-              acc[module.mainMenu] = { icon: undefined, children: [] };
-            }
-            acc[module.mainMenu].children.push(module);
+      // const navBar = user.role.modules
+      //   .filter((m) => !m.deleted)
+      //   .reduce((acc, module) => {
+      //     if (module.menuType === "mainMenu") {
+      //       if (!acc[module.name]) {
+      //         acc[module.name] = { icon: module.icon, children: [] };
+      //       }
+      //     } else if (module.permissions?.read) {
+      //       if (!acc[module.mainMenu]) {
+      //         acc[module.mainMenu] = { icon: undefined, children: [] };
+      //       }
+      //       acc[module.mainMenu].children.push(module);
+      //     }
+      //     return acc;
+      //   }, {} as Record<string, { icon?: string; children: any[] }>);
+
+      const mainMenus = user?.role?.modules.filter((item) => item.menuType === 'mainMenu' && !item.deleted && item.permissions.read);
+      const oNavData = {};
+      mainMenus.forEach((mainMenu: string) => {
+        const subMenus = user?.role?.modules.filter(
+          (item) => item.menuType === 'subMenu' && item.mainMenu === mainMenu.key && !item.deleted && item.permissions.read,
+        );
+        if(!oNavData[mainMenu.name]){
+          oNavData[mainMenu.name] = {
+            children: [],
+            icon: mainMenu.icon
           }
-          return acc;
-        }, {} as Record<string, { icon?: string; children: any[] }>);
-      setANavBar(navBar);
+        }
+          console.log('subMenus',subMenus)
+        oNavData[mainMenu.name].children = subMenus.map((subMenu) => ({
+          key: subMenu.key,
+          name: subMenu.name,
+          path: subMenu.path,
+        }))
+        
+        // mainMenuItems.push({
+        //   key: mainMenu.key,
+        //   name: mainMenu.name,
+        //   path: mainMenu.path,
+        //   subMenuItems: subMenus.map((subMenu) => ({
+        //     key: subMenu.key,
+        //     name: subMenu.name,
+        //     path: subMenu.path,
+        //   })),
+        // });
+      });
+
+      setANavBar(oNavData);
     }
   }, [user?.role?.modules]);
-
+console.log('navBar',aNavBar)
   const toggleMenu = (menuKey: string) => {
     setOpenMenu((prev) => (prev === menuKey ? null : menuKey));
   };
