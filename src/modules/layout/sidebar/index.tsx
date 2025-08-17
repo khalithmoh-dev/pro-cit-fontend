@@ -222,11 +222,16 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import React, { useState, useEffect, useRef } from "react";
 import { Nav, Button, Collapse, Form } from "react-bootstrap";
 import useAuthStore from "../../../store/authStore";
-import { ChevronDown } from "lucide-react";
 import Icon from "../../../components/Icons";
 import { createPortal } from "react-dom";
+import Switch from "@mui/material/Switch";   // 👈 add this
 
-export default function SidebarComponent() {
+interface SidebarProps {
+  theme: "light" | "dark";
+  toggleTheme: () => void;
+}
+
+export default function SidebarComponent({ theme, toggleTheme }: SidebarProps) {
   const location = useLocation();
   const navigate = useNavigate();
   const [aNavBar, setANavBar] = useState<
@@ -240,16 +245,13 @@ export default function SidebarComponent() {
   const popoverRef = useRef<HTMLDivElement | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState<any[]>([]);
-  
-  
-  // Search filter
-  
+
+  // 🔍 Search filter
   useEffect(() => {
     if (!searchTerm) {
       setSearchResults([]);
       return;
     }
-
     const results: any[] = [];
     Object.keys(aNavBar).forEach(menu => {
       aNavBar[menu].children.forEach(sub => {
@@ -279,7 +281,6 @@ export default function SidebarComponent() {
           }
           return acc;
         }, {} as Record<string, { icon?: string; children: any[] }>);
-
       setANavBar(navBar);
     }
   }, [user?.role?.modules]);
@@ -290,13 +291,13 @@ export default function SidebarComponent() {
 
   const handleMainMenuClick = (menuKey: string, e: React.MouseEvent<HTMLButtonElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
-    setPopoverPos({ top: rect.top, left: rect.right }); // ✅ place next to button
+    setPopoverPos({ top: rect.top, left: rect.right });
     setActivePopoverMenu((prev) => (prev === menuKey ? null : menuKey));
   };
 
   const closePopover = () => setActivePopoverMenu(null);
 
-  // Close popover on outside click
+  // Outside click close
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (popoverRef.current && !popoverRef.current.contains(e.target as Node)) {
@@ -313,25 +314,25 @@ export default function SidebarComponent() {
 
   const navLinkClass = (path: string) =>
     `d-flex align-items-center gap-2 px-3 py-2 rounded text-decoration-none ${
-      location.pathname === path ? `${style.activeLink} bg-light text-success !important fw-semibold` : "text-dark"
+      location.pathname === path
+        ? `${style.activeLink} bg-light text-success !important fw-semibold`
+        : "text-dark"
     }`;
-  
 
   return (
     <aside
-      className="border-end bg-white d-flex flex-column"
+      className={`border-end d-flex flex-column`}
       style={{ width: collapsed ? "80px" : "260px", height: "100vh" }}
     >
       {/* Logo Row with collapse toggle */}
       <div className="p-3 d-flex align-items-center justify-content-between border-bottom">
         <div
-          className="text-success fw-bold fs-4"
-          style={{ cursor: "pointer" }}
+          className="fw-bold fs-4"
+          style={{ cursor: "pointer", color: theme === "dark" ? "#0f0" : "#198754" }}
           onClick={() => navigate("/dashboard")}
         >
           CIT
         </div>
-     
 
         <Button
           variant="link"
@@ -339,22 +340,39 @@ export default function SidebarComponent() {
           onClick={() => setCollapsed(!collapsed)}
         >
           <Icon
-            name={collapsed ? 'ChevronRight' :'ChevronLeft'}
+            name={collapsed ? "ChevronRight" : "ChevronLeft"}
             size={20}
-            className={`${collapsed ? "rotate-90" : ""}`}
             style={{ transition: "transform 0.2s" }}
           />
         </Button>
       </div>
-        {/* 🔍 Search Bar */}
-       {!collapsed && <div className="px-3 pb-2 pt-2">
-     <Form.Control
-       type="text"
-       placeholder="Search..."
-       value={searchTerm}
-       onChange={(e) => setSearchTerm(e.target.value)}
-     />
-   </div>}
+
+      {/* 🌙 Theme Switcher */}
+      {        <div
+  className={`px-3 py-2 border-bottom d-flex align-items-center ${collapsed ? 'justify-content-center' : ''}`}
+>
+
+          <Switch
+            checked={theme === "dark"}
+            onChange={toggleTheme}
+          />
+<span className="ms-2">
+  {!collapsed && (theme === "dark" ? "Dark Mode" : "Light Mode")}
+</span>
+        </div>
+      }
+
+      {/* 🔍 Search Bar */}
+      {!collapsed && (
+        <div className="px-3 pb-2 pt-2">
+          <Form.Control
+            type="text"
+            placeholder="Search..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+      )}
       {/* Menu Section */}
       {searchTerm ? (
           <Nav className="flex-column">

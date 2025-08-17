@@ -1,33 +1,29 @@
-import useAuthStore from '../../store/authStore';
-import LogoIcon from '../../icon-components/LogoIcon';
-import style from './layout.module.css';
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import SidebarComponent from './sidebar';
-// import HeaderComponent from './header';
+import { Outlet } from 'react-router-dom';
 
-interface PropsIF {
-  children?: JSX.Element[] | JSX.Element;
-}
+const Layout = () => {
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    return (localStorage.getItem('app-theme') as 'light' | 'dark') || 'light';
+  });
 
-const Layout: React.FC<PropsIF> = ({ children }) => {
-  const { isAuthenticated } = useAuthStore();
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('app-theme', theme);
+  }, [theme]);
 
-  if (isAuthenticated)
-    return (
-      <div className={style.container}>
-        <SidebarComponent />
-        <div className={style.headerContainer}>
-          {/* <HeaderComponent /> */}
-          <div className={style.contentContainer}>{children}</div>
-        </div>
-      </div>
-    );
-  else
-    return (
-      <div className={style.container}>
-        <div className={style.contentContainer}>{children}</div>
-      </div>
-    );
+  const toggleTheme = () => {
+    setTheme(prev => (prev === 'dark' ? 'light' : 'dark'));
+  };
+console.log('themetheme',theme)
+  return (
+    <div className="appLayout" style={{ display: 'flex', height: '100vh',backgroundColor: "var(--layout-bg)", overflow: 'hidden' }}>
+      <SidebarComponent theme={theme} toggleTheme={toggleTheme} />
+      <main style={{ flex: 1, overflowY: 'auto', padding: '1rem' }}>
+        <Outlet />
+      </main>
+    </div>
+  );
 };
 
 export default Layout;
