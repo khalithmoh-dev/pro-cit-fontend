@@ -22,7 +22,8 @@
 /* index.css */
 [data-theme='dark'] {
   --main-bg: #1c2434;
-  --layout-bg: #222;
+  --text-color: #ffffff;
+  --layout-bg: #3A3F51;
   --sidebar-bg: #1c2434;
   --sidebar-text: #ffffff;
   --sidebar-selected-bg: #4c6b5a;
@@ -36,6 +37,7 @@
 [data-theme='light'] {
   --main-bg: #f0f2f5;
   --layout-bg: #f0f2f5;
+  --text-color: black;
   --sidebar-bg: #1d5bd6;
   --sidebar-text: #e21a1a;
   --sidebar-selected-bg: #4c6b5a;

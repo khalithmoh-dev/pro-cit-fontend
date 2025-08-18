@@ -348,7 +348,7 @@ console.log('navBar',aNavBar)
     `d-flex align-items-center gap-2 px-3 py-2 rounded text-decoration-none ${
       location.pathname === path
         ? `${style.activeLink} bg-light text-success !important fw-semibold`
-        : "text-dark"
+        : ""
     }`;
 
   return (
@@ -414,13 +414,14 @@ console.log('navBar',aNavBar)
                   key={idx}
                   to={sub.path || "#"}
                   className={navLinkClass(sub.path || "#")}
+                  style={{color:"var(--text-color)"}}
                 >
                   <Icon name={sub.icon} size={16} />
                   {sub.name}
                 </Link>
               ))
             ) : (
-              <div className="px-3 text-muted">No matches found</div>
+              <div className="px-3">No matches found</div>
             )}
           </Nav>
         ) : 
@@ -434,7 +435,7 @@ console.log('navBar',aNavBar)
                 <div key={eachNav} className="position-relative">
                   <Button
                     variant="link"
-                    className="d-flex align-items-center justify-content-center py-3 text-dark w-100 text-decoration-none"
+                    className="d-flex align-items-center justify-content-center py-3 w-100 text-decoration-none"
                     onClick={(e) => handleMainMenuClick(eachNav, e)}
                   >
                     <Icon name={menu.icon} size={20} />
@@ -448,7 +449,8 @@ console.log('navBar',aNavBar)
               <React.Fragment key={eachNav}>
                 <Button
                   variant="link"
-                  className="d-flex align-items-center justify-content-between gap-5 px-3 py-2 text-dark w-100 text-start text-decoration-none"
+                  className="d-flex align-items-center justify-content-between gap-5 px-3 py-2 w-100 text-start text-decoration-none"
+                  style={{color:"var(--text-color)"}}
                   onClick={() => toggleMenu(eachNav)}
                 >
                   <span className="d-flex align-items-center gap-3">
@@ -472,6 +474,7 @@ console.log('navBar',aNavBar)
                         key={i}
                         to={sub.path || "#"}
                         className={navLinkClass(sub.path || "#")}
+                        style={{color:"var(--text-color)"}}
                       >
                         <Icon name={sub.icon} size={16} />
                         <span>{sub.name}</span>
@@ -497,9 +500,9 @@ console.log('navBar',aNavBar)
               <div className="fw-medium">
                 {`${user?.user?.firstName || ""} ${user?.user?.lastName || ""}`}
               </div>
-              <div className="text-muted" style={{ fontSize: "0.9rem" }}>
+              <div style={{ fontSize: "0.9rem" }}>
                 {user?.user?.email}
-              </div>
+              </div>  
             </div>
           </div>
           <Button

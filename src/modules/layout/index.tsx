@@ -17,7 +17,7 @@ const Layout = () => {
   };
 console.log('themetheme',theme)
   return (
-    <div className="appLayout" style={{ display: 'flex', height: '100vh',backgroundColor: "var(--layout-bg)", overflow: 'hidden' }}>
+    <div className="appLayout" style={{ display: 'flex', height: '100vh',backgroundColor: "var(--layout-bg)", color: "var(--text-color)", overflow: 'hidden' }}>
       <SidebarComponent theme={theme} toggleTheme={toggleTheme} />
       <main style={{ flex: 1, overflowY: 'auto', padding: '1rem' }}>
         <Outlet />
