@@ -10,6 +10,7 @@ const AttendanceRoutes = lazy(() => import('./AttendanceRoutes'));
 const CalendarRoutes = lazy(() => import('./CalendarRoutes'));
 const TimeTableRoutes = lazy(() => import('./TimeTableRoutes'));
 const DepartmentRoutes = lazy(() => import('./DepartmentRoutes'));
+const DegreeRoutes = lazy(() => import('./DegreeRoutes'));
 const DesignationRoutes = lazy(() => import('./DesignationRoutes'));
 const EmployeeRoutes = lazy(() => import('./EmployeeRoutes'));
 const FeeHeadRoutes = lazy(() => import('./FeeHeadRoutes'));
@@ -59,6 +60,7 @@ const AuthenticatedRoutes = () => {
           <Route path="attendance/*" element={<AttendanceRoutes />} />
           <Route path="calendar/*" element={<CalendarRoutes />} />
           <Route path="department/*" element={<DepartmentRoutes />} />
+          <Route path="degree/*" element={<DegreeRoutes />} />
           <Route path="designation/*" element={<DesignationRoutes />} />
           <Route path="employee/*" element={<EmployeeRoutes />} />
           <Route path="feeHead/*" element={<FeeHeadRoutes />} />
