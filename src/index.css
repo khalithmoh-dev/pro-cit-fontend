@@ -21,11 +21,18 @@
 }
 /* index.css */
 [data-theme='dark'] {
-  --main-bg: #1c2434;
-  --text-color: #ffffff;
-  --layout-bg: #3A3F51;
-  --sidebar-bg: #1c2434;
+  --bg-color: #0b2a49;
+  --main-div: #ffff;
+  --main-text: #000000;
+  --header-color: rgb(0, 0, 0);
+
+
+  --text-color: #eeeeee;
+  --sidebar-bg: rgba(0, 0, 0, 0.87) ;
+  --sidebar-shadow:rgba(0, 0, 0, 0.05) 0rem 1.25rem 1.6875rem 0rem;
   --sidebar-text: #ffffff;
+  --logout-button: #ec407a;
+  --logout-text: #ffffff;
   --sidebar-selected-bg: #4c6b5a;
   --sidebar-selected-text: #ffffff;
   --sidebar-hover-bg: rgba(211, 211, 211, 0.2);
@@ -35,11 +42,14 @@
 }
 
 [data-theme='light'] {
-  --main-bg: #f0f2f5;
-  --layout-bg: #f0f2f5;
-  --text-color: black;
-  --sidebar-bg: #1d5bd6;
-  --sidebar-text: #e21a1a;
+  --bg-color: #ffff;
+  --main-div: #0b2a49;
+  --main-text: #000000;
+  --header-color: black;
+
+
+  --text-color: #529fc1;
+  --sidebar-bg: #f7efef;
   --sidebar-selected-bg: #4c6b5a;
   --sidebar-selected-text: #ffffff;
   --sidebar-hover-bg: rgba(211, 211, 211, 0.2);
@@ -47,6 +57,25 @@
   --nav-item-color: #9ba2af;
   --submenu-color: #989eaa;
 }
+
+.page-header {
+  font-size: 25px !important;
+  font-weight: 900 !important;
+  color: var(--header-color);
+  font-size: 2rem !important;   /* ~24px */
+  font-weight: 600 !important;    /* normal */
+  line-height: 1.334;
+  letter-spacing: 0em;
+}
+
+.section-header {
+    font-size: 1.5rem !important;   /* ~20px */
+    font-weight: 500 !important;
+    line-height: 1.6 !important;
+    letter-spacing: 0.0075em !important;
+    color:var(--main-text); /* default text color */
+}
+
 ::-webkit-scrollbar {
   width: 4px;
 }

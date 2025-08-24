@@ -28,7 +28,7 @@ main.mainContent {
   flex: 1; /* take remaining space */
   overflow-y: auto; /* scroll main content if overflow */
   background-color: var(--main-bg, #f0f2f5);
-  padding: 1rem;
+  /* padding: 1rem; */
 }
 
 

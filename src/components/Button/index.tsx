@@ -1,43 +1,61 @@
-import React from 'react';
-import MuiButton, { ButtonProps as MuiButtonProps } from '@mui/material/Button';
-import { ICON_NAMES } from '../../utils/static-data';
-import Icon from '../../components/Icons';
+import * as React from "react"
+import MuiButton, { ButtonProps as MuiButtonProps } from "@mui/material/Button"
 
-interface CustomButtonProps extends MuiButtonProps {
-  icon?: keyof typeof ICON_NAMES;
-  variant?: 'contained'
+type Variant = "submit" | "cancel" | "reset"
+type Size = "sm" | "md" | "lg"
+
+export interface ButtonProps extends Omit<MuiButtonProps, "variant"> {
+  variantType?: Variant
+  sizeType?: Size
 }
 
-const CustomButton: React.FC<CustomButtonProps> = ({
-  icon,
-  children,
-  ...rest
-}) => {
-  const getIconColor = (type: string): string => {
-    switch (type) {
-      case 'primary':
-        return 'white';
-      case 'secondary':
-        return 'black';
-      default:
-        return 'white';
-    }
-  };
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ variantType = "submit", sizeType = "md", ...props }, ref) => {
+    // Size styles (shadcn style)
+    const sizeStyles =
+      sizeType === "sm"
+        ? { padding: "6px 14px", fontSize: "0.8rem" }
+        : sizeType === "lg"
+        ? { padding: "12px 24px", fontSize: "1rem" }
+        : { padding: "8px 18px", fontSize: "0.875rem" }
 
-  return (
-    <>
-      {icon && (
-        <Icon
-          name={ICON_NAMES[icon]}
-          size={20}
-          color={getIconColor(rest.type)}
-        />
-      )}
-      <MuiButton {...rest} variant="contained">
-        {children}
-      </MuiButton>
-    </>
-  );
-};
+    // Variant styles
+    const variantStyles =
+      variantType === "submit"
+        ? {
+            backgroundColor: "#2563eb", // blue-600
+            color: "#fff",
+            "&:hover": { backgroundColor: "#1d4ed8" }, // blue-700
+          }
+        : variantType === "cancel"
+        ? {
+            backgroundColor: "#dc2626", // red-600
+            color: "#fff",
+            "&:hover": { backgroundColor: "#b91c1c" }, // red-700
+          }
+        : {
+            backgroundColor: "#9ca3af", // gray-400
+            color: "#fff",
+            "&:hover": { backgroundColor: "#6b7280" }, // gray-500
+          }
 
-export default CustomButton;
+    return (
+      <MuiButton
+        ref={ref}
+        disableElevation
+        sx={{
+          borderRadius: "0.5rem",
+          fontWeight: 500,
+          textTransform: "none",
+          ...sizeStyles,
+          ...variantStyles,
+        }}
+        {...props}
+      />
+    )
+  }
+)
+
+Button.displayName = "Button"
+
+export default Button

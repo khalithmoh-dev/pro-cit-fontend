@@ -9,8 +9,8 @@ const FormbuilderRoutes = () => {
   return (
     <Suspense fallback={<PageLoader />}>
       <Routes>
-        <Route path="/list" element={<FormListPage />} />
-        <Route path="/create" element={<CreateFormPage />} />
+        <Route path="/institute-config/list" element={<FormListPage />} />
+        <Route path="/institute-config/create" element={<CreateFormPage />} />
         <Route path="/update/:formId" element={<CreateFormPage update />} />
       </Routes>
     </Suspense>

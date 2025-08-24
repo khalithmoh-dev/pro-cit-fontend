@@ -224,7 +224,8 @@ import { Nav, Button, Collapse, Form } from "react-bootstrap";
 import useAuthStore from "../../../store/authStore";
 import Icon from "../../../components/Icons";
 import { createPortal } from "react-dom";
-import Switch from "@mui/material/Switch";   // 👈 add this
+import Switch from "@mui/material/Switch";
+import { useMediaQuery } from "@mui/material";
 
 interface SidebarProps {
   theme: "light" | "dark";
@@ -245,6 +246,15 @@ export default function SidebarComponent({ theme, toggleTheme }: SidebarProps) {
   const popoverRef = useRef<HTMLDivElement | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState<any[]>([]);
+   const isTabletOrLess = useMediaQuery("(max-width:900px)");
+
+  useEffect(() => {
+    if (isTabletOrLess) {
+      setCollapsed(true);
+    } else {
+      setCollapsed(false);
+    }
+  }, [isTabletOrLess]);
 
   // 🔍 Search filter
   useEffect(() => {
@@ -316,12 +326,17 @@ export default function SidebarComponent({ theme, toggleTheme }: SidebarProps) {
       setANavBar(oNavData);
     }
   }, [user?.role?.modules]);
-console.log('navBar',aNavBar)
+
   const toggleMenu = (menuKey: string) => {
     setOpenMenu((prev) => (prev === menuKey ? null : menuKey));
   };
 
   const handleMainMenuClick = (menuKey: string, e: React.MouseEvent<HTMLButtonElement>) => {
+    console.log('activePopoverMenu',activePopoverMenu)
+    if(activePopoverMenu){
+      closePopover()
+      return;
+    }
     const rect = e.currentTarget.getBoundingClientRect();
     setPopoverPos({ top: rect.top, left: rect.right });
     setActivePopoverMenu((prev) => (prev === menuKey ? null : menuKey));
@@ -345,21 +360,21 @@ console.log('navBar',aNavBar)
   }, [activePopoverMenu]);
 
   const navLinkClass = (path: string) =>
-    `d-flex align-items-center gap-2 px-3 py-2 rounded text-decoration-none ${
+    `d-flex align-items-center gap-2 px-3 py-2 me-2 rounded text-decoration-none ${
       location.pathname === path
-        ? `${style.activeLink} bg-light text-success !important fw-semibold`
+        ? `${style.activeLink} bg-light text-success !important`
         : ""
     }`;
 
   return (
     <aside
-      className={`border-end d-flex flex-column`}
-      style={{ width: collapsed ? "80px" : "260px", height: "100vh" }}
+      className={`d-flex flex-column`}
+      style={{ width: collapsed ? "80px" : "280px", height: "100vh", color: "var(--logout-text)"}}
     >
       {/* Logo Row with collapse toggle */}
       <div className="p-3 d-flex align-items-center justify-content-between border-bottom">
         <div
-          className="fw-bold fs-4"
+          className="fs-4"
           style={{ cursor: "pointer", color: theme === "dark" ? "#0f0" : "#198754" }}
           onClick={() => navigate("/dashboard")}
         >
@@ -414,7 +429,6 @@ console.log('navBar',aNavBar)
                   key={idx}
                   to={sub.path || "#"}
                   className={navLinkClass(sub.path || "#")}
-                  style={{color:"var(--text-color)"}}
                 >
                   <Icon name={sub.icon} size={16} />
                   {sub.name}
@@ -450,7 +464,7 @@ console.log('navBar',aNavBar)
                 <Button
                   variant="link"
                   className="d-flex align-items-center justify-content-between gap-5 px-3 py-2 w-100 text-start text-decoration-none"
-                  style={{color:"var(--text-color)"}}
+                  style={{color: 'var(--sidebar-text)'}}
                   onClick={() => toggleMenu(eachNav)}
                 >
                   <span className="d-flex align-items-center gap-3">
@@ -474,7 +488,7 @@ console.log('navBar',aNavBar)
                         key={i}
                         to={sub.path || "#"}
                         className={navLinkClass(sub.path || "#")}
-                        style={{color:"var(--text-color)"}}
+                        style={{color: 'var(--sidebar-text)'}}
                       >
                         <Icon name={sub.icon} size={16} />
                         <span>{sub.name}</span>
@@ -490,7 +504,7 @@ console.log('navBar',aNavBar)
 
       {/* Profile Section */}
       {!collapsed && (
-        <div className="p-3 border-top" style={{ flexShrink: 0 }}>
+        <div className="p-3 border-top" style={{ flexShrink: 0}}>
           <div className="d-flex align-items-center gap-2">
             <div className={style.profileText}>
               {user?.user?.firstName?.[0]}
@@ -508,6 +522,7 @@ console.log('navBar',aNavBar)
           <Button
             variant="outline-secondary"
             className="w-100 mt-3"
+            style={{backgroundColor:"var(--logout-button)", color: "var(--logout-text)"}}
             onClick={logout}
           >
             Log out
@@ -521,20 +536,21 @@ console.log('navBar',aNavBar)
         createPortal(
           <div
             ref={popoverRef}
-            className="position-fixed bg-white border rounded shadow p-2"
+            className="position-fixed border rounded shadow p-2"
             style={{
               top: `${popoverPos.top}px`,
               left: `${popoverPos.left}px`,
               minWidth: "220px",
               zIndex: 1050,
+              backgroundColor: "var(--sidebar-bg)",
             }}
           >
-            <div className="fw-semibold mb-2">{activePopoverMenu}</div>
+            <div className="mb-2 rounded p-1" style={{backgroundColor:"var(--logout-button)", color: "var(--logout-tex)"}} >{activePopoverMenu}</div>
             {aNavBar[activePopoverMenu].children.map((sub, i) => (
               <Link
                 key={i}
                 to={sub.path || "#"}
-                className="d-flex align-items-center gap-2 text-dark text-decoration-none mb-2"
+                className="d-flex align-items-center gap-2 text-decoration-none mb-2"
                 onClick={closePopover}
               >
                 <Icon name={sub.icon} size={16} />
