@@ -304,7 +304,6 @@ export default function SidebarComponent({ theme, toggleTheme }: SidebarProps) {
             icon: mainMenu.icon
           }
         }
-          console.log('subMenus',subMenus)
         oNavData[mainMenu.name].children = subMenus.map((subMenu) => ({
           key: subMenu.key,
           name: subMenu.name,

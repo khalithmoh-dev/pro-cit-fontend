@@ -25,12 +25,12 @@
   --main-div: #ffff;
   --main-text: #000000;
   --header-color: rgb(0, 0, 0);
+  --sidebar-text: #ffffff;
 
 
   --text-color: #eeeeee;
   --sidebar-bg: rgba(0, 0, 0, 0.87) ;
   --sidebar-shadow:rgba(0, 0, 0, 0.05) 0rem 1.25rem 1.6875rem 0rem;
-  --sidebar-text: #ffffff;
   --logout-button: #ec407a;
   --logout-text: #ffffff;
   --sidebar-selected-bg: #4c6b5a;
@@ -91,6 +91,10 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+.error-text{
+  color: red !important;
 }
 
 /* z-index: sidebar:10, z-index: formbuilder-dialog:11 */

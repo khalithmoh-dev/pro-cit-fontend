@@ -33,6 +33,7 @@ interface User {
       _id: string;
       departmentCode: string;
     };
+    insId: string;
   };
   role: {
     modules: ModuleIF[];
