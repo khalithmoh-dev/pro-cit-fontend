@@ -1,139 +1,97 @@
-// App.jsx
-
 import React from 'react';
-import GenericTable from '../../common/generic-table';
-import Button from "@mui/material/Button";
-import Stack from "@mui/material/Stack";
-import AddIcon from "@mui/icons-material/Add";
-import EditIcon from "@mui/icons-material/Edit";
+import DataTable from '../../common/generic-table';
+import { Chip,Box } from '@mui/material';
+import { Eye } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import PageTitle from "../../../components/PageTitle";
 
-
-const columns = [
-  { id: 'degreeId', label: 'Degree ID' },
-  { id: 'degreeName', label: 'Degree Name' },
-  { id: 'description', label: 'Description' },  
-  { id: 'institution', label: 'Institution' },
-];
-
-const tableSchema = [
-  { Header: "Author", accessor: "author" },
-  { Header: "Function", accessor: "function" },
-  { Header: "Status", accessor: "status", type: "status", align: "center" },
-  { Header: "Employed", accessor: "employed", align: "center" },
-  {
-    Header: "Actions",
-    accessor: "actions",
-    align: "center",
-    type: "actions",
-    onEdit: (row) => console.log("Edit", row),
-    onDelete: (row) => console.log("Delete", row),
-  },
-];
-
-const rows = [
-  { id: 1, author: "John Michael", function: "Manager", status: "ONLINE", employed: "23/04/18" },
-  { id: 2, author: "Alexa Liras", function: "Programmer", status: "OFFLINE", employed: "11/01/19" },
-];
-
-
-
-// const rows= [
-//   {
-//     "degreeId": "BCS",
-//     "degreeName": "Bachelor of Computer Science",
-//     "description": "Undergraduate program focusing on algorithms, programming, and software development.",
-//     "institution": "Massachusetts Institute of Technology"
-//   },
-//   {
-//     "degreeId": "MBA",
-//     "degreeName": "Master of Business Administration",
-//     "description": "Postgraduate degree emphasizing leadership, strategy, and business management.",
-//     "institution": "Harvard Business School"
-//   },
-//   {
-//     "degreeId": "BME",
-//     "degreeName": "Bachelor of Mechanical Engineering",
-//     "description": "Undergraduate program in design, manufacturing, and thermal engineering.",
-//     "institution": "Indian Institute of Technology Bombay"
-//   },
-//   {
-//     "degreeId": "MDS",
-//     "degreeName": "Master of Data Science",
-//     "description": "Graduate program focusing on big data, AI, and predictive analytics.",
-//     "institution": "Stanford University"
-//   },
-//   {
-//     "degreeId": "PHDPHY",
-//     "degreeName": "Doctor of Philosophy in Physics",
-//     "description": "Research-based doctoral degree in quantum mechanics, astrophysics, and materials science.",
-//     "institution": "California Institute of Technology"
-//   },
-//   {
-//     "degreeId": "BAPSY",
-//     "degreeName": "Bachelor of Arts in Psychology",
-//     "description": "Study of human behavior, mental processes, and social interactions.",
-//     "institution": "University of California, Berkeley"
-//   },
-//   {
-//     "degreeId": "MPH",
-//     "degreeName": "Master of Public Health",
-//     "description": "Graduate degree focusing on epidemiology, health policy, and global health.",
-//     "institution": "Johns Hopkins University"
-//   },
-//   {
-//     "degreeId": "BCE",
-//     "degreeName": "Bachelor of Civil Engineering",
-//     "description": "Program emphasizing structural design, transportation, and environmental engineering.",
-//     "institution": "National University of Singapore"
-//   },
-//   {
-//     "degreeId": "MAI",
-//     "degreeName": "Master of Artificial Intelligence",
-//     "description": "Advanced program on neural networks, natural language processing, and robotics.",
-//     "institution": "Carnegie Mellon University"
-//   },
-//   {
-//     "degreeId": "BCOM",
-//     "degreeName": "Bachelor of Commerce",
-//     "description": "Undergraduate program covering finance, accounting, and business economics.",
-//     "institution": "University of Melbourne"
-//   }
-// ];
-
-const DegreeListPage = () =>  {
+// Example usage
+const ExampleTable = () => {
   const navigate = useNavigate();
+  // Sample data
+  const sampleData = [
+    { id: 1, name: 'Project Alpha', status: 'active', category: 'Development', budget: 5000, deadline: '2024-03-15' },
+    { id: 2, name: 'Marketing Campaign', status: 'pending', category: 'Marketing', budget: 3200, deadline: '2024-04-20' },
+    { id: 3, name: 'System Upgrade', status: 'completed', category: 'Infrastructure', budget: 7500, deadline: '2024-02-10' },
+    { id: 4, name: 'Website Redesign', status: 'active', category: 'Development', budget: 4200, deadline: '2024-05-05' },
+    { id: 5, name: 'Product Launch', status: 'pending', category: 'Marketing', budget: 8500, deadline: '2024-06-12' },
+  ];
+
+  // Column configuration
+  const columns = [
+    { 
+      field: 'name', 
+      headerName: 'Project Name', 
+      sortable: true
+    },
+    { 
+      field: 'status', 
+      headerName: 'Status', 
+      sortable: true,
+      renderCell: (row) => {
+        const colorMap = {
+          active: 'success',
+          pending: 'warning',
+          completed: 'primary'
+        };
+        
+        return (
+          <Chip 
+            label={row.status} 
+            color={colorMap[row.status] || 'default'} 
+            size="small" 
+          />
+        );
+      }
+    },
+    { 
+      field: 'category', 
+      headerName: 'Category', 
+      sortable: true,
+    },
+    { 
+      field: 'budget', 
+      headerName: 'Budget ($)', 
+      sortable: true,
+      renderCell: (row) => `$${row.budget.toLocaleString()}`,
+    },
+    { 
+      field: 'deadline', 
+      headerName: 'Deadline', 
+      sortable: true,
+      renderCell: (row) => new Date(row.deadline).toLocaleDateString(),
+    },
+  ];
+
+  // Action buttons
+  const actions = [
+    {
+      label: 'View Details',
+      icon: <Eye size={18} />,
+      onClick: (row) => {
+        console.log('View:', row);
+        navigate('/degree/create')
+      }
+    }
+  ];
+
+  // Handle selection
+  const handleSelection = (selectedIds) => {
+    console.log('Selected IDs:', selectedIds);
+  };
+
   return (
-    <div style={{ padding: 20 }}>
-      <h2>Degrees</h2>
-      <div style={{float : "right"}}>
-        <Stack direction="row" spacing={2}>
-      {/* New Button */}
-      <Button 
-        variant="contained" 
-        color="primary" 
-        startIcon={<AddIcon />}
-        onClick={() => alert("New record")}
-      >
-        New
-      </Button>
-
-      {/* Edit Button */}
-      <Button 
-        variant="outlined" 
-        color="secondary" 
-        startIcon={<EditIcon />}
-        onClick={() => alert("Edit record")}
-      >
-        Edit
-      </Button>
-    </Stack>
-      </div>
-      
-      {/* <GenericTable columns={columns} rows={rows} /> */}
-      <GenericTable schema={tableSchema} rows={rows} />
-    </div>
+    <Box sx={{ p: 3 }}>
+      <PageTitle title={'Degree list'}/>
+      <DataTable
+        data={sampleData}
+        columns={columns}
+        onSelect={handleSelection}
+        title="Degree list"
+        actions={actions}
+      />
+    </Box>
   );
-}
+};
 
-export default DegreeListPage;
+export default ExampleTable;

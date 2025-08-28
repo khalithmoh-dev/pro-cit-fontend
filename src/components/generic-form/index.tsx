@@ -1,5 +1,5 @@
 // src/screens/CreateDegree/GenericMaster.jsx
-import React from "react";
+import React, {useState} from "react";
 import {
   Box,
   Checkbox,
@@ -9,7 +9,8 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  TextField
+  TextField,
+  Switch
 } from "@mui/material";
 import Typography from '@mui/material/Typography'
 import PageTitle from '../PageTitle';
@@ -31,7 +32,9 @@ import FormHelperText from '@mui/joy/FormHelperText';
       - onSubmit: onSubmit function
 */
 
-const GenericMaster = ({ pageTitle, schema, onSubmit, oInitialValues }) => {
+const GenericMaster = ({ pageTitle, schema, onSubmit, isEditPerm= false ,oInitialValues }) => {
+  const [editPerm, setEditPerm] = useState(false);
+
   // Build validation schema
 const validationSchema = Yup.object(
   Object.values(schema.fields).flat().reduce((acc, field) => {
@@ -43,7 +46,6 @@ const validationSchema = Yup.object(
     return acc;
   }, {})
 );
-console.log('from form',oInitialValues)
 const formik = useFormik({
   initialValues: Object.values(schema.fields)
     .flat()
@@ -86,7 +88,7 @@ const formik = useFormik({
             onBlur={formik.handleBlur}
             error={formik.touched[field.name] && Boolean(formik.errors[field.name])}
             helperText={formik.touched[field.name] && formik.errors[field.name]}
-            disabled={field.isEdit}
+            disabled={!editPerm || field.isDisabled}
           />
         );
        case "select":
@@ -135,6 +137,7 @@ const formik = useFormik({
                 newValue.splice(index)
                 formik.setFieldValue(field.name, newValue);
             }}
+            disabled={!editPerm || field.isDisabled}
           />
         );
      case "checkbox":
@@ -193,6 +196,7 @@ const formik = useFormik({
             onBlur={formik.handleBlur}
             error={formik.touched[field.name] && Boolean(formik.errors[field.name])}
             helperText={formik.touched[field.name] && formik.errors[field.name]}
+            disabled={!editPerm || field.isDisabled}
           />
           {formik.touched[field.name] && Boolean(formik.errors[field.name]) && <FormHelperText className="error-text">{formik.errors[field.name]}</FormHelperText>}
         </>
@@ -205,8 +209,18 @@ const formik = useFormik({
   return (
     <div className="p-3">
       {/* Page Header */}
-      {pageTitle && <PageTitle title={pageTitle}/>}
-
+      {pageTitle && 
+        <div className="d-flex justify-content-between">
+          <PageTitle title={pageTitle}/>
+          {
+            isEditPerm &&
+            <div className="d-flex justify-content-center align-item-center">
+              <Label labelName={'Edit mode'} className='mt-2'/>
+              <Switch defaultChecked={false} onChange={() => setEditPerm(!editPerm)} />
+            </div>
+          }
+        </div>
+      }
       {/* Form */}
       <form onSubmit={formik.handleSubmit} className="w-75 mx-auto" onReset={formik.handleReset}>
         {Object.entries(schema.fields).map(([sectionName, fields]) => (

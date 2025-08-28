@@ -8,8 +8,7 @@ const PageTitle = ({
 }) => {
     return (
         <Typography
-            mb={3}
-            className="page-header"
+            variant="h6" component="h2"
         >
             {title}
         </Typography>

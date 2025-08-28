@@ -1,8 +1,12 @@
 import RenderFormbuilderForm from "../../../components/render-formbuilder-form";
 import DynamicForm from "../../../components/generic-form";
 import * as Yup from "yup";
+import { useNavigate } from "react-router-dom";
 
-const schema = {
+export default function CreateDegree() {
+  const navigate = useNavigate();
+
+  const schema = {
   fields: {
       General: [
         // {
@@ -53,7 +57,7 @@ const schema = {
 },
   buttons:[
     {
-      name:"Cancel", variant:"outlined", color:"secondary", onClick:()=>{}
+      name:"Cancel", variant:"outlined", color:"secondary", onClick:()=>{navigate(-1)}
     },{
       name:"Reset", variant:"outlined", color:"warning", onClick:()=>{}
     },{
@@ -64,14 +68,14 @@ const schema = {
   ]
 };
 
-
-export default function CreateDegree() {
   return (
-    <DynamicForm
-      schema={schema}
-      pageTitle="Create Degree"
-      onSubmit={(values) => console.log("Form Submitted:", values)}
-      onCancel={() => console.log("Cancelled")}
-    />
+    <>
+      <DynamicForm
+        schema={schema}
+        pageTitle="Create Degree"
+        onSubmit={(values) => console.log("Form Submitted:", values)}
+        onCancel={() => console.log("Cancelled")}
+      />
+    </>
   );
 }
