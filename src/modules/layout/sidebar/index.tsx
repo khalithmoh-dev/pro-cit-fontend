@@ -222,6 +222,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import React, { useState, useEffect, useRef } from "react";
 import { Nav, Button, Collapse, Form } from "react-bootstrap";
 import useAuthStore from "../../../store/authStore";
+import useInstituteStore from "../../../store/instituteStore";
 import Icon from "../../../components/Icons";
 import { createPortal } from "react-dom";
 import Switch from "@mui/material/Switch";
@@ -240,13 +241,15 @@ export default function SidebarComponent({ theme, toggleTheme }: SidebarProps) {
   >({});
   const { user, logout } = useAuthStore();
   const [openMenu, setOpenMenu] = useState<string | null>(null);
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
   const [activePopoverMenu, setActivePopoverMenu] = useState<string | null>(null);
   const [popoverPos, setPopoverPos] = useState<{ top: number; left: number }>({ top: 0, left: 0 });
   const popoverRef = useRef<HTMLDivElement | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState<any[]>([]);
    const isTabletOrLess = useMediaQuery("(max-width:900px)");
+  const { getInstitute } = useInstituteStore();
+  const [insCode,setInsCode] = useState('')
 
   useEffect(() => {
     if (isTabletOrLess) {
@@ -255,6 +258,18 @@ export default function SidebarComponent({ theme, toggleTheme }: SidebarProps) {
       setCollapsed(false);
     }
   }, [isTabletOrLess]);
+
+  useEffect(()=>{
+      if(user && getInstitute){
+        (async()=>{
+          const oInstituteDtls = await getInstitute(user?.user?.insId);
+          if(oInstituteDtls && Object.keys(oInstituteDtls).length){
+            setInsCode(oInstituteDtls?.insCode);
+          }
+        })();
+      }
+  },[user,getInstitute]);
+  console.log('insCodeinsCode',insCode)
 
   // 🔍 Search filter
   useEffect(() => {
@@ -377,7 +392,7 @@ export default function SidebarComponent({ theme, toggleTheme }: SidebarProps) {
           style={{ cursor: "pointer", color: theme === "dark" ? "#0f0" : "#198754" }}
           onClick={() => navigate("/dashboard")}
         >
-          CIT
+          {insCode}
         </div>
 
         <Button
@@ -502,7 +517,7 @@ export default function SidebarComponent({ theme, toggleTheme }: SidebarProps) {
       </div>}
 
       {/* Profile Section */}
-      {!collapsed && (
+      {!collapsed ? (
         <div className="p-3 border-top" style={{ flexShrink: 0}}>
           <div className="d-flex align-items-center gap-2">
             <div className={style.profileText}>
@@ -527,7 +542,23 @@ export default function SidebarComponent({ theme, toggleTheme }: SidebarProps) {
             Log out
           </Button>
         </div>
-      )}
+      ): 
+     <div className="p-2 border-top d-flex justify-content-center" style={{ flexShrink: 0 }}>
+  <div
+    className="d-flex align-items-center justify-content-center rounded-circle"
+    style={{
+      width: "36px",
+      height: "36px",
+      backgroundColor:"var(--logout-button)",
+      color: "var(--logout-text)",
+      boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+    }}
+  >
+    <Icon name="LogOut" size={18} />
+  </div>
+</div>
+
+      }
 
       {/* Floating Popover (collapsed mode only) */}
       {activePopoverMenu &&
