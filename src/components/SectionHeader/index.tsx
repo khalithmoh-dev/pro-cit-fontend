@@ -11,7 +11,7 @@ const SectionHeader: React.FC<SectionHeaderProps> = ({ sectionName }) => {
         <Typography className='section-header'>
         {sectionName}
         </Typography>
-        <hr className='m-0 p-2' style={{color: 'black'}}/>
+        <hr className='m-0 p-0' style={{color: 'black'}}/>
     </>
   )
 }

@@ -1,13 +1,21 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+/* Import Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
-* {
+html, body, #root {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
+  height: 100%;
+  background-color: var(--bg-color); /* Global page background */
+  font-size: 16px;
+  font-family: var(--font-family-1) !important;
+}
 
+/* Common Variables */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
   --primary: #0465ac;
-  /* --primary: rgb(40, 53, 80); */
   --primary-dark: #1a81c1;
   --primary-shade: #3d91cd66;
   --primary-light: #3d98cd26;
@@ -19,69 +27,64 @@
   --white: #ffffff;
   --error: #ff3838;
 }
-/* index.css */
-[data-theme='dark'] {
-  --bg-color: #0b2a49;
-  --main-div: #ffff;
+
+/* #region theme styles*/
+/* Light Theme */
+[data-theme='light'] {
+  --bg-color: #e0e0e0;        /* Light grey background for the whole page */
+  --sidebar-bg: #d6d6d6;      /* Sidebar slightly darker grey */
+  --sidebar-text: #222222;
   --main-text: #000000;
-  --header-color: rgb(0, 0, 0);
-  --sidebar-text: #ffffff;
-
-
-  --text-color: #eeeeee;
-  --sidebar-bg: rgba(0, 0, 0, 0.87) ;
-  --sidebar-shadow:rgba(0, 0, 0, 0.05) 0rem 1.25rem 1.6875rem 0rem;
+  --header-color: #000000;
   --logout-button: #ec407a;
   --logout-text: #ffffff;
+  --sidebar-hover-bg: rgba(0, 0, 0, 0.05);
   --sidebar-selected-bg: #4c6b5a;
   --sidebar-selected-text: #ffffff;
-  --sidebar-hover-bg: rgba(211, 211, 211, 0.2);
-  --profile-bg: #5e5e5e;
-  --nav-item-color: #9ba2af;
-  --submenu-color: #989eaa;
 }
 
-[data-theme='light'] {
-  --bg-color: #ffff;
-  --main-div: #0b2a49;
+/* Dark Theme */
+[data-theme='dark'] {
+  --bg-color: #fcf4fc;        /* Dark grey page background */
+  --sidebar-bg: #090f3f;      /* Darker sidebar */
+  --sidebar-text: #f5f5f5;
   --main-text: #000000;
-  --header-color: black;
-
-
-  --text-color: #529fc1;
-  --sidebar-bg: #f7efef;
+  --form-bg: #ffffff;
+  --header-color: #f5f5f5;
+  --logout-button: #ec407a;
+  --logout-text: #ffffff;
+  --sidebar-hover-bg: rgba(255, 255, 255, 0.1);
   --sidebar-selected-bg: #4c6b5a;
   --sidebar-selected-text: #ffffff;
-  --sidebar-hover-bg: rgba(211, 211, 211, 0.2);
-  --profile-bg: #5e5e5e;
-  --nav-item-color: #9ba2af;
-  --submenu-color: #989eaa;
+  --font-family-1: ui-sans-serif, system-ui, sans-serif, 
+    "Apple Color Emoji", "Segoe UI Emoji", 
+    "Segoe UI Symbol", "Noto Color Emoji";
 }
+/* #endregion */
 
+/* Headers */
 .page-header {
-  font-size: 25px !important;
-  font-weight: 900 !important;
+  font-size: 2rem;
+  font-weight: 600;
   color: var(--header-color);
-  font-size: 2rem !important;   /* ~24px */
-  font-weight: 600 !important;    /* normal */
   line-height: 1.334;
-  letter-spacing: 0em;
 }
 
 .section-header {
-    font-size: 1.5rem !important;   /* ~20px */
-    font-weight: 500 !important;
-    line-height: 1.6 !important;
-    letter-spacing: 0.0075em !important;
-    color:var(--main-text); /* default text color */
+  font-size: 1.5rem !important;
+  font-weight: 600 !important;
+  color: var(--main-text) !important;
+  line-height: 1.6 !important;
+  padding-bottom: 0px !important;
 }
 
+/* Scrollbar */
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: var(--bg-color);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -93,8 +96,106 @@
   background: #555;
 }
 
-.error-text{
-  color: red !important;
+/* Sidebar Styles */
+.sidebar {
+  background-color: var(--sidebar-bg);
+  color: var(--sidebar-text);
+  transition: width 0.3s ease-in-out;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px;
+  border-radius: 10px;
 }
 
-/* z-index: sidebar:10, z-index: formbuilder-dialog:11 */
+.sidebar a {
+  color: var(--sidebar-text);
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.sidebar a:hover {
+  background-color: var(--sidebar-hover-bg);
+  border-radius: 6px;
+}
+
+.sidebar a.active {
+  background-color: var(--sidebar-selected-bg);
+  color: var(--sidebar-selected-text);
+  border-radius: 6px;
+}
+
+/* Profile Circle */
+.profile-text {
+  background-color: var(--logout-button);
+  color: var(--logout-text);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* Error Text */
+.error-text {
+  color: var(--error);
+}
+
+.default
+/* #region mui styles*/
+.css-1miy0lu-MuiTypography-root{
+  font-family: var(--font-family-1) !important;
+  --fs-2: 16px;
+}
+.css-rizt0-MuiTypography-root{
+  font-family: var(--font-family-1) !important;
+}
+
+.css-1pzfmz2-MuiInputBase-input-MuiOutlinedInput-input{
+  font-family: var(--font-family-1) !important;
+}
+
+.generic-form-footer > .MuiBox-root.css-ku0b5b {
+  margin-top: 0 !important;
+}
+
+.css-1blp12k-MuiInputBase-root-MuiOutlinedInput-root{
+  border-radius: var(--input-radius, 15px) !important;
+}
+
+.css-1pzfmz2-MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled{
+  background-color: #e2e8f0;
+  border-radius: var(--input-radius, 15px) !important;
+  color: #000 !important;
+}
+
+/* #endregion */
+
+/* GenericMaster Card */
+.generic-master-card {
+  background-color: var(--card-bg, #fff); /* Similar to bg-card */
+  color: var(--card-foreground, #000);    /* Similar to text-card-foreground */
+  display: flex;                         /* flex */
+  flex-direction: column;                /* flex-col */
+  gap: 1rem;                           /* gap-6 => 1.5rem*/
+  border-radius: 0.75rem;                /* rounded-xl => 12px */
+  border: 1px solid var(--border-color, #e5e7eb); /* border */
+  padding: 3rem;
+  margin-left: 30px;
+  margin-right: 10px;
+  box-shadow: 13px 13px 15px rgba(0, 0, 0, 0.15);
+}
+
+.generic-form-footer {
+  background-color: var(--card-bg, #fff); /* Similar to bg-card */
+  color: var(--card-foreground, #000);    /* Similar to text-card-foreground */
+  display: flex;                         /* flex */
+  flex-direction: column;                /* flex-col */
+  gap: 1rem;                           /* gap-6 => 1.5rem*/
+  border-radius: 0.75rem;                /* rounded-xl => 12px */
+  border: 1px solid var(--border-color, #e5e7eb); /* border */
+  padding: 1.5rem;
+  margin-left: 30px;
+  margin-right: 10px;
+
+}

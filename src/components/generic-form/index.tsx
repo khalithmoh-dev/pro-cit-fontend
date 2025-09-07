@@ -207,78 +207,78 @@ const formik = useFormik({
   };
 
   return (
-    <div className="p-3">
+    <div>
       {/* Page Header */}
       {pageTitle && 
-        <div className="d-flex justify-content-between">
+        <div className="d-flex justify-content-between mb-3">
           <PageTitle title={pageTitle}/>
-          {
-            isEditPerm &&
+          {isEditPerm && (
             <div className="d-flex justify-content-center align-item-center">
               <Label labelName={'Edit mode'} className='mt-2'/>
               <Switch defaultChecked={false} onChange={() => setEditPerm(!editPerm)} />
             </div>
-          }
+          )}
         </div>
       }
-      {/* Form */}
-      <form onSubmit={formik.handleSubmit} className="w-75 mx-auto" onReset={formik.handleReset}>
-        {Object.entries(schema.fields).map(([sectionName, fields]) => (
-          <Box key={sectionName} mb={4}>
-            {/* Section Heading */}
-            <SectionHeader sectionName={sectionName} />
 
-            <div className="row">
-             {fields.map((field, index) => {
-              const shouldShow =
-                !field.showWhen ||
-                formik.values[field.showWhen.field] === field.showWhen.value;
+      {/* White Card Wrapper */}
+        <form
+          onSubmit={formik.handleSubmit}
+          onReset={formik.handleReset}
+        >
+          {Object.entries(schema.fields).map(([sectionName, fields]) => (
+            <Box key={sectionName} mb={4}>
+              {/* Section Heading */}
+      <div className="generic-master-card">
+              <SectionHeader sectionName={sectionName} />
+              <div className="row">
+                {fields.map((field, index) => {
+                  const shouldShow =
+                    !field.showWhen ||
+                    formik.values[field.showWhen.field] === field.showWhen.value;
 
-              if (!shouldShow) return null;
+                  if (!shouldShow) return null;
 
-              return (
-                <div className="col-12 col-md-6 p-2" key={index}>
-                  {!field.removeHeader && (
-                    <Label labelName={field.label} required={field.isRequired} />
-                  )}
-                  {renderField(field)}
-                </div>
-              );
-            })}
-            </div>
+                  return (
+                    <div className="col-12 col-md-6" key={index}>
+                      {!field.removeHeader && (
+                        <Label labelName={field.label} required={field.isRequired}/>
+                      )}
+                      {renderField(field)}
+                    </div>
+                  );
+                })}
+              </div>
+              </div>
+            </Box>
+          ))}
 
+          {/* Buttons */}
+          <div className="generic-form-footer">
+          <Box display="flex" justifyContent="flex-end" gap={2} mt={4}>
+            {schema.buttons.map((btn, idx) => (
+              <Button
+                key={idx}
+                color={btn.color}
+                size={btn.size || "medium"}
+                onClick={btn.onClick}
+                type={btn.type ?? 'button'}
+                variantType={
+                  btn.type === "submit"
+                    ? "submit"
+                    : btn.name === "Reset"
+                    ? "reset"
+                    : btn.name === "Cancel"
+                    ? "cancel"
+                    : "button"
+                }
+              >
+                {btn.name}
+              </Button>
+            ))}
           </Box>
-        ))}
-
-        {/* Buttons */}
-   <Box 
-  display="flex" 
-  justifyContent="flex-end" 
-  gap={2} 
-  mt={4}
->
-  {schema.buttons.map((btn, idx) => (
-    <Button
-      key={idx}
-      color={btn.color}
-      size={btn.size || "medium"}
-      onClick={btn.onClick}
-      type={btn.type ?? 'button'}
-      variantType={
-        btn.type === "submit"
-          ? "submit"
-          : btn.name === "Reset"
-          ? "reset" : btn.name === "Cancel" ? "cancel"
-          : "button"
-      }
-    >
-      {btn.name}
-    </Button>
-  ))}
-</Box>
-
-
-      </form>
+          </div>
+        </form>
     </div>
   );
 };

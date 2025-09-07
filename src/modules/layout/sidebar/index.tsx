@@ -240,36 +240,42 @@ export default function SidebarComponent({ theme, toggleTheme }: SidebarProps) {
     Record<string, { icon?: string; children: any[] }>
   >({});
   const { user, logout } = useAuthStore();
+  const { getInstitute } = useInstituteStore();
+
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [collapsed, setCollapsed] = useState(true);
-  const [activePopoverMenu, setActivePopoverMenu] = useState<string | null>(null);
-  const [popoverPos, setPopoverPos] = useState<{ top: number; left: number }>({ top: 0, left: 0 });
+  const [activePopoverMenu, setActivePopoverMenu] = useState<string | null>(
+    null
+  );
+  const [popoverPos, setPopoverPos] = useState<{ top: number; left: number }>({
+    top: 0,
+    left: 0,
+  });
   const popoverRef = useRef<HTMLDivElement | null>(null);
+
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState<any[]>([]);
-   const isTabletOrLess = useMediaQuery("(max-width:900px)");
-  const { getInstitute } = useInstituteStore();
-  const [insCode,setInsCode] = useState('')
+  const [insCode, setInsCode] = useState("");
 
+  //default side nav collapsed on tablet
+  // const isTabletOrLess = useMediaQuery("(max-width:900px)");
+
+  // // Collapse sidebar based on screen size
+  // useEffect(() => {
+  //   setCollapsed(isTabletOrLess);
+  // }, [isTabletOrLess]);
+
+  // Fetch institute code
   useEffect(() => {
-    if (isTabletOrLess) {
-      setCollapsed(true);
-    } else {
-      setCollapsed(false);
+    if (user && getInstitute) {
+      (async () => {
+        const oInstituteDtls = await getInstitute(user?.user?.insId);
+        if (oInstituteDtls && Object.keys(oInstituteDtls).length) {
+          setInsCode(oInstituteDtls?.insCode);
+        }
+      })();
     }
-  }, [isTabletOrLess]);
-
-  useEffect(()=>{
-      if(user && getInstitute){
-        (async()=>{
-          const oInstituteDtls = await getInstitute(user?.user?.insId);
-          if(oInstituteDtls && Object.keys(oInstituteDtls).length){
-            setInsCode(oInstituteDtls?.insCode);
-          }
-        })();
-      }
-  },[user,getInstitute]);
-  console.log('insCodeinsCode',insCode)
+  }, [user, getInstitute]);
 
   // 🔍 Search filter
   useEffect(() => {
@@ -278,8 +284,8 @@ export default function SidebarComponent({ theme, toggleTheme }: SidebarProps) {
       return;
     }
     const results: any[] = [];
-    Object.keys(aNavBar).forEach(menu => {
-      aNavBar[menu].children.forEach(sub => {
+    Object.keys(aNavBar).forEach((menu) => {
+      aNavBar[menu].children.forEach((sub) => {
         if (sub.name.toLowerCase().includes(searchTerm.toLowerCase())) {
           results.push(sub);
         }
@@ -291,50 +297,37 @@ export default function SidebarComponent({ theme, toggleTheme }: SidebarProps) {
   // Build menu data
   useEffect(() => {
     if (user?.role?.modules) {
-      // const navBar = user.role.modules
-      //   .filter((m) => !m.deleted)
-      //   .reduce((acc, module) => {
-      //     if (module.menuType === "mainMenu") {
-      //       if (!acc[module.name]) {
-      //         acc[module.name] = { icon: module.icon, children: [] };
-      //       }
-      //     } else if (module.permissions?.read) {
-      //       if (!acc[module.mainMenu]) {
-      //         acc[module.mainMenu] = { icon: undefined, children: [] };
-      //       }
-      //       acc[module.mainMenu].children.push(module);
-      //     }
-      //     return acc;
-      //   }, {} as Record<string, { icon?: string; children: any[] }>);
+      const mainMenus = user?.role?.modules.filter(
+        (item) =>
+          item.menuType === "mainMenu" &&
+          !item.deleted &&
+          item.permissions.read
+      );
 
-      const mainMenus = user?.role?.modules.filter((item) => item.menuType === 'mainMenu' && !item.deleted && item.permissions.read);
-      const oNavData = {};
-      mainMenus.forEach((mainMenu: string) => {
+      const oNavData: Record<string, { icon?: string; children: any[] }> = {};
+
+      mainMenus.forEach((mainMenu) => {
         const subMenus = user?.role?.modules.filter(
-          (item) => item.menuType === 'subMenu' && item.mainMenu === mainMenu.key && !item.deleted && item.permissions.read,
+          (item) =>
+            item.menuType === "subMenu" &&
+            item.mainMenu === mainMenu.key &&
+            !item.deleted &&
+            item.permissions.read
         );
-        if(!oNavData[mainMenu.name]){
+
+        if (!oNavData[mainMenu.name]) {
           oNavData[mainMenu.name] = {
             children: [],
-            icon: mainMenu.icon
-          }
+            icon: mainMenu.icon,
+          };
         }
+
         oNavData[mainMenu.name].children = subMenus.map((subMenu) => ({
           key: subMenu.key,
           name: subMenu.name,
           path: subMenu.path,
-        }))
-        
-        // mainMenuItems.push({
-        //   key: mainMenu.key,
-        //   name: mainMenu.name,
-        //   path: mainMenu.path,
-        //   subMenuItems: subMenus.map((subMenu) => ({
-        //     key: subMenu.key,
-        //     name: subMenu.name,
-        //     path: subMenu.path,
-        //   })),
-        // });
+          icon: subMenu.icon,
+        }));
       });
 
       setANavBar(oNavData);
@@ -345,10 +338,12 @@ export default function SidebarComponent({ theme, toggleTheme }: SidebarProps) {
     setOpenMenu((prev) => (prev === menuKey ? null : menuKey));
   };
 
-  const handleMainMenuClick = (menuKey: string, e: React.MouseEvent<HTMLButtonElement>) => {
-    console.log('activePopoverMenu',activePopoverMenu)
-    if(activePopoverMenu){
-      closePopover()
+  const handleMainMenuClick = (
+    menuKey: string,
+    e: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    if (activePopoverMenu) {
+      closePopover();
       return;
     }
     const rect = e.currentTarget.getBoundingClientRect();
@@ -382,14 +377,29 @@ export default function SidebarComponent({ theme, toggleTheme }: SidebarProps) {
 
   return (
     <aside
-      className={`d-flex flex-column`}
-      style={{ width: collapsed ? "80px" : "280px", height: "100vh", color: "var(--logout-text)"}}
+      className="d-flex flex-column"
+      style={{
+    width: "fit-content",
+    height: "98vh",                // Slightly shorter than 100vh
+    margin: "10px",                // Push it inward so radius is visible
+    borderRadius: "12px",          // Rounded corners
+    color: "var(--sidebar-text)",
+    backgroundColor: "var(--sidebar-bg)",
+    boxShadow: "13px 13px 15px rgba(0, 0, 0, 0.15)",
+    overflow: "hidden",            // Ensures inner content respects radius
+  }}
     >
-      {/* Logo Row with collapse toggle */}
-      <div className="p-3 d-flex align-items-center justify-content-between border-bottom">
+      {/* Logo Row */}
+      <div
+        className="p-3 d-flex align-items-center justify-content-between border-bottom"
+        style={{ backgroundColor: "var(--sidebar-bg)" }}
+      >
         <div
           className="fs-4"
-          style={{ cursor: "pointer", color: theme === "dark" ? "#0f0" : "#198754" }}
+          style={{
+            cursor: "pointer",
+            color: theme === "dark" ? "#0f0" : "#198754",
+          }}
           onClick={() => navigate("/dashboard")}
         >
           {insCode}
@@ -404,28 +414,30 @@ export default function SidebarComponent({ theme, toggleTheme }: SidebarProps) {
             name={collapsed ? "ChevronRight" : "ChevronLeft"}
             size={20}
             style={{ transition: "transform 0.2s" }}
+            color= "var(--sidebar-text)"
           />
         </Button>
       </div>
 
       {/* 🌙 Theme Switcher */}
-      {        <div
-  className={`px-3 py-2 border-bottom d-flex align-items-center ${collapsed ? 'justify-content-center' : ''}`}
->
-
-          <Switch
-            checked={theme === "dark"}
-            onChange={toggleTheme}
-          />
-<span className="ms-2">
-  {!collapsed && (theme === "dark" ? "Dark Mode" : "Light Mode")}
-</span>
-        </div>
-      }
+      <div
+        className={`px-3 py-2 border-bottom d-flex align-items-center ${
+          collapsed ? "justify-content-center" : ""
+        }`}
+        style={{ backgroundColor: "var(--sidebar-bg)" }}
+      >
+        <Switch checked={theme === "dark"} onChange={toggleTheme} />
+        <span className="ms-2">
+          {!collapsed && (theme === "dark" ? "Dark Mode" : "Light Mode")}
+        </span>
+      </div>
 
       {/* 🔍 Search Bar */}
       {!collapsed && (
-        <div className="px-3 pb-2 pt-2">
+        <div
+          className="px-3 pb-2 pt-2"
+          style={{ backgroundColor: "var(--sidebar-bg)" }}
+        >
           <Form.Control
             type="text"
             placeholder="Search..."
@@ -434,91 +446,99 @@ export default function SidebarComponent({ theme, toggleTheme }: SidebarProps) {
           />
         </div>
       )}
+
       {/* Menu Section */}
       {searchTerm ? (
-          <Nav className="flex-column">
-            {searchResults.length > 0 ? (
-              searchResults.map((sub, idx) => (
-                <Link
-                  key={idx}
-                  to={sub.path || "#"}
-                  className={navLinkClass(sub.path || "#")}
-                >
-                  <Icon name={sub.icon} size={16} />
-                  {sub.name}
-                </Link>
-              ))
-            ) : (
-              <div className="px-3">No matches found</div>
-            )}
-          </Nav>
-        ) : 
-      <div style={{ overflowY: "auto", flex: 1 }}>
         <Nav className="flex-column">
-          {Object.keys(aNavBar).map((eachNav) => {
-            const menu = aNavBar[eachNav];
+          {searchResults.length > 0 ? (
+            searchResults.map((sub, idx) => (
+              <Link
+                key={idx}
+                to={sub.path || "#"}
+                className={navLinkClass(sub.path || "#")}
+              >
+                <Icon name={sub.icon} size={16} color= "var(--sidebar-text)"/>
+                {sub.name}
+              </Link>
+            ))
+          ) : (
+            <div className="px-3">No matches found</div>
+          )}
+        </Nav>
+      ) : (
+        <div
+          style={{
+            overflowY: "auto",
+            flex: 1,
+            backgroundColor: "var(--sidebar-bg)",
+          }}
+        >
+          <Nav className="flex-column">
+            {Object.keys(aNavBar).map((eachNav) => {
+              const menu = aNavBar[eachNav];
 
-            if (collapsed) {
+              if (collapsed) {
+                return (
+                  <div key={eachNav} className="position-relative">
+                    <Button
+                      variant="link"
+                      className="d-flex align-items-center justify-content-center py-3 w-100 text-decoration-none"
+                      onClick={(e) => handleMainMenuClick(eachNav, e)}
+                    >
+                      <Icon name={menu.icon} size={20} color= "var(--sidebar-text)"/>
+                    </Button>
+                  </div>
+                );
+              }
+
               return (
-                <div key={eachNav} className="position-relative">
+                <div key={eachNav} style={{ backgroundColor: "var(--sidebar-bg)" }}>
                   <Button
                     variant="link"
-                    className="d-flex align-items-center justify-content-center py-3 w-100 text-decoration-none"
-                    onClick={(e) => handleMainMenuClick(eachNav, e)}
+                    className="d-flex align-items-center justify-content-between gap-5 px-3 py-2 w-100 text-start text-decoration-none"
+                    style={{ color: "var(--sidebar-text)" }}
+                    onClick={() => toggleMenu(eachNav)}
                   >
-                    <Icon name={menu.icon} size={20} />
+                    <span className="d-flex align-items-center gap-3">
+                      <Icon name={menu.icon} size={20} color= "var(--sidebar-text)"/>
+                      {eachNav}
+                    </span>
+                    <Icon
+                      name={openMenu === eachNav ? "ChevronUp" : "ChevronDown"}
+                      size={16}
+                      style={{ transition: "transform 0.2s" }}
+                      color= "var(--sidebar-text)"
+                    />
                   </Button>
+
+                  <Collapse in={openMenu === eachNav}>
+                    <div className="ms-4">
+                      {menu.children.map((sub, i) => (
+                        <Link
+                          key={i}
+                          to={sub.path || "#"}
+                          className={navLinkClass(sub.path || "#")}
+                          style={{ color: "var(--sidebar-text)" }}
+                        >
+                          <Icon name={sub.icon} size={16} color= "var(--sidebar-text)"/>
+                          <span>{sub.name}</span>
+                        </Link>
+                      ))}
+                    </div>
+                  </Collapse>
                 </div>
               );
-            }
-
-            // Expanded mode
-            return (
-              <React.Fragment key={eachNav}>
-                <Button
-                  variant="link"
-                  className="d-flex align-items-center justify-content-between gap-5 px-3 py-2 w-100 text-start text-decoration-none"
-                  style={{color: 'var(--sidebar-text)'}}
-                  onClick={() => toggleMenu(eachNav)}
-                >
-                  <span className="d-flex align-items-center gap-3">
-                    <Icon name={menu.icon} size={20} />
-                    {eachNav}
-                  </span>
-                  <span>
-                    <Icon
-                      name={openMenu === eachNav ? 'ChevronUp' : 'ChevronDown'}
-                      size={16}
-                      className={`ms-auto ${openMenu === eachNav ? "rotate-180" : ""}`}
-                      style={{ transition: "transform 0.2s" }}
-                    />
-                  </span>
-                </Button>
-
-                <Collapse in={openMenu === eachNav}>
-                  <div className="ms-4">
-                    {menu.children.map((sub, i) => (
-                      <Link
-                        key={i}
-                        to={sub.path || "#"}
-                        className={navLinkClass(sub.path || "#")}
-                        style={{color: 'var(--sidebar-text)'}}
-                      >
-                        <Icon name={sub.icon} size={16} />
-                        <span>{sub.name}</span>
-                      </Link>
-                    ))}
-                  </div>
-                </Collapse>
-              </React.Fragment>
-            );
-          })}
-        </Nav>
-      </div>}
+            })}
+          </Nav>
+        </div>
+      )}
 
       {/* Profile Section */}
       {!collapsed ? (
-        <div className="p-3 border-top" style={{ flexShrink: 0}}>
+        <div
+          className="p-3 border-top"
+          style={{ flexShrink: 0, backgroundColor: "var(--sidebar-bg)" }}
+        >
           <div className="d-flex align-items-center gap-2">
             <div className={style.profileText}>
               {user?.user?.firstName?.[0]}
@@ -528,37 +548,39 @@ export default function SidebarComponent({ theme, toggleTheme }: SidebarProps) {
               <div className="fw-medium">
                 {`${user?.user?.firstName || ""} ${user?.user?.lastName || ""}`}
               </div>
-              <div style={{ fontSize: "0.9rem" }}>
-                {user?.user?.email}
-              </div>  
+              <div style={{ fontSize: "0.9rem" }}>{user?.user?.email}</div>
             </div>
           </div>
           <Button
             variant="outline-secondary"
             className="w-100 mt-3"
-            style={{backgroundColor:"var(--logout-button)", color: "var(--logout-text)"}}
+            style={{
+              backgroundColor: "var(--logout-button)",
+              color: "var(--logout-text)",
+            }}
             onClick={logout}
           >
             Log out
           </Button>
         </div>
-      ): 
-     <div className="p-2 border-top d-flex justify-content-center" style={{ flexShrink: 0 }}>
-  <div
-    className="d-flex align-items-center justify-content-center rounded-circle"
-    style={{
-      width: "36px",
-      height: "36px",
-      backgroundColor:"var(--logout-button)",
-      color: "var(--logout-text)",
-      boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-    }}
-  >
-    <Icon name="LogOut" size={18} />
-  </div>
-</div>
-
-      }
+      ) : (
+        <div
+          className="p-2 border-top d-flex justify-content-center"
+          style={{ flexShrink: 0 }}
+        >
+        <Button onClick={logout} 
+          className="d-flex align-items-center justify-content-center rounded-circle"
+          style={{
+              width: "40px",
+              height: "40px",
+              backgroundColor: "var(--logout-button)",
+              color: "var(--logout-text)",
+              boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+            }}>
+            <Icon name="LogOut" size={18} color= {"var(--logout-text)"}/>
+            </Button>
+          </div>
+      )}
 
       {/* Floating Popover (collapsed mode only) */}
       {activePopoverMenu &&
@@ -575,15 +597,34 @@ export default function SidebarComponent({ theme, toggleTheme }: SidebarProps) {
               backgroundColor: "var(--sidebar-bg)",
             }}
           >
-            <div className="mb-2 rounded p-1" style={{backgroundColor:"var(--logout-button)", color: "var(--logout-tex)"}} >{activePopoverMenu}</div>
+            <div
+              className="mb-2 rounded p-1"
+              style={{
+                color: "var(--sidebar-text)",
+                backgroundColor: "var(--sidebar-bg)",
+                fontWeight: "bold"
+              }}
+            >
+              {activePopoverMenu}
+            </div>
+            <hr 
+            style={{
+                color: "var(--sidebar-text)",
+                backgroundColor: "var(--sidebar-bg)",
+                fontWeight: "bold",
+                padding:0
+              }}></hr>
             {aNavBar[activePopoverMenu].children.map((sub, i) => (
               <Link
                 key={i}
                 to={sub.path || "#"}
                 className="d-flex align-items-center gap-2 text-decoration-none mb-2"
                 onClick={closePopover}
+                style={{
+                  color: "var(--sidebar-text)",
+                }}
               >
-                <Icon name={sub.icon} size={16} />
+                <Icon name={sub.icon} size={16} color={"var(--logout-text)"}/>
                 {sub.name}
               </Link>
             ))}

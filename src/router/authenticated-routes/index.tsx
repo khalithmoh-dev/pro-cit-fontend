@@ -32,6 +32,7 @@ const InstallMentRoutesRoutes = lazy(() => import('../InstallMentRoutes'));
 const StudentFeePaymentRoutes = lazy(() => import('../StudentFeePaymentRoutes'));
 const QuickCollectRoutes = lazy(() => import('../QuickCollectRoutes'));
 const ReportRoutes = lazy(() => import('../ReportRoutes'));
+const InstituteRoutes = (lazy(() => import ('./InstituteRoutes')))
 
 // Direct imports (not lazy)
 import OutcomeListPage from '../../modules/outcomes/outcome-list';
@@ -62,6 +63,7 @@ const AuthenticatedRoutes = () => {
           <Route path="calendar/*" element={<CalendarRoutes />} />
           <Route path="department/*" element={<DepartmentRoutes />} />
           <Route path="degree/*" element={<DegreeRoutes />} />
+          <Route path="institute/*" element={<InstituteRoutes /> } />
           <Route path="designation/*" element={<DesignationRoutes />} />
           <Route path="employee/*" element={<EmployeeRoutes />} />
           <Route path="feeHead/*" element={<FeeHeadRoutes />} />

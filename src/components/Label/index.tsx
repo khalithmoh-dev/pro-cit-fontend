@@ -8,7 +8,7 @@ interface LabelProps {
 
 const FormLabel = (props: LabelProps) => {
   return (
-    <Typography className={`form-label ${props.className}`}>
+    <Typography className={`form-label ${props.className}`} variant="h6">
       {props.labelName}
       {props.required && (
         <span style={{ color: "red", marginLeft: "4px" }}>*</span>
@@ -18,3 +18,4 @@ const FormLabel = (props: LabelProps) => {
 }
 
 export default FormLabel
+ 

@@ -19,41 +19,54 @@
 
 import React from "react";
 import { Card, CardContent } from "@mui/material";
-import {Activity} from "lucide-react";
+import { Activity } from "lucide-react";
 
 export default function PageTitle({
-  color = "var(--bg-color)", // Material Yellow
+  color = "var(--sidebar-bg)",
   title = "Your Label",
-  className=''
+  className = "",
 }) {
   return (
-    <div className={`d-flex align-items-center ${className}`} style={{ width: "fit-content" }}>
+    <div
+      className={`d-flex align-items-center ${className}`}
+      style={{ width: "fit-content" }}
+    >
       {/* Left colored block */}
       <div
         style={{
           backgroundColor: color,
           padding: "16px",
-          clipPath: "polygon(0 0, 100% 0, 85% 100%, 0% 100%)", // diagonal cut
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          borderRadius: "20px 0 0 20px", // Rounded only on the left
+          marginLeft: "32px"
         }}
       >
-        <Activity color="var(--main-div)" />
+        <Activity color="var(--sidebar-text)" />
       </div>
 
       {/* Right white box */}
       <Card
         className="shadow-sm"
         style={{
-          borderRadius: 0,
+          borderRadius: "0 20px 20px 0", // Rounded only on the right
           boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
         }}
       >
-        <CardContent style={{ padding: "12px 20px", backgroundColor: "var(--main-div)" }}>
-          <span style={{ fontWeight: 500, color: "var(--bg-color)" }}>{title}</span>
+        <CardContent
+          style={{
+            padding: "12px 20px",
+            backgroundColor: "var(--main-div)",
+            color: "var(--main-text)",
+          }}
+        >
+          <span style={{ fontWeight: 500, color: "var(--main-text)" }}>
+            {title}
+          </span>
         </CardContent>
       </Card>
     </div>
   );
 }
+
