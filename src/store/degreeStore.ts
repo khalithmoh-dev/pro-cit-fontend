@@ -23,7 +23,7 @@ interface DegreeState {
     degreeData: object,
     createDegree: (payload: createDegreePayload) => Promise<boolean>,
     getDegree: (id: string) => Promise<boolean>,
-    getDegrees: (firstRender?: boolean) => Promise<boolean>;
+    getDegrees: (firstRender?: boolean) => Promise<object[] | boolean >;
     updateDegree: (payload: createDegreePayload) => Promise<boolean>
 }
 

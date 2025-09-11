@@ -143,14 +143,17 @@ const DataTable = ({
   };
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box sx={{ width: '100%', mt: 2, boxShadow: '10px 10px 15px rgba(0, 0, 0, 0.2)' }}>
       {/* Header with title and search */}
-      <Box sx={{ display: 'flex', justifyContent: 'end', alignItems: 'center', mb: 2 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height:'fit-content', backgroundColor: "white",  borderTop: '4px solid var(--logout-button)', borderRadius: "16px 16px 0 0" }}>
         {/* <Typography variant="h6" component="h2">
           {}
         </Typography> */}
         {/* <PageTitle title={title}/> */}
-        
+        <div className='mt-3 mx-2'>
+          <p className='fw-semibold'>{title}</p>
+          <p style={{color: 'slategrey'}}>{`Showing ${paginatedData?.length} of ${data?.length}`}</p>
+        </div>
         {searchable && (
           <TextField
             placeholder="Search..."
@@ -163,7 +166,7 @@ const DataTable = ({
                 </InputAdornment>
               ),
             }}
-            sx={{ width: 300 }}
+            sx={{ width: 300, marginRight: "12px" }}
             size="small"
           />
         )}
@@ -201,9 +204,16 @@ const DataTable = ({
       </Box> */}
 
       {/* Table */}
-      <TableContainer component={Paper} elevation={2}>
-        <Table sx={{ minWidth: 650 }} aria-label="data table">
-          <TableHead style={{'backgroundColor': 'aliceblue'}}>
+      <TableContainer component={Paper} elevation={0} sx={{ overflow: 'hidden', px: 2  }}>
+        <Table sx={{ minWidth: 650, borderCollapse: 'separate', borderSpacing: '0 8px',   }} aria-label="data table">
+          <TableHead style={{ background: `
+      linear-gradient(
+        to right,
+        transparent,
+        aliceblue 1%,
+        aliceblue 99%,
+        transparent
+      )`}}>
             <TableRow>
               {selectable && (
                 <TableCell padding="checkbox">
@@ -240,7 +250,6 @@ const DataTable = ({
               )}
             </TableRow>
           </TableHead>
-          
           <TableBody>
             {paginatedData.length > 0 ? (
               paginatedData.map(row => (
@@ -301,7 +310,7 @@ const DataTable = ({
       </TableContainer>
 
       {/* Pagination */}
-      <div className='d-flex justify-content-center align-items-center'>
+      <div className='d-flex justify-content-center align-items-center bg-white' style={{borderRadius: "0 0 10px 10px"}}>
         {pagination && (
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}

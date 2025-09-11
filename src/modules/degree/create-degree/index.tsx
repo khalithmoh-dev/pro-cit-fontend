@@ -13,10 +13,12 @@ export default function CreateDegree() {
   fields: {
       General: [        
         {
-          name: "institutionName",
+          name: "Insname",
           label: "Institution name",
-          type: "text",
-          isEdit: false
+          type: "select",
+          validation: Yup.string().required("Institution Name is required"),
+          isRequired: true,
+          isDisabled: true
         },
         {
           name: "degreeId",
@@ -45,14 +47,15 @@ export default function CreateDegree() {
     },{
       name:"Reset", variant:"outlined", color:"warning", onClick:()=>{}
     },{
-      name:"Save", variant:"contained", color:"primary", onClick:()=>{onSubmit}
+      name:"Save", variant:"contained", color:"primary", type: "submit"
     },{
       name:"Next", variant:"contained", color:"primary", onClick:()=>{}
     }
   ]
 };
 
-const onSubmit = async (values: createDegreePayload) => {
+const handleDegreeSubmit = async (values: createDegreePayload) => {
+  console.log('inn for creating degree',values)
     const res = await createDegree(values);
     if (res) {
     
@@ -64,7 +67,7 @@ const onSubmit = async (values: createDegreePayload) => {
       <DynamicForm
         schema={schema}
         pageTitle="Create Degree"
-        onSubmit={(values) => console.log("Form Submitted:", values)}
+        onSubmit={handleDegreeSubmit}
         isEditPerm = {true}
         oInitialValues = ""
       />

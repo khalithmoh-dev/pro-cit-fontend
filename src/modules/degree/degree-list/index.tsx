@@ -9,12 +9,24 @@ import useDegreeStore from '../../../store/degreeStore';
 // Example usage
 const DegreeList = () => {
   const navigate = useNavigate();
-  const { getDegrees, degrees } = useDegreeStore();
+  const { getDegrees,degrees } = useDegreeStore();
   const [degreesData, setDegreesData] = useState([]);
 
   useEffect(() => {
-    getDegrees();
-  }, []);
+    if (getDegrees) {
+      (async () => {
+        try {
+          const aDegreeList = await getDegrees();
+          if (Array.isArray(aDegreeList) && aDegreeList.length) {
+            setDegreesData(aDegreeList);
+          }
+        } catch (error) {
+          console.error("Failed to fetch degrees:", error);
+        }
+      })();
+    }
+  }, [getDegrees]);
+
 
   useEffect(() => {
     if (degrees.length > 0) {
