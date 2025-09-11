@@ -1,5 +1,6 @@
 /* Import Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
 
 html, body, #root {
   margin: 0;
@@ -46,19 +47,18 @@ html, body, #root {
 /* Dark Theme */
 [data-theme='dark'] {
   --bg-color: #fcf4fc;        /* Dark grey page background */
-  --sidebar-bg: #090f3f;      /* Darker sidebar */
-  --sidebar-text: #f5f5f5;
+  --sidebar-bg: #f5f2ff;      /* Darker sidebar */
+  --sidebar-text: #000000;
   --main-text: #000000;
+  --logo-color: #ffffff;
   --form-bg: #ffffff;
   --header-color: #f5f5f5;
-  --logout-button: #ec407a;
+  --logout-button: #756AB6;
   --logout-text: #ffffff;
   --sidebar-hover-bg: rgba(255, 255, 255, 0.1);
   --sidebar-selected-bg: #4c6b5a;
   --sidebar-selected-text: #ffffff;
-  --font-family-1: ui-sans-serif, system-ui, sans-serif, 
-    "Apple Color Emoji", "Segoe UI Emoji", 
-    "Segoe UI Symbol", "Noto Color Emoji";
+  --font-family-1: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
 }
 /* #endregion */
 
@@ -74,7 +74,7 @@ html, body, #root {
   font-size: 1.5rem !important;
   font-weight: 600 !important;
   color: var(--main-text) !important;
-  line-height: 1.6 !important;
+  line-height: 0.75 !important;
   padding-bottom: 0px !important;
 }
 
@@ -144,11 +144,13 @@ html, body, #root {
 .default
 /* #region mui styles*/
 .css-1miy0lu-MuiTypography-root{
-  font-family: var(--font-family-1) !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   --fs-2: 16px;
 }
 .css-rizt0-MuiTypography-root{
   font-family: var(--font-family-1) !important;
+  font-weight: 600 !important;
+  line-height: 1.3rem !important;
 }
 
 .css-1pzfmz2-MuiInputBase-input-MuiOutlinedInput-input{
@@ -169,6 +171,29 @@ html, body, #root {
   color: #000 !important;
 }
 
+.css-trm6af-MuiNativeSelect-root-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled{
+  background-color: #e2e8f0;
+  border-radius: var(--input-radius, 15px) !important;
+  color: #000 !important;
+}
+
+.css-11qxch-MuiButtonBase-root-MuiButton-root.Mui-disabled{
+  color: #fff5f5 !important;
+  background-color: rgba(0, 0, 0, 0.38);
+}
+
+.css-1orzuox-MuiTableCell-root{
+  font-family: var(--font-family-1) !important;
+  font-weight: 600;
+}
+
+.css-1dc80h3-MuiTableCell-root{
+  font-family: var(--font-family-1) !important;
+}
+
+.css-7oysng{
+  border-radius: 15px;
+}
 /* #endregion */
 
 /* GenericMaster Card */

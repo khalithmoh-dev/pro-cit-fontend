@@ -7,7 +7,7 @@ import useAuthStore from '../../../../store/authStore'
 import { useNavigate } from "react-router-dom";
 
 export default function InstiteConfig() {
-  const { createInstitute, getInstitute } = useInstituteStore();
+  const { updateInstitute, getInstitute } = useInstituteStore();
   const { user, permissions } = useAuthStore();
   const { parseFormDataAndUpload, upldedRec } = useBaseStore()
   const [instDtls, setInstDtls] = useState({});
@@ -30,7 +30,6 @@ export default function InstiteConfig() {
             validation: Yup.string().required("Institution code is required"),
             isRequired: true
           },
-          { name: "insLogo", label: "Institute Logo", type: "file", size: '' ,format: 'image', isMulti: true },
           {
             name: "acrtdBy",
             label: "Accredited By",
@@ -40,7 +39,8 @@ export default function InstiteConfig() {
             name: 'insDesc',
             label: "Instiution description",
             type: "Textarea",
-          }
+          },
+          { name: "insLogo", label: "Institute Logo", type: "file", size: '' ,format: 'image', isMulti: true }
     ],
     "Institution contact": [
           {
@@ -240,7 +240,6 @@ export default function InstiteConfig() {
     if(user && getInstitute){
       (async()=>{
         const oInstituteDtls = await getInstitute(user?.user?.insId);
-        console.log('oInstituteDtls',oInstituteDtls)
         if(oInstituteDtls && Object.keys(oInstituteDtls).length){
           setInstDtls(oInstituteDtls);
         }
@@ -249,15 +248,20 @@ export default function InstiteConfig() {
   },[user,getInstitute]);
 
   const handleFormSubmit = async(values) => {
-    if(values?.insLogo?.length){
-      const deepValues =  structuredClone(values);
-      if(await parseFormDataAndUpload(values?.insLogo)){
-        deepValues.insLogo = upldedRec.url;
+    try{
+      const deepValues =  {...structuredClone(values),_id: instDtls?._id};
+      if(values?.insLogo?.length){
+        if(await parseFormDataAndUpload(values?.insLogo)){
+          deepValues.insLogo = upldedRec.url;
+        }
       }
-      await createInstitute(deepValues);
+      console.log('deepValues',instDtls)
+      await updateInstitute(deepValues);
+    }catch(err){
+      console.error('error while update',err)
     }
   }
-
+  
   return (
     <DynamicForm
       schema={schema}

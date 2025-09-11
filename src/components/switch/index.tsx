@@ -1,20 +1,45 @@
 import React from 'react';
-import styles from './switch.module.css';
-import { SwitchPropsIF } from '../../interface/component.interface';
+import MuiSwitch from '@mui/material/Switch';
+import Label from '../Label';
 
-const Switch: React.FC<SwitchPropsIF> = ({ checked, onChange, size = 'medium', color = '#2196F3' }) => {
-  const sizeStyles = {
-    small: { '--switch-width': '30px', '--switch-height': '15px' },
-    medium: { '--switch-width': '40px', '--switch-height': '20px' },
-    large: { '--switch-width': '50px', '--switch-height': '25px' },
-  };
+const Switch: React.FC<SwitchPropsIF> = ({ checked, onChange, label="" }) => {
+
 
   return (
     // @ts-ignore
-    <label className={styles.switch} style={{ ...sizeStyles[size], '--switch-color': color } as React.CSSProperties}>
-      <input className={styles.input} type="checkbox" checked={checked} onChange={onChange} />
-      <span className={styles.slider}></span>
-    </label>
+    <div className='d-flex gap-2'>
+      <Label labelName={label} />
+      <MuiSwitch
+        sx={{
+          width: 40,
+          height: 20,
+          padding: 0,
+          '& .MuiSwitch-switchBase': {
+            padding: 0,
+            transform: 'translateX(0)',
+            '&.Mui-checked': {
+              transform: 'translateX(20px)',
+              '& + .MuiSwitch-track': {
+                backgroundColor: '#4cd964',
+                opacity: 1,
+              },
+            },
+          },
+          '& .MuiSwitch-thumb': {
+            width: 18,
+            height: 18,
+            boxSizing: 'border-box',
+          },
+          '& .MuiSwitch-track': {
+            borderRadius: 10,
+            backgroundColor: '#e5e5ea',
+            opacity: 1,
+          },
+        }}
+        checked = {checked}
+        onChange = {onChange}
+      />
+    </div>
   );
 };
 

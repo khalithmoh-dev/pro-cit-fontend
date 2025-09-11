@@ -1,27 +1,28 @@
 // src/screens/CreateDegree/GenericMaster.jsx
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {
   Box,
   Checkbox,
   FormControl,
   FormControlLabel,
   FormGroup,
-  InputLabel,
   MenuItem,
   Select,
   TextField,
-  Switch
 } from "@mui/material";
 import Typography from '@mui/material/Typography'
 import PageTitle from '../PageTitle';
 import SectionHeader from '../SectionHeader'
 import Label from '../Label';
+import Switch from '../switch'
 import Button from '../../components/Button';
 import FileUpload from '../../components/fileupload';
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Textarea from '@mui/joy/Textarea';
 import FormHelperText from '@mui/joy/FormHelperText';
+import useInstituteStore from "../../store/instituteStore";
+import useAuthStore from '../../store/authStore'
 
 /** The generic form component to generate form dynamically using a JSON
     The working json can be referred from institute config
@@ -34,23 +35,40 @@ import FormHelperText from '@mui/joy/FormHelperText';
 
 const GenericMaster = ({ pageTitle, schema, onSubmit, isEditPerm= false ,oInitialValues }) => {
   const [editPerm, setEditPerm] = useState(false);
+  const [instDtls, setInstDtls] = useState({});
+  const instituteStore = useInstituteStore();
+  const authStore = useAuthStore();
+
+  
+  useEffect(()=>{
+      if(authStore?.user && instituteStore.getInstitute){
+        (async()=>{
+          const oInstituteDtls = await instituteStore.getInstitute(authStore?.user?.user?.insId);
+          if(oInstituteDtls && Object.keys(oInstituteDtls).length){
+            setInstDtls(oInstituteDtls);
+          }
+        })();
+      }
+    },[authStore,instituteStore]);
 
   // Build validation schema
-const validationSchema = Yup.object(
-  Object.values(schema.fields).flat().reduce((acc, field) => {
-      if(field.isNullable){
+  const validationSchema = Yup.object(
+    Object.values(schema.fields).flat().reduce((acc, field) => {
+        if(field.isNullable){
 
-      }else if (field.name && field.validation) {
-        acc[field.name] = field.validation;
-      }
-    return acc;
-  }, {})
-);
+        }else if (field.name && field.validation) {
+          acc[field.name] = field.validation;
+        }
+      return acc;
+    }, {})
+  );
 const formik = useFormik({
   initialValues: Object.values(schema.fields)
     .flat()
     .reduce((acc, field) => {
-      if (oInitialValues && oInitialValues.hasOwnProperty(field.name)) {
+      if(field.name === "Insname" && instDtls?._id && instDtls?.Insname){
+        acc[field.name] = instDtls?._id;
+      }else if (oInitialValues && oInitialValues.hasOwnProperty(field.name)) {
         // Use value from oInitialValues if available
         acc[field.name] = oInitialValues[field.name];
       } else if(field.isNullable){
@@ -91,36 +109,51 @@ const formik = useFormik({
             disabled={!editPerm || field.isDisabled}
           />
         );
-       case "select":
-          return (
-            <FormControl fullWidth size="small">
-              <InputLabel>{field.label}</InputLabel>
-              <Select
-                name={field.name}
-                multiple={field.isMulti}
-                value={formik.values[field.name]}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                renderValue={(selected) =>
-                  field.isMulti ? selected.join(", ") : selected
+      case "select":
+        return (
+          <FormControl fullWidth size="small">
+            {console.log('formik.values',formik.values)}
+            <Select
+              name={field.name}
+              multiple={field.isMulti}
+              value={formik.values[field.name] || (field.isMulti ? [] : "")}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              renderValue={(selected) => {
+                if (field.isMulti) {
+                  return selected.join(", ");
                 }
-              >
-                {field.options?.map((opt) => (
-                  <MenuItem key={opt.value} value={opt.value}>
-                    {field.isMulti ? (
-                      <Checkbox checked={formik.values[field.label]?.includes(opt.value)} />
-                    ) : null}
-                    {opt.label}
-                  </MenuItem>
-                ))}
-              </Select>
-              {formik.touched[field.name] && formik.errors[field.name] && (
-                <Typography variant="caption" color="error">
-                  {formik.errors[field.name]}
-                </Typography>
-              )}
-            </FormControl>
-          );
+                const selectedOption = (field.name === "Insname" ? [{value: instDtls._id, label: instDtls.Insname}] : field.options)?.find(
+                  (opt) => opt.value === selected
+                );
+                return selectedOption ? selectedOption.label : "";
+              }}
+              disabled={!editPerm || field.isDisabled}
+              sx={{
+                borderRadius: "var(--input-radius, 15px)"
+
+              }}
+            >
+              {(field.name === "Insname" ? [{value: instDtls._id, label: instDtls.Insname}] : field.options)?.map((opt) => (
+                <MenuItem key={opt.value} value={opt.value}>
+                  {field.isMulti && (
+                    <Checkbox
+                      checked={formik.values[field.name]?.includes(opt.value)}
+                      disabled={!editPerm || field.isDisabled}
+                    />
+                  )}
+                  {opt.label}
+                </MenuItem>
+              ))}
+            </Select>
+
+            {formik.touched[field.name] && formik.errors[field.name] && (
+              <Typography variant="caption" color="error">
+                {formik.errors[field.name]}
+              </Typography>
+            )}
+          </FormControl>
+        );
       case "file":
         return (
           <FileUpload
@@ -163,6 +196,7 @@ const formik = useFormik({
                       }}
                     />
                   }
+                  disabled={!editPerm || field.isDisabled}
                   label={option.label}
                 />
               ))}
@@ -176,6 +210,7 @@ const formik = useFormik({
                   name={field.name}
                   checked={formik.values[field.name]}
                   onChange={formik.handleChange}
+                  disabled={!editPerm || field.isDisabled}
                 />
               }
               label={field.label}
@@ -213,9 +248,8 @@ const formik = useFormik({
         <div className="d-flex justify-content-between mb-3">
           <PageTitle title={pageTitle}/>
           {isEditPerm && (
-            <div className="d-flex justify-content-center align-item-center">
-              <Label labelName={'Edit mode'} className='mt-2'/>
-              <Switch defaultChecked={false} onChange={() => setEditPerm(!editPerm)} />
+            <div className="mt-3 mx-3" >
+              <Switch defaultChecked={false} onChange={() => setEditPerm(!editPerm)} label="Edit mode"/>
             </div>
           )}
         </div>
@@ -232,7 +266,7 @@ const formik = useFormik({
       <div className="generic-master-card">
               <SectionHeader sectionName={sectionName} />
               <div className="row">
-                {fields.map((field, index) => {
+                {(fields ?? []).map((field, index) => {
                   const shouldShow =
                     !field.showWhen ||
                     formik.values[field.showWhen.field] === field.showWhen.value;
@@ -240,7 +274,7 @@ const formik = useFormik({
                   if (!shouldShow) return null;
 
                   return (
-                    <div className="col-12 col-md-6" key={index}>
+                    <div className="col-12 col-md-4 p-2" key={index}>
                       {!field.removeHeader && (
                         <Label labelName={field.label} required={field.isRequired}/>
                       )}
@@ -263,6 +297,7 @@ const formik = useFormik({
                 size={btn.size || "medium"}
                 onClick={btn.onClick}
                 type={btn.type ?? 'button'}
+                disabled={btn.isDisabled || (btn.name !== "Cancel" && (!editPerm || btn.isDisabled))}
                 variantType={
                   btn.type === "submit"
                     ? "submit"

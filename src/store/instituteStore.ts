@@ -39,7 +39,6 @@ interface createInstitutePayload{
 
 interface InstituteState {
     insData: object,
-    createInstitute: (payload: createInstitutePayload) => Promise<boolean>,
     getInstitute: (id: string) => Promise<boolean>,
     updateInstitute: (payload: createInstitutePayload) => Promise<boolean>
 }
@@ -47,18 +46,6 @@ interface InstituteState {
 // Institute Store to handle institution create update get functionalities
 const useInstituteStore = create<InstituteState>((set,get) => ({
     insData: {},
-    createInstitute: async(oPaylaod = {
-        Insname: '',
-        insCode: ''
-    }) => {
-        try{
-            const {data} = await httpRequest('POST',`${import.meta.env.VITE_API_URL}/institute/create`,oPaylaod);
-            get().getInstitute(data?._id);
-            return true
-        }catch(err){
-            return false
-        }
-    },
     getInstitute: async(id = '') => {
        try{
          return (await httpRequest('GET',`${import.meta.env.VITE_API_URL}/institute/get-by-id/${'68ae0a790bfe5e87f234fbd3'}`))?.data;

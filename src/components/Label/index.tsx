@@ -8,7 +8,7 @@ interface LabelProps {
 
 const FormLabel = (props: LabelProps) => {
   return (
-    <Typography className={`form-label ${props.className}`} variant="h6">
+    <Typography className={`form-label fw-semibold ${props.className}`}>
       {props.labelName}
       {props.required && (
         <span style={{ color: "red", marginLeft: "4px" }}>*</span>

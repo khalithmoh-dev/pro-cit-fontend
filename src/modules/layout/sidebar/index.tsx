@@ -227,6 +227,7 @@ import Icon from "../../../components/Icons";
 import { createPortal } from "react-dom";
 import Switch from "@mui/material/Switch";
 import { useMediaQuery } from "@mui/material";
+import { Weight } from "lucide-react";
 
 interface SidebarProps {
   theme: "light" | "dark";
@@ -382,7 +383,7 @@ export default function SidebarComponent({ theme, toggleTheme }: SidebarProps) {
     width: "fit-content",
     height: "98vh",                // Slightly shorter than 100vh
     margin: "10px",                // Push it inward so radius is visible
-    borderRadius: "12px",          // Rounded corners
+    borderRadius: "30px",          // Rounded corners
     color: "var(--sidebar-text)",
     backgroundColor: "var(--sidebar-bg)",
     boxShadow: "13px 13px 15px rgba(0, 0, 0, 0.15)",
@@ -392,17 +393,18 @@ export default function SidebarComponent({ theme, toggleTheme }: SidebarProps) {
       {/* Logo Row */}
       <div
         className="p-3 d-flex align-items-center justify-content-between border-bottom"
-        style={{ backgroundColor: "var(--sidebar-bg)" }}
+        style={{ backgroundColor: "var(--logout-button)" }}
       >
         <div
-          className="fs-4"
+          className="fs-4 d-flex flex-column justify-content-center"
           style={{
             cursor: "pointer",
-            color: theme === "dark" ? "#0f0" : "#198754",
+            color: theme === "dark" ? "var(--logo-color)" : "#198754",
           }}
           onClick={() => navigate("/dashboard")}
         >
-          {insCode}
+          <span>{'CIT'||insCode}</span>
+          {!collapsed && <span style={{fontSize:"14px"}}>{'www.google.com'}</span>}
         </div>
 
         <Button
@@ -492,14 +494,14 @@ export default function SidebarComponent({ theme, toggleTheme }: SidebarProps) {
               }
 
               return (
-                <div key={eachNav} style={{ backgroundColor: "var(--sidebar-bg)" }}>
+                <div key={eachNav} style={{ backgroundColor: "var(--sidebar-bg)", padding: "0.2rem" }}>
                   <Button
                     variant="link"
                     className="d-flex align-items-center justify-content-between gap-5 px-3 py-2 w-100 text-start text-decoration-none"
                     style={{ color: "var(--sidebar-text)" }}
                     onClick={() => toggleMenu(eachNav)}
                   >
-                    <span className="d-flex align-items-center gap-3">
+                    <span className="d-flex align-items-center gap-3 fw-semibold">
                       <Icon name={menu.icon} size={20} color= "var(--sidebar-text)"/>
                       {eachNav}
                     </span>
@@ -518,7 +520,7 @@ export default function SidebarComponent({ theme, toggleTheme }: SidebarProps) {
                           key={i}
                           to={sub.path || "#"}
                           className={navLinkClass(sub.path || "#")}
-                          style={{ color: "var(--sidebar-text)" }}
+                          style={{ color: "var(--sidebar-text)", padding: "0.5rem" }}
                         >
                           <Icon name={sub.icon} size={16} color= "var(--sidebar-text)"/>
                           <span>{sub.name}</span>

@@ -19,12 +19,13 @@
 
 import React from "react";
 import { Card, CardContent } from "@mui/material";
-import { Activity } from "lucide-react";
+import Icon from "../Icons";
 
 export default function PageTitle({
-  color = "var(--sidebar-bg)",
+  color = "var(--logout-button)",
   title = "Your Label",
   className = "",
+  iconName = ""
 }) {
   return (
     <div
@@ -32,6 +33,7 @@ export default function PageTitle({
       style={{ width: "fit-content" }}
     >
       {/* Left colored block */}
+      {iconName && 
       <div
         style={{
           backgroundColor: color,
@@ -43,8 +45,8 @@ export default function PageTitle({
           marginLeft: "32px"
         }}
       >
-        <Activity color="var(--sidebar-text)" />
-      </div>
+        <Icon color="var(--sidebar-text)" name={iconName}/>
+      </div>}
 
       {/* Right white box */}
       <Card
