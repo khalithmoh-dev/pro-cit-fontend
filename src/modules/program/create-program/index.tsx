@@ -2,12 +2,12 @@ import DynamicForm from "../../../components/generic-form";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import useAuthStore from '../../../store/authStore';
-import useDegreeStore, { createDegreePayload } from "../../../store/degreeStore";
+import useProgramStore, { createProgramPayload } from "../../../store/programStore";
 
-export default function CreateDegree() {
+export default function CreateProgram() {
   const navigate = useNavigate();
   const { user, permissions } = useAuthStore();
-  const { createDegree } = useDegreeStore();
+  const { createProgram } = useProgramStore();
 
   const schema = {
   fields: {
@@ -19,17 +19,17 @@ export default function CreateDegree() {
           isEdit: false
         },
         {
-          name: "degreeId",
-          label: "Degree Id",
+          name: "programId",
+          label: "Program Id",
           type: "text",
-          validation: Yup.string().required("Degree Id is required"),
+          validation: Yup.string().required("Program Id is required"),
           isRequired: true
         },
          {
-          name: "degreeName",
-          label: "Degree name",
+          name: "programName",
+          label: "Program name",
           type: "text",
-          validation: Yup.string().required("Degree name is required"),
+          validation: Yup.string().required("Program name is required"),
           isRequired: true
         },
          {
@@ -52,8 +52,8 @@ export default function CreateDegree() {
   ]
 };
 
-const onSubmit = async (values: createDegreePayload) => {
-    const res = await createDegree(values);
+const onSubmit = async (values: createProgramPayload) => {
+    const res = await createProgram(values);
     if (res) {
     
     }
@@ -63,7 +63,7 @@ const onSubmit = async (values: createDegreePayload) => {
     <>
       <DynamicForm
         schema={schema}
-        pageTitle="Create Degree"
+        pageTitle="Create Program"
         onSubmit={(values) => console.log("Form Submitted:", values)}
         isEditPerm = {true}
         oInitialValues = ""

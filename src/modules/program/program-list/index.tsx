@@ -4,23 +4,23 @@ import { Chip,Box } from '@mui/material';
 import { Eye } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import PageTitle from "../../../components/PageTitle";
-import useDegreeStore from '../../../store/degreeStore';
+import useProgramStore from '../../../store/programStore';
 
 // Example usage
-const DegreeList = () => {
+const ProgramList = () => {
   const navigate = useNavigate();
-  const { getDegrees, degrees } = useDegreeStore();
-  const [degreesData, setDegreesData] = useState([]);
+  const { getPrograms, programs } = useProgramStore();
+  const [programsData, setProgramsData] = useState([]);
 
   useEffect(() => {
-    getDegrees();
+    getPrograms();
   }, []);
 
   useEffect(() => {
-    if (degrees.length > 0) {
-      setDegreesData(degrees);
+    if (programs.length > 0) {
+      setProgramsData(programs);
     }
-  }, [degrees]);
+  }, [programs]);
  
   // Column configuration
   const columns = [
@@ -30,13 +30,13 @@ const DegreeList = () => {
       sortable: false
     },
     { 
-      field: 'degreeId', 
-      headerName: 'Degree ID', 
+      field: 'programId', 
+      headerName: 'Program ID', 
       sortable: true      
     },
     { 
-      field: 'degreeName', 
-      headerName: 'Degree Name', 
+      field: 'programName', 
+      headerName: 'Program Name', 
       sortable: true,
     },
     { 
@@ -52,7 +52,7 @@ const DegreeList = () => {
       label: 'View Details',
       icon: <Eye size={18} />,
       onClick: (row) => {
-        navigate('/degree/create')
+        navigate('/program/create')
       }
     }
   ];
@@ -64,16 +64,16 @@ const DegreeList = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <PageTitle title={'Degree list'}/>
+      <PageTitle title={'Program list'}/>
       <DataTable
-        data={degreesData}
+        data={programsData}
         columns={columns}
         onSelect={handleSelection}
-        title="Degree list"
+        title="Program list"
         actions={actions}
       />
     </Box>
   );
 };
 
-export default DegreeList;
+export default ProgramList;
