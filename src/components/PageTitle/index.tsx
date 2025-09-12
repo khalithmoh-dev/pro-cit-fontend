@@ -17,9 +17,11 @@
 // export default PageTitle;
 
 
-import React from "react";
+import React,{useEffect, useState} from "react";
 import { Card, CardContent } from "@mui/material";
 import Icon from "../Icons";
+import useAuthStore from '../../store/authStore'
+import { useLocation } from 'react-router-dom';
 
 export default function PageTitle({
   color = "var(--logout-button)",
@@ -27,13 +29,22 @@ export default function PageTitle({
   className = "",
   iconName = ""
 }) {
+  const authStore = useAuthStore();
+  const location = useLocation();
+  const [routeNm, setRouteNm] = useState('');
+  
+  // to set the page header icon as per data in DB
+  useEffect(()=>{
+    if(location.pathname) setRouteNm(location.pathname.split('/').filter(Boolean)[0] || '')
+  }, [location.pathname])
+
   return (
     <div
       className={`d-flex align-items-center ${className}`}
       style={{ width: "fit-content" }}
     >
       {/* Left colored block */}
-      {iconName && 
+      {
       <div
         style={{
           backgroundColor: color,
@@ -42,10 +53,9 @@ export default function PageTitle({
           alignItems: "center",
           justifyContent: "center",
           borderRadius: "20px 0 0 20px", // Rounded only on the left
-          marginLeft: "32px"
         }}
       >
-        <Icon color="var(--sidebar-text)" name={iconName}/>
+        <Icon color="var(--sidebar-text)" name={iconName || authStore.routeInfo[routeNm]?.icon}/>
       </div>}
 
       {/* Right white box */}

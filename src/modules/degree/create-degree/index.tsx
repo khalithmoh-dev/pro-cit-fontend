@@ -13,7 +13,7 @@ export default function CreateDegree() {
   fields: {
       General: [        
         {
-          name: "Insname",
+          name: "insname",
           label: "Institution name",
           type: "select",
           validation: Yup.string().required("Institution Name is required"),

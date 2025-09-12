@@ -3,7 +3,7 @@ import httpRequest from '../utils/functions/http-request';
 import { ModuleIF, ModulePermissions } from './moduleStore';
 import { SelectOptionIF } from '../interface/component.interface';
 import { MainMenuItem } from './authStore';
-import { transformNavData } from '../modules/layout/sidebar';
+// import { transformNavData } from '../modules/layout/sidebar';
 
 export interface roleIF {
   _id: string;
@@ -24,7 +24,7 @@ export interface createRolePayloadIF {
 
 interface RoleState {
   roles: roleIF[];
-  sidebarNavItems: MainMenuItem[];
+  // sidebarNavItems: MainMenuItem[];
   roleOptions: SelectOptionIF[];
   permissions: { [key: string]: ModulePermissions } | null;
   role: roleIF | null;
@@ -107,7 +107,7 @@ const useRoleStore = create<RoleState>((set) => ({
     try {
       const res = await httpRequest("GET", `${import.meta.env.VITE_API_URL}/role/${id}`);
       console.log(res?.data, "res?.datares?.data");
-      const transformedData = transformNavData(res?.data?.modules);
+      // const transformedData = transformNavData(res?.data?.modules);
       const permissionsObject: { [key: string]: ModulePermissions } = {};
       res?.data.modules?.forEach((module: ModuleIF) => {
         permissionsObject[module.key] = module.permissions;
@@ -115,7 +115,7 @@ const useRoleStore = create<RoleState>((set) => ({
       set({
         userRole: res.data,
         permissions: permissionsObject,
-        sidebarNavItems: transformedData,
+        // sidebarNavItems: transformedData,
       });
       
       return true;

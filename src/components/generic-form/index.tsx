@@ -43,7 +43,8 @@ const GenericMaster = ({ pageTitle, schema, onSubmit, isEditPerm= false ,oInitia
   useEffect(()=>{
       if(authStore?.user && instituteStore.getInstitute){
         (async()=>{
-          const oInstituteDtls = await instituteStore.getInstitute(authStore?.user?.user?.insId);
+          const oInstituteDtls = await instituteStore.getLogInIns();
+          console.log('oInstituteDtlsoInstituteDtls',oInstituteDtls)
           if(oInstituteDtls && Object.keys(oInstituteDtls).length){
             setInstDtls(oInstituteDtls);
           }
@@ -66,7 +67,7 @@ const formik = useFormik({
   initialValues: Object.values(schema.fields)
     .flat()
     .reduce((acc, field) => {
-      if(field.name === "Insname" && instDtls?._id && instDtls?.Insname){
+      if(field.name === "insname" && instDtls?._id && instDtls?.insname){
         acc[field.name] = instDtls?._id;
       }else if (oInitialValues && oInitialValues.hasOwnProperty(field.name)) {
         // Use value from oInitialValues if available
@@ -112,7 +113,6 @@ const formik = useFormik({
       case "select":
         return (
           <FormControl fullWidth size="small">
-            {console.log('formik.values',formik.values)}
             <Select
               name={field.name}
               multiple={field.isMulti}
@@ -123,7 +123,7 @@ const formik = useFormik({
                 if (field.isMulti) {
                   return selected.join(", ");
                 }
-                const selectedOption = (field.name === "Insname" ? [{value: instDtls._id, label: instDtls.Insname}] : field.options)?.find(
+                const selectedOption = (field.name === "insname" ? [{value: instDtls._id, label: instDtls.insname}] : field.options)?.find(
                   (opt) => opt.value === selected
                 );
                 return selectedOption ? selectedOption.label : "";
@@ -134,7 +134,7 @@ const formik = useFormik({
 
               }}
             >
-              {(field.name === "Insname" ? [{value: instDtls._id, label: instDtls.Insname}] : field.options)?.map((opt) => (
+              {(field.name === "insname" ? [{value: instDtls._id, label: instDtls.insname}] : field.options)?.map((opt) => (
                 <MenuItem key={opt.value} value={opt.value}>
                   {field.isMulti && (
                     <Checkbox

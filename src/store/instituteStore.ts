@@ -1,7 +1,8 @@
 import { create } from 'zustand';
 import httpRequest from '../utils/functions/http-request';
+import useAuthStore from './authStore';
 interface createInstitutePayload{
-    Insname: string,
+    insname: string,
     insCode: string,
     insLogo?: string,
     acrtdBy?: string,
@@ -37,10 +38,15 @@ interface createInstitutePayload{
     isBdayMsg?: string
 }
 
+interface InstituteDetails {
+  _id: string,
+  insname: string
+}
 interface InstituteState {
     insData: object,
     getInstitute: (id: string) => Promise<boolean>,
     updateInstitute: (payload: createInstitutePayload) => Promise<boolean>
+    getLogInIns: () => InstituteDetails
 }
 
 // Institute Store to handle institution create update get functionalities
@@ -48,13 +54,16 @@ const useInstituteStore = create<InstituteState>((set,get) => ({
     insData: {},
     getInstitute: async(id = '') => {
        try{
-         return (await httpRequest('GET',`${import.meta.env.VITE_API_URL}/institute/get-by-id/${'68ae0a790bfe5e87f234fbd3'}`))?.data;
+         return (await httpRequest('GET',`${import.meta.env.VITE_API_URL}/institute/get-by-id/${'68c2d50407f3ff56fed55b21'}`))?.data;
        }catch(err){
         return false
        }
     },
+    getLogInIns: () => {
+        return useAuthStore.getState().instituteDtls;
+    },
     updateInstitute: async(oPaylaod = {
-        Insname: '',
+        insname: '',
         insCode: ''
     }) => {
         try{

@@ -12,13 +12,15 @@ export default function InstiteConfig() {
   const { parseFormDataAndUpload, upldedRec } = useBaseStore()
   const [instDtls, setInstDtls] = useState({});
   const navigate = useNavigate();
+  
+  //form schema
   const schema = {
     fields: {
         General: [
           {
-            name: "Insname",
+            name: "insname",
             label: "Institution name",
-            type: "text",
+            type: "select",
             validation: Yup.string().required("Institution Name is required"),
             isRequired: true,
             isDisabled: true
@@ -236,6 +238,7 @@ export default function InstiteConfig() {
     ]
   };
 
+  //get institute details by institute id
   useEffect(()=>{
     if(user && getInstitute){
       (async()=>{
@@ -247,6 +250,7 @@ export default function InstiteConfig() {
     }
   },[user,getInstitute]);
 
+  //submitting institute form
   const handleFormSubmit = async(values) => {
     try{
       const deepValues =  {...structuredClone(values),_id: instDtls?._id};
@@ -255,7 +259,6 @@ export default function InstiteConfig() {
           deepValues.insLogo = upldedRec.url;
         }
       }
-      console.log('deepValues',instDtls)
       await updateInstitute(deepValues);
     }catch(err){
       console.error('error while update',err)

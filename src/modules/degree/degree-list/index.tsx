@@ -81,7 +81,7 @@ const DegreeList = () => {
         data={degreesData}
         columns={columns}
         onSelect={handleSelection}
-        title="Degree list"
+        title="Degree"
         actions={actions}
       />
     </Box>

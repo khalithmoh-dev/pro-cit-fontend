@@ -25,6 +25,7 @@ export interface ModuleIF {
   createdAt: string;
   deleted: boolean;
   _id: string;
+  icon?: string;
 }
 
 interface ModuleState {

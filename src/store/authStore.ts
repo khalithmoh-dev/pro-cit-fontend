@@ -47,14 +47,24 @@ interface VaidateOtpPayloadIF {
   password: string;
 }
 
+interface RouteDetails {
+  icon: string
+}
+
+interface InstituteDetails {
+  _id: string,
+  insname: string
+}
+
 interface AuthState {
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
-  sidebarNavItems: MainMenuItem[];
   permissions: { [key: string]: ModulePermissions } | null;
   user: User | null;
   academicYear: string;
+  routeInfo: Record<string,RouteDetails>; 
+  instituteDtls: InstituteDetails;
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
   setPermissions: (modules: { [key: string]: ModulePermissions }) => void;
@@ -66,15 +76,19 @@ interface AuthState {
 
 const useAuthStore = create<AuthState>()(
   persist(
-    (set) => ({
+    (set,get) => ({
       isAuthenticated: false,
       isLoading: false,
       permissions: null,
       error: null,
       user: null,
-      sidebarNavItems: [],
+      // sidebarNavItems: [],
       academicYear: '2024-2025',
-
+      instituteDtls: {
+        _id: '',
+        insname: ''
+      },
+      routeInfo: {},
       login: async (email: string, password: string) => {
         set({ isLoading: true, error: null });
         try {
@@ -93,17 +107,24 @@ const useAuthStore = create<AuthState>()(
           const data: any = await response.json();
           useToastStore.getState().showToast('success', 'Logged in successfully');
           window?.sessionStorage?.setItem('accessToken', JSON.stringify(data?.data?.accessToken));
-          const transformedData = transformNavData(data.data.role.modules);
+          // const transformedData = transformNavData(data.data.role.modules);
           const permissionsObject: { [key: string]: ModulePermissions } = {};
+          const pathDtls: Record<string, RouteDetails> = {};
           data.data.role.modules.forEach((module: ModuleIF) => {
             permissionsObject[module.key] = module.permissions;
+            if(!module.deleted){
+              const currentPath = module.path.split('/').filter(Boolean)[0] || ''
+              pathDtls[currentPath]= {icon: module.icon};
+            }
           });
           set({
             isAuthenticated: true,
             user: data.data,
             permissions: permissionsObject,
-            sidebarNavItems: transformedData,
+            // sidebarNavItems: transformedData,
             isLoading: false,
+            routeInfo: pathDtls,
+            instituteDtls: data.data?.user?.institutes
           });
           return true;
         } catch (err: any) {
