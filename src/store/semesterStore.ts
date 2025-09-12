@@ -1,0 +1,83 @@
+import { create } from 'zustand';
+import httpRequest from '../utils/functions/http-request';
+
+export interface createSemesterPayload{
+    insId: string,
+    degId: string,
+    prgId: string,
+    semId: string,
+    semNm: string,
+    desc:  string
+}
+
+interface SemesterIF {
+    insId: string,
+    degId: string,
+    prgId: string,
+    semId: string,
+    semNm: string,
+    desc:  string
+}
+
+interface SemesterState {
+    semesterList: SemesterIF[];
+    degreeData: object,
+    createSemester: (payload: createSemesterPayload) => Promise<boolean>,
+    getSemesterById: (id: string) => Promise<boolean>,
+    getSemester: (firstRender?: boolean) => Promise<object[] | boolean >;
+    updateDegree: (payload: createSemesterPayload) => Promise<boolean>
+}
+
+// Degree Store to handle Degree create update get functionalities
+const useDegreeStore = create<SemesterState>((set,get) => ({
+    semesterList:[],
+    degreeData: {},
+    createSemester: async(oPayload = {
+        insId: '',
+        degId: '',
+        prgId: '',
+        semId: '',
+        semNm: '',
+        desc: ''
+    }) => {
+        try{
+            const {data} = await httpRequest('POST',`${import.meta.env.VITE_API_URL}/semester/create`,oPayload);
+            get().getSemester();
+            return true
+        }catch(err){
+            return false
+        }
+    },
+    getSemesterById: async(id = '') => {
+       try{
+         return (await httpRequest('GET',`${import.meta.env.VITE_API_URL}/semester/get-by-id/${id}`))?.data
+       }catch(err){
+        return false
+       }
+    },
+    getSemester: async() => {
+       try{
+         const aSemesterList = await httpRequest('GET',`${import.meta.env.VITE_API_URL}/semester/get-all-Semester`);
+         return aSemesterList?.data;
+       }catch(err){
+        return false
+       }
+    },
+    updateDegree: async(oPayload = {
+        insId: '',
+        degId: '',
+        prgId: '',
+        semId: '',
+        semNm: '',
+        desc: ''
+    }) => {
+        try{
+            const {data} = await httpRequest('POST',`${import.meta.env.VITE_API_URL}/degree/update`,oPayload);
+            get().getDegree(data?._id);
+            return true
+        }catch(err){
+            return false
+        }
+    }
+}))
+export default useDegreeStore;

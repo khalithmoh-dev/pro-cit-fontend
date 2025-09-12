@@ -28,7 +28,7 @@ const DataTable = ({
   data,
   columns,
   selectable = false,
-  onSelect,
+  onSelect = () => {},
   pagination = true,
   searchable = true,
   title = "Data Table",

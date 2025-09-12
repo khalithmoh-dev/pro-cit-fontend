@@ -2,89 +2,127 @@ import { useEffect,useState } from 'react';
 import DynamicForm from "../../../components/generic-form";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
-import useAuthStore from '../../../store/authStore';
-import useDegreeStore, { createDegreePayload } from "../../../store/degreeStore";
+import useSemesterStore, { createSemesterPayload } from "../../../store/semesterStore";
 import useBaseStore from '../../../store/baseStore';
-export default function CreateDegree() {
+import { useLocation, useParams } from 'react-router-dom';
+
+export default function CreateSemester() {
   const navigate = useNavigate();
-  const { user, permissions } = useAuthStore();
   const baseStore = useBaseStore();
-  const { createDegree } = useDegreeStore();
-  const [baseData,setBaseData] = useState({})
+  const semesterStore = useSemesterStore();
+  const [baseData,setBaseData] = useState({degree: []});
+  const { id } = useParams();
+  const [editValues,setEditValues] = useState({});
+  
+  //to get the initial base data eg: program data and degree data
   useEffect(()=> {
+    try{
+      if(baseStore){
+        (async()=>{
+            const aReq = ['degree', 'program'];
+            setBaseData(await baseStore.getBaseData(aReq));
+        })();
+      }
+    } catch(err){
+      console.error(err)
+    }
+  },[baseStore]);
+
+  //to get semester data by id for update
+  useEffect(()=>{
     (async()=>{
-        const aReq = ['degree', 'program'];
-        setBaseData(await baseStore.getBaseData(aReq));
-    })();
-  },[]);
+      if(id){
+      const oSemester = await semesterStore.getSemesterById(id)
+      setEditValues(oSemester);
+    }
+    })()
+  },[id])
 
+  //form schema
   const schema = {
-  fields: {
-      General: [        
-        {
-          name: "insname",
-          label: "Institution name",
-          type: "select",
-          validation: Yup.string().required("Institution Name is required"),
-          isRequired: true,
-          isDisabled: true
-        },
-        {
-          name: "afgsa",
-          label: "Degree",
-          type: "select",
-          validation: Yup.string().required("Institution Name is required"),
-          isRequired: true,
-          isDisabled: true
-        },
-        {
-          name: "agrwg",
-          label: "Program",
-          type: "select",
-          validation: Yup.string().required("Institution Name is required"),
-          isRequired: true,
-          isDisabled: true
-        },
-        {
-          name: "semId",
-          label: "Semester Id",
-          type: "text",
-          validation: Yup.string().required("Semester Id is required"),
-          isRequired: true
-        },
-         {
-          name: "semNm",
-          label: "Semester name",
-          type: "text",
-          validation: Yup.string().required("Semester name is required"),
-          isRequired: true
-        },
-         {
-          name: "description",
-          label: "Description",
-          type: "text"
-        }
-  ]
-},
-  buttons:[
+    fields: {
+          General: [        
+            {
+              name: "insId",
+              label: "Institution",
+              type: "select",
+              validation: Yup.string().required("Institution is required"),
+              isRequired: true,
+              isDisabled: true
+            },
+            {
+              name: "degId",
+              label: "Degree",
+              type: "select",
+              options:(baseData?.degree ?? []),
+              validation: Yup.string().required("Degree is required"),
+              isRequired: true,
+              labelKey: 'degreeName',
+              valueKey: '_id'
+            },
+            {
+              name: "prgId",
+              label: "Program",
+              type: "select",
+              // validation: Yup.string().required("Institution Name is required"),
+              // isRequired: true,
+            },
+            {
+              name: "semId",
+              label: "Semester Id",
+              type: "text",
+              validation: Yup.string().required("Semester Id is required"),
+              isRequired: true
+            },
+            {
+              name: "semNm",
+              label: "Semester name",
+              type: "text",
+              validation: Yup.string().required("Semester name is required"),
+              isRequired: true
+            },
+            {
+              name: "description",
+              label: "Description",
+              type: "text"
+            }
+      ]
+    },
+     buttons: [
     {
-      name:"Cancel", variant:"outlined", color:"secondary", onClick:()=>{navigate(-1)}
-    },{
-      name:"Reset", variant:"outlined", color:"warning", onClick:()=>{}
-    },{
-      name:"Save", variant:"contained", color:"primary", type: "submit"
-    },{
-      name:"Next", variant:"contained", color:"primary", onClick:()=>{}
+      name: "Cancel",
+      variant: "outlined",
+      color: "secondary",
+      onClick: () => {
+        navigate(-1);
+      }
+    },
+    ...(!id
+      ? [
+          {
+            name: "Reset",
+            variant: "outlined",
+            color: "warning",
+            onClick: () => {}
+          }
+        ]
+      : []),
+    {
+      name: id ? "Update" : "Save",
+      variant: "contained",
+      color: "primary",
+      type: "submit"
     }
   ]
-};
+  };
 
-const handleSemesterSubmit = async (values: createDegreePayload) => {
-  console.log('inn for creating degree',values)
-    const res = await createDegree(values);
-    if (res) {
-    
-    }
+const handleSemesterSubmit = async (values: createSemesterPayload) => {
+  try{
+    await semesterStore.createSemester(values);
+    navigate(-1)
+  }catch(err){
+    console.error(err)
+  }
   };
 
   return (
@@ -94,7 +132,7 @@ const handleSemesterSubmit = async (values: createDegreePayload) => {
         pageTitle="Create Semester"
         onSubmit={handleSemesterSubmit}
         isEditPerm = {true}
-        oInitialValues = ""
+        oInitialValues = {id ? editValues :""}
       />
     </>
   );

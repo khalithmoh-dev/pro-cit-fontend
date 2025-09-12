@@ -35,7 +35,7 @@ import useAuthStore from '../../store/authStore'
 
 const GenericMaster = ({ pageTitle, schema, onSubmit, isEditPerm= false ,oInitialValues }) => {
   const [editPerm, setEditPerm] = useState(false);
-  const [instDtls, setInstDtls] = useState({});
+  const [instDtls, setInstDtls] = useState({_id: '', insname: ''});
   const instituteStore = useInstituteStore();
   const authStore = useAuthStore();
 
@@ -44,7 +44,6 @@ const GenericMaster = ({ pageTitle, schema, onSubmit, isEditPerm= false ,oInitia
       if(authStore?.user && instituteStore.getInstitute){
         (async()=>{
           const oInstituteDtls = await instituteStore.getLogInIns();
-          console.log('oInstituteDtlsoInstituteDtls',oInstituteDtls)
           if(oInstituteDtls && Object.keys(oInstituteDtls).length){
             setInstDtls(oInstituteDtls);
           }
@@ -67,7 +66,7 @@ const formik = useFormik({
   initialValues: Object.values(schema.fields)
     .flat()
     .reduce((acc, field) => {
-      if(field.name === "insname" && instDtls?._id && instDtls?.insname){
+      if(field.name === "insId" && instDtls?._id && instDtls?.insname){
         acc[field.name] = instDtls?._id;
       }else if (oInitialValues && oInitialValues.hasOwnProperty(field.name)) {
         // Use value from oInitialValues if available
@@ -111,6 +110,13 @@ const formik = useFormik({
           />
         );
       case "select":
+        const labelKey = field.labelKey || "label";
+        const valueKey = field.valueKey || "value";
+        const options =
+          field.name === "insId"
+            ? [{ [valueKey]: instDtls._id, [labelKey]: instDtls.insname }]
+            : field.options || [];
+
         return (
           <FormControl fullWidth size="small">
             <Select
@@ -121,28 +127,30 @@ const formik = useFormik({
               onBlur={formik.handleBlur}
               renderValue={(selected) => {
                 if (field.isMulti) {
-                  return selected.join(", ");
+                  return selected
+                    .map((val: any) => {
+                      const opt = options.find((o) => o[valueKey] === val);
+                      return opt ? opt[labelKey] : val;
+                    })
+                    .join(", ");
                 }
-                const selectedOption = (field.name === "insname" ? [{value: instDtls._id, label: instDtls.insname}] : field.options)?.find(
-                  (opt) => opt.value === selected
-                );
-                return selectedOption ? selectedOption.label : "";
+                const selectedOption = options.find((opt) => opt[valueKey] === selected);
+                return selectedOption ? selectedOption[labelKey] : "";
               }}
               disabled={!editPerm || field.isDisabled}
               sx={{
-                borderRadius: "var(--input-radius, 15px)"
-
+                borderRadius: "var(--input-radius, 15px)",
               }}
             >
-              {(field.name === "insname" ? [{value: instDtls._id, label: instDtls.insname}] : field.options)?.map((opt) => (
-                <MenuItem key={opt.value} value={opt.value}>
+              {options.map((opt: any) => (
+                <MenuItem key={opt[valueKey]} value={opt[valueKey]}>
                   {field.isMulti && (
                     <Checkbox
-                      checked={formik.values[field.name]?.includes(opt.value)}
+                      checked={formik.values[field.name]?.includes(opt[valueKey])}
                       disabled={!editPerm || field.isDisabled}
                     />
                   )}
-                  {opt.label}
+                  {opt[labelKey]}
                 </MenuItem>
               ))}
             </Select>
@@ -154,6 +162,7 @@ const formik = useFormik({
             )}
           </FormControl>
         );
+
       case "file":
         return (
           <FileUpload

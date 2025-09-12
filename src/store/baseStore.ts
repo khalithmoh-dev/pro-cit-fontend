@@ -23,13 +23,11 @@ const useBaseStore = create<BaseState>((set, get) => ({
       if(!oInstDtls?._id){
         throw 'invalid req'
       }
-      console.log('aReq',aReq)
-      const baseData = await httpRequest(
+      return await httpRequest(
         "POST",
         `${import.meta.env.VITE_API_URL}/basedata/get-base-data-by-insid`,
         {aRqstdFlds: aReq}
       );
-      console.log('baseDatabaseData',baseData)
     }catch(err){
       return false
     }

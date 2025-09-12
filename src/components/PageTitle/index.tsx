@@ -27,7 +27,8 @@ export default function PageTitle({
   color = "var(--logout-button)",
   title = "Your Label",
   className = "",
-  iconName = ""
+  iconName = "",
+  children
 }) {
   const authStore = useAuthStore();
   const location = useLocation();
@@ -39,6 +40,7 @@ export default function PageTitle({
   }, [location.pathname])
 
   return (
+<div className="d-flex justify-content-between">
     <div
       className={`d-flex align-items-center ${className}`}
       style={{ width: "fit-content" }}
@@ -79,6 +81,8 @@ export default function PageTitle({
         </CardContent>
       </Card>
     </div>
+      {children}
+</div>
   );
 }
 
