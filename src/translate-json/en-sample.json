@@ -1,0 +1,12 @@
+{
+  "INSTITUTION": "Institution",
+  "COURSE": "Course",
+  "COURSE_ID": "Course ID",
+  "COURSE_NAME":"Course Name",
+  "OFFERING_DEPARTMENT": "Offering Department",
+  "CREDIT": "Credit",
+  "COURSE_TYPE": "Course Type",
+  "CATEGORY": "Category",
+  "SUB_CATEGORY": "Sub-Category",
+  "IS_EXAM_SUBJECT": "Is Exam Subject"
+}

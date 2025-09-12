@@ -2,6 +2,7 @@ import { BrowserRouter } from 'react-router-dom';
 import IndexRoute from './router';
 import style from './app.module.css';
 import Toast from './components/toast';
+import "./i18n";
 
 const App = () => {
   return (
