@@ -1,5 +1,7 @@
 import { create } from "zustand";
 import httpUploadRequest from "../utils/functions/http-upload-request";
+import useInstituteStore from "./instituteStore";
+import httpRequest from '../utils/functions/http-request';
 
 interface UploadedFile {
   fileName: string;
@@ -9,24 +11,39 @@ interface UploadedFile {
 interface BaseState {
   handleCloudUpload: (formData: FormData) => Promise<boolean>;
   parseFormDataAndUpload: (files: File[]) => Promise<object | boolean>;
+  getBaseData: (arr: string[]) => Promise<boolean>;
   upldedRec: UploadedFile | UploadedFile[] | null;
 }
 
-const useBaseRoutes = create<BaseState>((set, get) => ({
+const useBaseStore = create<BaseState>((set, get) => ({
   upldedRec: {url:'', fileName: ''},
-
+  getBaseData: async(aReq) => {
+    try{
+      const oInstDtls = useInstituteStore.getState().getLogInIns();
+      if(!oInstDtls?._id){
+        throw 'invalid req'
+      }
+      console.log('aReq',aReq)
+      const baseData = await httpRequest(
+        "POST",
+        `${import.meta.env.VITE_API_URL}/basedata/get-base-data-by-insid`,
+        {aRqstdFlds: aReq}
+      );
+      console.log('baseDatabaseData',baseData)
+    }catch(err){
+      return false
+    }
+  },
   parseFormDataAndUpload: async (files) => {
    try {
         const formData = new FormData();
-        console.log('filesssssssss', files);
 
         // Iterate over the File objects directly
         for (const eachFile of files ?? []) {
             // The File object already contains the name and content
             formData.append("files", eachFile); 
         }
-        
-        console.log('formDataformData', formData);
+
         await get().handleCloudUpload(formData);
         return true;
     } catch (err) {
@@ -48,7 +65,7 @@ const useBaseRoutes = create<BaseState>((set, get) => ({
   }
 }));
 
-export default useBaseRoutes;
+export default useBaseStore;
 
 
 
