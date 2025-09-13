@@ -7,13 +7,14 @@ import PageTitle from "../../../components/PageTitle";
 import useDegreeStore from '../../../store/degreeStore';
 import useSemesterStore from '../../../store/semesterStore';
 import TitleButton from '../../../components/TitleButton';
+import { useTranslation } from 'react-i18next';
 
 const SemesterList = () => {
   const navigate = useNavigate();
   const { getDegrees,degrees } = useDegreeStore();
   const { getSemester } = useSemesterStore();
   const [semesterData, setSemesterData] = useState([]);
-
+  const {t} = useTranslation();
   useEffect(() => {
     if (getSemester) {
       (async () => {
@@ -73,7 +74,7 @@ const SemesterList = () => {
   return (
     <Box sx={{ p: 3 }}>
       <PageTitle title={'Semester list'}>
-        <TitleButton />
+        <TitleButton Btnname={t("ADD")} onClick={()=>navigate('/semester/create')} />
       </PageTitle>
       <DataTable
         data={semesterData}

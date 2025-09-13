@@ -33,8 +33,8 @@ import useAuthStore from '../../store/authStore'
       - onSubmit: onSubmit function
 */
 
-const GenericMaster = ({ pageTitle, schema, onSubmit, isEditPerm= false ,oInitialValues }) => {
-  const [editPerm, setEditPerm] = useState(false);
+const GenericMaster = ({ pageTitle, schema, onSubmit, isEditPerm= false, isEditDisableDflt = false ,oInitialValues }) => {
+  const [editPerm, setEditPerm] = useState(!isEditDisableDflt);
   const [instDtls, setInstDtls] = useState({_id: '', insname: ''});
   const instituteStore = useInstituteStore();
   const authStore = useAuthStore();
@@ -258,7 +258,7 @@ const formik = useFormik({
           <PageTitle title={pageTitle}/>
           {isEditPerm && (
             <div className="mt-3 mx-3" >
-              <Switch defaultChecked={false} onChange={() => setEditPerm(!editPerm)} label="Edit mode"/>
+              <Switch checked={editPerm} onChange={() => setEditPerm(!editPerm)} label="Edit mode"/>
             </div>
           )}
         </div>

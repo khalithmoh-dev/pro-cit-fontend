@@ -4,7 +4,8 @@ import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import useSemesterStore, { createSemesterPayload } from "../../../store/semesterStore";
 import useBaseStore from '../../../store/baseStore';
-import { useLocation, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { sanitizePayload } from '../../../utils'
 
 export default function CreateSemester() {
   const navigate = useNavigate();
@@ -82,7 +83,7 @@ export default function CreateSemester() {
               isRequired: true
             },
             {
-              name: "description",
+              name: "desc",
               label: "Description",
               type: "text"
             }
@@ -118,7 +119,16 @@ export default function CreateSemester() {
 
 const handleSemesterSubmit = async (values: createSemesterPayload) => {
   try{
-    await semesterStore.createSemester(values);
+    delete values.prgId;
+    if(!id){
+      await semesterStore.createSemester(values);
+    }else{
+      const oUpdtPayload = {
+        ...values,
+        _id:id
+      }
+      await semesterStore.updateSemester(oUpdtPayload);
+    }
     navigate(-1)
   }catch(err){
     console.error(err)
@@ -132,6 +142,7 @@ const handleSemesterSubmit = async (values: createSemesterPayload) => {
         pageTitle="Create Semester"
         onSubmit={handleSemesterSubmit}
         isEditPerm = {true}
+        isEditDisableDflt = {Boolean(id)}
         oInitialValues = {id ? editValues :""}
       />
     </>

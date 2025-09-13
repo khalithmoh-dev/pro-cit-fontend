@@ -8,5 +8,6 @@
   "COURSE_TYPE": "Course Type",
   "CATEGORY": "Category",
   "SUB_CATEGORY": "Sub-Category",
-  "IS_EXAM_SUBJECT": "Is Exam Subject"
+  "IS_EXAM_SUBJECT": "Is Exam Subject",
+  "ADD": "Add"
 }

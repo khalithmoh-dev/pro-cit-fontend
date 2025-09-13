@@ -36,7 +36,7 @@ const Switch: React.FC<SwitchPropsIF> = ({ checked, onChange, label="" }) => {
             opacity: 1,
           },
         }}
-        checked = {checked}
+        defaultChecked = {checked}
         onChange = {onChange}
       />
     </div>

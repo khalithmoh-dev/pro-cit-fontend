@@ -7,7 +7,8 @@ export interface createSemesterPayload{
     prgId: string,
     semId: string,
     semNm: string,
-    desc:  string
+    desc:  string,
+    _id?: string
 }
 
 interface SemesterIF {
@@ -25,7 +26,7 @@ interface SemesterState {
     createSemester: (payload: createSemesterPayload) => Promise<boolean>,
     getSemesterById: (id: string) => Promise<boolean>,
     getSemester: (firstRender?: boolean) => Promise<object[] | boolean >;
-    updateDegree: (payload: createSemesterPayload) => Promise<boolean>
+    updateSemester: (payload: createSemesterPayload) => Promise<boolean>
 }
 
 // Degree Store to handle Degree create update get functionalities
@@ -63,17 +64,20 @@ const useDegreeStore = create<SemesterState>((set,get) => ({
         return false
        }
     },
-    updateDegree: async(oPayload = {
+    updateSemester: async(oPayload = {
         insId: '',
         degId: '',
         prgId: '',
         semId: '',
         semNm: '',
-        desc: ''
+        desc: '',
+        _id: ""
     }) => {
         try{
-            const {data} = await httpRequest('POST',`${import.meta.env.VITE_API_URL}/degree/update`,oPayload);
-            get().getDegree(data?._id);
+            const id = oPayload._id;
+            delete oPayload._id
+            const {data} = await httpRequest('PATCH',`${import.meta.env.VITE_API_URL}/semester/update/${id}`,oPayload);
+            get().getSemester(data?._id);
             return true
         }catch(err){
             return false
