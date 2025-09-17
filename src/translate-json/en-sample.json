@@ -9,5 +9,19 @@
   "CATEGORY": "Category",
   "SUB_CATEGORY": "Sub-Category",
   "IS_EXAM_SUBJECT": "Is Exam Subject",
-  "ADD": "Add"
+  "ADD": "Add",
+  "COURSE_ID_IS_REQUIRED": "Course ID is required",
+  "COURSE_NAME_IS_REQUIRED": "Course Name is required",
+  "THEORY": "Theory",
+  "PRACTICAL": "Practical",
+  "BOTH": "Both",
+  "SPLIT_CREDIT": "Split Credit",
+  "THEORY_CREDIT": "Theory Credit",
+  "PRACTICAL_CREDIT": "Practical Credit",
+  "THEORY_CREDIT_IS_REQUIRED": "Theory Credit is required",
+  "PRACTICAL_CREDIT_IS_REQUIRED": "Practical Credit is required",
+  "UPDATE": "Update",
+  "SUBMIT": "Submit",
+  "COURSE_LIST": "Course List",
+  "COURSES": "Courses"
 }

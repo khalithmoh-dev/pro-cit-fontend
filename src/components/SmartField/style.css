@@ -1,0 +1,56 @@
+.smart-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.smart-field label {
+  margin-bottom: 0.4rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.smart-field input,
+.smart-field select {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 15px !important;
+  outline: none;
+  font-size: 14px;
+}
+
+.smart-field input:focus,
+.smart-field select:focus {
+  border-color: #007bff;
+}
+
+.multi-select-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.selected-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 5px;
+}
+
+.tag {
+  background: #007bff;
+  color: #fff;
+  padding: 3px 8px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+}
+
+.remove-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  margin-left: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}

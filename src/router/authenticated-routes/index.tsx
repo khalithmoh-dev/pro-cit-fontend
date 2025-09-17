@@ -33,7 +33,8 @@ const StudentFeePaymentRoutes = lazy(() => import('../StudentFeePaymentRoutes'))
 const QuickCollectRoutes = lazy(() => import('../QuickCollectRoutes'));
 const ReportRoutes = lazy(() => import('../ReportRoutes'));
 const InstituteRoutes = (lazy(() => import ('./InstituteRoutes')))
-const SemesterRoutes = (lazy(() => import ('./SemesterRoutes')))
+// const SemesterRoutes = (lazy(() => import ('./SemesterRoutes')))
+const CourseRoutes = lazy(() => import('../basic-config-routes/CourseRoutes'));
 
 // Direct imports (not lazy)
 import OutcomeListPage from '../../modules/outcomes/outcome-list';
@@ -87,7 +88,8 @@ const AuthenticatedRoutes = () => {
           <Route path="quicksettings/*" element={<QuickCollectSettingRoutes />} />
           <Route path="report/*" element={<ReportRoutes />} />
           <Route path="configuration/*" element={<BaseConfigRoutes />} />
-          <Route path='semester/*' element={<SemesterRoutes/>} />
+          {/* <Route path='semester/*' element={<SemesterRoutes/>} /> */}
+          <Route path="course/*" element={<CourseRoutes /> } />
 
           {/* Direct routes */}
           <Route index element={<DashboardRoutes />} />

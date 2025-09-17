@@ -23,6 +23,7 @@ import Textarea from '@mui/joy/Textarea';
 import FormHelperText from '@mui/joy/FormHelperText';
 import useInstituteStore from "../../store/instituteStore";
 import useAuthStore from '../../store/authStore'
+import SmartField from "../SmartField";
 
 /** The generic form component to generate form dynamically using a JSON
     The working json can be referred from institute config
@@ -33,7 +34,7 @@ import useAuthStore from '../../store/authStore'
       - onSubmit: onSubmit function
 */
 
-const GenericMaster = ({ pageTitle, schema, onSubmit, isEditPerm= false, isEditDisableDflt = false ,oInitialValues }) => {
+const GenericMaster = ({ pageTitle, schema, onSubmit, isEditPerm= false, isEditDisableDflt = false ,oInitialValues , isSmartField}) => {
   const [editPerm, setEditPerm] = useState(!isEditDisableDflt);
   const [instDtls, setInstDtls] = useState({_id: '', insname: ''});
   const instituteStore = useInstituteStore();
@@ -287,7 +288,7 @@ const formik = useFormik({
                       {!field.removeHeader && (
                         <Label labelName={field.label} required={field.isRequired}/>
                       )}
-                      {renderField(field)}
+                    {isSmartField ? <SmartField key={field.name} field={field} formik={formik} editPerm={editPerm} /> : renderField(field)}
                     </div>
                   );
                 })}
