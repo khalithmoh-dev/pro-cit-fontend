@@ -5,7 +5,8 @@ export interface createDegreePayload{
   institutionName: String,
   degreeId: String,
   degreeName: String,
-  description: String
+  description: String,
+  deleted: boolean;
 }
 
 export interface DegreeIF {
@@ -35,7 +36,8 @@ const useDegreeStore = create<DegreeState>((set,get) => ({
         institutionName: '',
         degreeId: '',
         degreeName: '',
-        description: ''
+        description: '',
+        deleted: false
     }) => {
         try{
             const {data} = await httpRequest('POST',`${import.meta.env.VITE_API_URL}/degree/create`,oPayload);
@@ -63,7 +65,8 @@ const useDegreeStore = create<DegreeState>((set,get) => ({
         institutionName: '',
         degreeId: '',
         degreeName: '',
-        description: ''
+        description: '',
+        deleted: false
     }) => {
         try{
             const {data} = await httpRequest('POST',`${import.meta.env.VITE_API_URL}/degree/update`,oPayload);

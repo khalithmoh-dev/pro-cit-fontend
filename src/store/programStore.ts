@@ -5,7 +5,8 @@ export interface createProgramPayload{
   institutionName: String,
   programId: String,
   programName: String,
-  description: String
+  description: String,
+  deleted: boolean
 }
 
 export interface ProgramIF {
@@ -35,7 +36,8 @@ const useProgramStore = create<ProgramState>((set,get) => ({
         institutionName: '',
         programId: '',
         programName: '',
-        description: ''
+        description: '',
+        deleted: false
     }) => {
         try{
             const {data} = await httpRequest('POST',`${import.meta.env.VITE_API_URL}/program/create`,oPayload);
@@ -63,7 +65,8 @@ const useProgramStore = create<ProgramState>((set,get) => ({
         institutionName: '',
         programId: '',
         programName: '',
-        description: ''
+        description: '',
+        deleted: false
     }) => {
         try{
             const {data} = await httpRequest('POST',`${import.meta.env.VITE_API_URL}/program/update`,oPayload);
