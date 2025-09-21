@@ -1,73 +1,100 @@
 import DynamicForm from "../../../components/generic-form";
 import * as Yup from "yup";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useSectionStore, { createSectionPayload } from "../../../store/sectionStore";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function CreateSection() {
   const navigate = useNavigate();
-  const { createSection } = useSectionStore();
-
+  const sectionStore = useSectionStore();
+  const { id } = useParams();
+  const [editValues, setEditValues] = useState({});
+  const { t } = useTranslation();
+  
   const schema = {
   fields: {
       General: [        
         {
           name: "insname",
-          label: "Institution name",
+          label: t("INSTITUITION_NAME"),
           type: "select",
-          validation: Yup.string().required("Institution Name is required"),
+          validation: Yup.string().required(t("INSTITUITION_NAME_IS_REQUIRED")),
           isRequired: true,
           isDisabled: true
         },
         {
           name: "sectionCode",
-          label: "Section Code",
+          label: t("SECTION_CODE"),
           type: "text",
-          validation: Yup.string().required("Section Code is required"),
+          validation: Yup.string().required(t("SECTION_CODE_IS_REQUIRED")),
           isRequired: true
         },
          {
           name: "sectionName",
-          label: "Section name",
+          label: t("SECTION_NAME"),
           type: "text",
-          validation: Yup.string().required("Section name is required"),
+          validation: Yup.string().required(t("SECTION_NAME_IS_REQUIRED")),
           isRequired: true
         },
          {
           name: "description",
-          label: "Description",
+          label: t("DESCRIPTION"),
           type: "text"
         }
   ]
 },
   buttons:[
     {
-      name:"Cancel", variant:"outlined", color:"secondary", onClick:()=>{navigate(-1)}
+      name:t("CANCEL"), variant:"outlined", color:"secondary", onClick:()=>{navigate(-1)}
     },{
-      name:"Reset", variant:"outlined", color:"warning", onClick:()=>{}
+       name:t("RESET"), variant:"outlined", color:"warning", onClick:()=>{}
     },{
-      name:"Save", variant:"contained", color:"primary", type: "submit"
+      name: id ? t("UPDATE") : t("SAVE"), variant:"contained", color:"primary", type: "submit"
     },{
-      name:"Next", variant:"contained", color:"primary", onClick:()=>{}
+     name:t("NEXT"), variant:"contained", color:"primary", onClick:()=>{}
     }
   ]
 };
 
-const handleSectionSubmit = async (values: createSectionPayload) => {
-  console.log('inn for creating section',values)
-    const res = await createSection(values);
-    if (res) {
-    
-    }
-  };
+ 
+   //to get section data by id for update
+      useEffect(()=>{
+        (async()=>{
+          if(id){
+          const oSection = await sectionStore.getSection(id)
+          setEditValues(oSection);
+        }
+        })()
+      },[id])
+  
+    const handleSectionSubmit = async (values: createSectionPayload) => {
+      try{
+        delete values.sectionCode;
+        if(!id){
+          await sectionStore.createSection(values);
+        }else{
+          const oUpdtPayload = {
+            ...values,
+            _id:id
+          }
+          await sectionStore.updateSection(oUpdtPayload);
+        }
+        navigate(-1)
+      }catch(err){
+        console.error(err)
+      }
+      };
 
   return (
     <>
       <DynamicForm
         schema={schema}
-        pageTitle="Create Section"
-        onSubmit={handleSectionSubmit}
+        pageTitle={t("CREATE_SECTION")}
+        onSubmit={handleSectionSubmit} 
         isEditPerm = {true}
-        oInitialValues = ""
+        isEditDisableDflt = {Boolean(id)}
+        oInitialValues = {id ? editValues :""}
       />
     </>
   );

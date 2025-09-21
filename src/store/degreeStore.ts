@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import httpRequest from '../utils/functions/http-request';
 
 export interface createDegreePayload{
-  institutionName: String,
+  insId: string,
   degreeId: String,
   degreeName: String,
   description: String,
@@ -13,7 +13,7 @@ export interface DegreeIF {
   _id: string;
   createdAt: string;
   updatedAt: string;
-  institutionName: String;
+  insId: String;
   degreeId: String;
   degreeName: String;
   description: String;
@@ -33,7 +33,7 @@ const useDegreeStore = create<DegreeState>((set,get) => ({
     degrees:[],
     degreeData: {},
     createDegree: async(oPayload = {
-        institutionName: '',
+        insId: '',
         degreeId: '',
         degreeName: '',
         description: '',
@@ -62,7 +62,7 @@ const useDegreeStore = create<DegreeState>((set,get) => ({
        }
     },
     updateDegree: async(oPayload = {
-        institutionName: '',
+        insId: '',
         degreeId: '',
         degreeName: '',
         description: '',

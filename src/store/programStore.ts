@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import httpRequest from '../utils/functions/http-request';
 
 export interface createProgramPayload{
-  institutionName: String,
+  insId: string,
   programId: String,
   programName: String,
   description: String,
@@ -13,7 +13,7 @@ export interface ProgramIF {
   _id: string;
   createdAt: string;
   updatedAt: string;
-  institutionName: String;
+  insId: String;
   programId: String;
   programName: String;
   description: String;
@@ -33,7 +33,7 @@ const useProgramStore = create<ProgramState>((set,get) => ({
     programs:[],
     programData: {},
     createProgram: async(oPayload = {
-        institutionName: '',
+        insId: '',
         programId: '',
         programName: '',
         description: '',
@@ -62,7 +62,7 @@ const useProgramStore = create<ProgramState>((set,get) => ({
        }
     },
     updateProgram: async(oPayload = {
-        institutionName: '',
+        insId: '',
         programId: '',
         programName: '',
         description: '',

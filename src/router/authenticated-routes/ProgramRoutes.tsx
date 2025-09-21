@@ -11,6 +11,7 @@ const ProgramRoutes = () => {
       <Routes>
         <Route path="/list" element={<ProgramListPage />} />
         <Route path="/create" element={<CreateProgramPage />} />
+        <Route path="/update/:id" element={<CreateProgramPage />} />
       </Routes>
     </Suspense>
   );

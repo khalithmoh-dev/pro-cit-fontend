@@ -5,12 +5,14 @@ import { Eye } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import PageTitle from "../../../components/PageTitle";
 import useProgramStore from '../../../store/programStore';
+import { useTranslation } from 'react-i18next';
 
 // Example usage
 const ProgramList = () => {
   const navigate = useNavigate();
   const { getPrograms, programs } = useProgramStore();
   const [programsData, setProgramsData] = useState([]);
+   const { t } = useTranslation();
 
   useEffect(() => {
     getPrograms();
@@ -26,22 +28,22 @@ const ProgramList = () => {
   const columns = [
     { 
       field: 'institutionName', 
-      headerName: 'Institution Name', 
+      headerName: t("INSTITUITION_NAME"), 
       sortable: false
     },
     { 
       field: 'programId', 
-      headerName: 'Program ID', 
+      headerName: t("PROGRAM_ID"),
       sortable: true      
     },
     { 
       field: 'programName', 
-      headerName: 'Program Name', 
+      headerName: t("PROGRAM_NAME"),
       sortable: true,
     },
     { 
       field: 'description', 
-      headerName: 'Description', 
+      headerName:  t("DESCRIPTION"),
       sortable: true
     },
   ];
@@ -49,7 +51,7 @@ const ProgramList = () => {
   // Action buttons
   const actions = [
     {
-      label: 'View Details',
+      label: t("VIEW_DETAILS"),
       icon: <Eye size={18} />,
       onClick: (row) => {
         navigate('/program/create')
@@ -64,12 +66,12 @@ const ProgramList = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <PageTitle title={'Program list'}/>
+      <PageTitle title={t("PROGRAM_LIST")}/>
       <DataTable
         data={programsData}
         columns={columns}
         onSelect={handleSelection}
-        title="Program list"
+        title= {t("PROGRAM_LIST")}
         actions={actions}
       />
     </Box>

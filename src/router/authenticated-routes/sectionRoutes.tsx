@@ -11,6 +11,7 @@ const SectionRoutes = () => {
       <Routes>
         <Route path="/list" element={<SectionListPage />} />
         <Route path="/create" element={<CreateSectionPage />} />
+        <Route path="/update/:id" element={<CreateSectionPage />} />
       </Routes>
     </Suspense>
   );

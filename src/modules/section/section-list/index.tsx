@@ -5,12 +5,14 @@ import { Eye } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import PageTitle from "../../../components/PageTitle";
 import useSectionStore from '../../../store/sectionStore';
+import { useTranslation } from 'react-i18next';
  
 const SectionList = () => {
   const navigate = useNavigate();
   const { getSections,sections } = useSectionStore();
   const [sectionsData, setSectionsData] = useState([]);
-
+  const { t } = useTranslation();
+  
   useEffect(() => {
     if (getSections) {
       (async () => {
@@ -37,22 +39,22 @@ const SectionList = () => {
   const columns = [
     { 
       field: 'institutionName', 
-      headerName: 'Institution Name', 
+      headerName: t("INSTITUITION_NAME"),
       sortable: false
     },
     { 
       field: 'sectionCode', 
-      headerName: 'Section Code', 
+      headerName: t("SECTION_CODE"),
       sortable: true      
     },
     { 
       field: 'sectionName', 
-      headerName: 'Section Name', 
+      headerName: t("SECTION_NAME"),
       sortable: true,
     },
     { 
       field: 'description', 
-      headerName: 'Description', 
+      headerName: t("DESCRIPTION"),
       sortable: true
     },
   ];
@@ -60,7 +62,7 @@ const SectionList = () => {
   // Action buttons
   const actions = [
     {
-      label: 'View Details',
+      label: t("VIEW_DETAILS"),
       icon: <Eye size={18} />,
       onClick: (row) => {
         navigate('/section/create')
@@ -75,12 +77,12 @@ const SectionList = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <PageTitle title={'Section list'}/>
+      <PageTitle title={t("SECTION_LIST")}/>
       <DataTable
         data={sectionsData}
         columns={columns}
         onSelect={handleSelection}
-        title="Section"
+        title= {t("SECTION")}
         actions={actions}
       />
     </Box>

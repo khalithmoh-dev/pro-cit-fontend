@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import httpRequest from '../utils/functions/http-request';
 
 export interface createSectionPayload{
-  institutionName: String,
+  insId: String,
   sectionCode: String,
   sectionName: String,
   description: String,
@@ -13,7 +13,7 @@ export interface SectionIF {
   _id: string;
   createdAt: string;
   updatedAt: string;
-  institutionName: String;
+  insId: String;
   sectionCode: String;
   sectionName: String;
   description: String;
@@ -33,7 +33,7 @@ const useSectionStore = create<SectionState>((set,get) => ({
     sections:[],
     sectionData: {},
     createSection: async(oPayload = {
-        institutionName: '',
+        insId: '',
         sectionCode: '',
         sectionName: '',
         description: '',
@@ -62,7 +62,7 @@ const useSectionStore = create<SectionState>((set,get) => ({
        }
     },
     updateSection: async(oPayload = {
-        institutionName: '',
+        insId: '',
         sectionCode: '',
         sectionName: '',
         description: '',

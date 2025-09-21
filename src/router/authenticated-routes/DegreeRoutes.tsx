@@ -11,8 +11,8 @@ const DegreeRoutes = () => {
     <Suspense fallback={<PageLoader />}>
       <Routes>
         <Route path="/list" element={<DegreeListPage />} />
-        {/* <Route path="/list" element={<InstiteConfig />} /> */}
         <Route path="/create" element={<CreateDegreePage />} />
+        <Route path="/update/:id" element={<CreateDegreePage />} />
       </Routes>
     </Suspense>
   );

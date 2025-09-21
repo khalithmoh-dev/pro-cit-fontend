@@ -5,12 +5,15 @@ import { Eye } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import PageTitle from "../../../components/PageTitle";
 import useDegreeStore from '../../../store/degreeStore';
+import { useTranslation } from 'react-i18next';
 
 // Example usage
 const DegreeList = () => {
   const navigate = useNavigate();
   const { getDegrees,degrees } = useDegreeStore();
   const [degreesData, setDegreesData] = useState([]);
+  const { t } = useTranslation();
+  
 
   useEffect(() => {
     if (getDegrees) {
@@ -38,22 +41,22 @@ const DegreeList = () => {
   const columns = [
     { 
       field: 'institutionName', 
-      headerName: 'Institution Name', 
+      headerName: t("INSTITUITION_NAME"), 
       sortable: false
     },
     { 
       field: 'degreeId', 
-      headerName: 'Degree ID', 
+      headerName: t("DEGREE_ID"), 
       sortable: true      
     },
     { 
       field: 'degreeName', 
-      headerName: 'Degree Name', 
+      headerName: t("DEGREE_NAME"),
       sortable: true,
     },
     { 
       field: 'description', 
-      headerName: 'Description', 
+      headerName: t("DESCRIPTION"),
       sortable: true
     },
   ];
@@ -61,7 +64,7 @@ const DegreeList = () => {
   // Action buttons
   const actions = [
     {
-      label: 'View Details',
+      label: t("VIEW_DETAILS"),
       icon: <Eye size={18} />,
       onClick: (row) => {
         navigate('/degree/create')
@@ -76,12 +79,12 @@ const DegreeList = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <PageTitle title={'Degree list'}/>
+      <PageTitle title={t("DEGREE_LIST")}/>
       <DataTable
         data={degreesData}
         columns={columns}
         onSelect={handleSelection}
-        title="Degree"
+        title={t("DEGREE")}
         actions={actions}
       />
     </Box>
