@@ -285,10 +285,10 @@ const formik = useFormik({
 
                   return (
                     <div className="col-12 col-md-4 p-2" key={index}>
-                      {!field.removeHeader && (
+                      {!field.removeHeader && !isSmartField && (
                         <Label labelName={field.label} required={field.isRequired}/>
                       )}
-                    {isSmartField ? <SmartField key={field.name} field={field} formik={formik} editPerm={editPerm} /> : renderField(field)}
+                    {isSmartField ? <SmartField key={field.name} field={field} formik={formik} editPerm={editPerm} instDtls={instDtls} /> : renderField(field)}
                     </div>
                   );
                 })}

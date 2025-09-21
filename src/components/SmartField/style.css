@@ -54,3 +54,22 @@
   cursor: pointer;
   font-size: 14px;
 }
+
+.smart-field-wrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 10px;
+}
+
+.smart-field-input {
+  flex: 0 0 80%;
+}
+
+.smart-field-actions {
+  flex: 0 0 20%;
+  display: flex;
+  justify-content: flex-start;
+  margin-top: 24px;
+  gap: 6px;
+}

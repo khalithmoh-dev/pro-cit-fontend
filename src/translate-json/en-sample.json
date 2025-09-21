@@ -23,5 +23,19 @@
   "UPDATE": "Update",
   "SUBMIT": "Submit",
   "COURSE_LIST": "Course List",
-  "COURSES": "Courses"
+  "COURSES": "Courses",
+  "ADD_CATEGORY": "Add Category",
+  "CREATE": "Create",
+  "CANCEL": "Cancel",
+  "CATEGORY_ID": "Category ID",
+  "CATEGORY_NAME": "Category Name",
+  "EDIT_CATEGORY": "Edit Category",
+  "CATEGORY_ID_IS_REQUIRED": "Category ID is required",
+  "CATEGORY_NAME_IS_REQUIRED": "Category Name is required",
+  "EDIT_SUB_CATEGORY": "Edit Sub-Category",
+  "ADD_SUB_CATEGORY": "Add Sub-Category",
+  "SUB_CATEGORY_NAME": "Sub Category Name",
+  "SUB_CATEGORY_ID": "Sub Category ID",
+  "SUB_CATEGORY_ID_IS_REQUIRED": "Sub Category ID is required",
+  "SUB_CATEGORY_NAME_IS_REQUIRED": "Sub Category Name is required"
 }

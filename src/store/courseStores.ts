@@ -17,7 +17,7 @@ export interface createCoursePayload{
 }
 
 interface CourseIF {
-   crsId: string,
+    crsId: string,
     crsNm: string,
     offDept: string,
     crsType: string,
@@ -30,12 +30,29 @@ interface CourseIF {
     isExamCrs: boolean,
 }
 
+interface courseCatPayload{
+    catId: string,
+    catNm: string,
+    _id?: string
+}
+
+interface courseSubCatPayload{
+    catId: string,
+    subCatId: string,
+    subCatNm: string,
+    _id?: string
+}
+
 interface CourseState {
     courseList: CourseIF[];
     createCourse: (payload: createCoursePayload) => Promise<boolean>,
     getCourseById: (id: string) => Promise<boolean>,
     getCourses: (firstRender?: boolean) => Promise<object[] | boolean >;
-    updateCourse: (payload: createCoursePayload) => Promise<boolean>
+    updateCourse: (payload: createCoursePayload) => Promise<boolean>;
+    createCourseCat: (payload: courseCatPayload) => Promise<boolean>,
+    updateCourseCat: (payload: courseCatPayload) => Promise<boolean>,
+    createCourseSubCat: (payload: courseSubCatPayload) => Promise<boolean>,
+    updateCourseSubCat: (payload: courseSubCatPayload) => Promise<boolean>,
 }
 
 // Course Store to handle Degree create update get functionalities
@@ -69,6 +86,39 @@ const useCourseStore = create<CourseState>(() => ({
             const id = oPayload._id;
             delete oPayload._id
             await httpRequest('PATCH',`${import.meta.env.VITE_API_URL}/course/update/${id}`, oPayload);
+            return true;
+        }catch {
+            return false;
+        }
+    },
+    createCourseCat: async(oPayload) => {
+        try{
+            await httpRequest('POST',`${import.meta.env.VITE_API_URL}/course/cat/create`, oPayload);
+            return true
+        }catch { 
+            return false
+        }
+    },
+    updateCourseCat: async(oPayload) => {
+        try{
+            await httpRequest('POST',`${import.meta.env.VITE_API_URL}/course/cat/update`, oPayload);
+            return true;
+        }catch {
+            return false;
+        }
+    },
+    createCourseSubCat: async(oPayload) => {
+        console.log("oPayload", oPayload)
+        try{
+            await httpRequest('POST',`${import.meta.env.VITE_API_URL}/course/sub-cat/create`, oPayload);   
+            return true
+        }catch { 
+            return false
+        }
+    },
+    updateCourseSubCat: async(oPayload) => {
+        try{
+            await httpRequest('POST',`${import.meta.env.VITE_API_URL}/course/sub-cat/update`, oPayload);
             return true;
         }catch {
             return false;

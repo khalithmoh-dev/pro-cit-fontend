@@ -290,3 +290,16 @@ div[class*="-control--is-disabled"] div[class*="-multiValue"] {
   background-color: #e2e8f0 !important; /* slightly darker grey */
   color: #000 !important;
 }
+
+.icon-btn:enabled {
+  color: #0d6efd !important; /* Bootstrap blue */
+}
+
+.icon-btn-enabled:hover {
+  color: #084298 !important; /* Darker blue */
+}
+
+.icon-btn:disabled {
+  color: #94a3b8 !important; /* Gray */
+  cursor: not-allowed !important;
+}

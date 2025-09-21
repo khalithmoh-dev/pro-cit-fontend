@@ -1,0 +1,117 @@
+/* Popup.css */
+.custom-popup .MuiPaper-root {
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+.popup-title {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+}
+
+.title-text {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #2d3748;
+    flex-grow: 1;
+}
+
+.close-button {
+    position: absolute;
+    right: 10px; 
+    color: #718096;
+    padding: 4px;
+}
+
+.close-button:hover {
+    background-color: #e2e8f0;
+    color: #4a5568;
+}
+
+.popup-content {
+    padding: 24px;
+    color: #4a5568;
+    margin: 20px !important;
+}
+
+.popup-divider {
+    height: 1px;
+    background-color: #e2e8f0;
+    width: 100%;
+}
+
+.popup-actions {
+    padding: 16px 24px;
+    gap: 12px;
+}
+
+/* Action button styles */
+.action-button {
+    border-radius: 6px;
+    padding: 8px 16px;
+    text-transform: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    min-width: 80px;
+}
+
+.action-button.MuiButton-contained {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.action-button.MuiButton-contained:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.action-button.MuiButton-outlined {
+    border: 1px solid #cbd5e0;
+}
+
+.action-button.MuiButton-outlined:hover {
+    background-color: #f7fafc;
+    border-color: #a0aec0;
+}
+
+/* Animation for popup entrance */
+@keyframes popupEnter {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.custom-popup .MuiPaper-root {
+    animation: popupEnter 0.2s ease-out;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .popup-title {
+        padding: 14px 20px;
+    }
+
+    .popup-content {
+        padding: 20px;
+    }
+
+    .popup-actions {
+        padding: 14px 20px;
+        flex-direction: column;
+    }
+
+    .action-button {
+        width: 100%;
+        margin: 4px 0;
+    }
+}
