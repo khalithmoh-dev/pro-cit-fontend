@@ -2,7 +2,6 @@ import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { useToastStore } from './toastStore';
 import { ModuleIF, ModulePermissions } from './moduleStore';
-import { transformNavData } from '../modules/layout/sidebar';
 import httpRequest from '../utils/functions/http-request';
 
 export interface MainMenuItem {
@@ -48,7 +47,8 @@ interface VaidateOtpPayloadIF {
 }
 
 interface RouteDetails {
-  icon: string
+  icon: string,
+  name: string
 }
 
 interface InstituteDetails {
@@ -86,7 +86,8 @@ const useAuthStore = create<AuthState>()(
       academicYear: '2024-2025',
       instituteDtls: {
         _id: '',
-        insname: ''
+        insname: '',
+        insCode: '',
       },
       routeInfo: {},
       login: async (email: string, password: string) => {
@@ -113,8 +114,9 @@ const useAuthStore = create<AuthState>()(
           data.data.role.modules.forEach((module: ModuleIF) => {
             permissionsObject[module.key] = module.permissions;
             if(!module.deleted){
-              const currentPath = module.path.split('/').filter(Boolean)[0] || ''
-              pathDtls[currentPath]= {icon: module.icon};
+              const currentPath = module.path
+              console.log('currentPath',currentPath)
+              pathDtls[currentPath]= {icon: module.icon, name: module.name};
             }
           });
           set({

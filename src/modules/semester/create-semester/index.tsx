@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import useSemesterStore, { createSemesterPayload } from "../../../store/semesterStore";
 import useBaseStore from '../../../store/baseStore';
 import { useParams } from 'react-router-dom';
-import { sanitizePayload } from '../../../utils'
+import { t } from 'i18next';
 
 export default function CreateSemester() {
   const navigate = useNavigate();
@@ -45,46 +45,46 @@ export default function CreateSemester() {
           General: [        
             {
               name: "insId",
-              label: "Institution",
+              label: t("INSTITUTION"),
               type: "select",
-              validation: Yup.string().required("Institution is required"),
+              validation: Yup.string().required(t('INSTITUTION_IS_REQUIRED')),
               isRequired: true,
               isDisabled: true
             },
             {
               name: "degId",
-              label: "Degree",
+              label: t("DEGREE"),
               type: "select",
               options:(baseData?.degree ?? []),
-              validation: Yup.string().required("Degree is required"),
+              validation: Yup.string().required(t("DEGREE_IS_REQUIRED")),
               isRequired: true,
               labelKey: 'degreeName',
               valueKey: '_id'
             },
             {
               name: "prgId",
-              label: "Program",
+              label: t("PROGRAM"),
               type: "select",
-              // validation: Yup.string().required("Institution Name is required"),
+              // validation: Yup.string().required("Program Name is required"),
               // isRequired: true,
             },
             {
               name: "semId",
-              label: "Semester Id",
+              label: t("SEMESTER_ID"),
               type: "text",
-              validation: Yup.string().required("Semester Id is required"),
+              validation: Yup.string().required("SEMESTER_ID_IS_REQUIRED"),
               isRequired: true
             },
             {
               name: "semNm",
-              label: "Semester name",
+              label: t("SEMESTER_NAME"),
               type: "text",
-              validation: Yup.string().required("Semester name is required"),
+              validation: Yup.string().required("SEMESTER_NAME_IS_REQUIRED"),
               isRequired: true
             },
             {
               name: "desc",
-              label: "Description",
+              label: t("DESCRIPTION"),
               type: "text"
             }
       ]
@@ -117,9 +117,10 @@ export default function CreateSemester() {
   ]
   };
 
+  //To handle submission of semester for both create and update
 const handleSemesterSubmit = async (values: createSemesterPayload) => {
   try{
-    delete values.prgId;
+    delete values.prgId; //--------------TEMP: HAVE TO REMOVE ONCE PROGRAM IS DONE--------------------------
     if(!id){
       await semesterStore.createSemester(values);
     }else{
@@ -139,7 +140,7 @@ const handleSemesterSubmit = async (values: createSemesterPayload) => {
     <>
       <DynamicForm
         schema={schema}
-        pageTitle="Create Semester"
+        pageTitle={`${t("CREATE_SEMESTER")}`}
         onSubmit={handleSemesterSubmit}
         isEditPerm = {true}
         isEditDisableDflt = {Boolean(id)}

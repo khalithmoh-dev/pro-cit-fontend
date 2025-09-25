@@ -1,5 +1,6 @@
 {
   "INSTITUTION": "Institution",
+  "CREATE": "Create",
   "COURSE": "Course",
   "COURSE_ID": "Course ID",
   "COURSE_NAME":"Course Name",
@@ -28,7 +29,6 @@
   "COURSE_LIST": "Course List",
   "COURSES": "Courses",
   "ADD_CATEGORY": "Add Category",
-  "CREATE": "Create",
   "CANCEL": "Cancel",
   "CATEGORY_ID": "Category ID",
   "CATEGORY_NAME": "Category Name",
@@ -64,5 +64,14 @@
   "SECTION_NAME":"Section name",
   "CREATE_SECTION":"Create Section",
   "SECTION_LIST":"Section list",
-  "SECTION":"Section"
+  "SECTION":"Section",
+  "PROGRAM" : "Program",
+  "SEMESTER": "Semester",
+  "SEMESTER_NAME" : "{{SEMESTER}} name",
+  "SEMESTER_ID" : "{{SEMESTER}} ID",
+  "CREATE_SEMESTER" : "{{CREATE}} {{SEMESTER}}",
+  "INSTITUTION_IS_REQUIRED": "Institution is required",
+  "DEGREE_IS_REQUIRED": "Degree is required",
+  "SEMESTER_ID_IS_REQUIRED": "Semester id is required",
+  "SEMESTER_NAME_IS_REQUIRED": "Semester name is required"
 }

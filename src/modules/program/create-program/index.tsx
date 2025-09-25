@@ -1,6 +1,7 @@
 import DynamicForm from "../../../components/generic-form";
 import * as Yup from "yup";
 import { useNavigate, useParams } from "react-router-dom";
+import useAuthStore from '../../../store/authStore';
 import useProgramStore, { createProgramPayload } from "../../../store/programStore";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -12,6 +13,8 @@ export default function CreateProgram() {
   const [editValues, setEditValues] = useState({});
   const { t } = useTranslation();
 
+  const { user, permissions } = useAuthStore();
+  const { createProgram } = useProgramStore();
   const schema = {
   fields: {
       General: [        

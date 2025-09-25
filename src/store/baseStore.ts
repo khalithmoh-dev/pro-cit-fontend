@@ -11,7 +11,7 @@ interface UploadedFile {
 interface BaseState {
   handleCloudUpload: (formData: FormData) => Promise<boolean>;
   parseFormDataAndUpload: (files: File[]) => Promise<object | boolean>;
-  getBaseData: (arr: string[]) => Promise<boolean>;
+  getBaseData: (arr: string[]) => Promise<object>;
   upldedRec: UploadedFile | UploadedFile[] | null;
 }
 
@@ -29,7 +29,7 @@ const useBaseStore = create<BaseState>((set, get) => ({
         {aRqstdFlds: aReq}
       );
     }catch(err){
-      return false
+      return {degree: []};
     }
   },
   parseFormDataAndUpload: async (files) => {

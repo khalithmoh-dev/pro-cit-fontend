@@ -12,6 +12,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import federation from '@originjs/vite-plugin-federation';
+import path from 'path'
 
 const localUrl = (port: number) => `http://localhost:${port}/assets/remoteEntry.js`;
 
@@ -46,4 +47,9 @@ export default defineConfig({
     minify: false,
     cssCodeSplit: false,
   },
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "src"),
+    }
+  }
 });

@@ -3,9 +3,10 @@ import DataTable from '../../common/generic-table';
 import { Chip,Box } from '@mui/material';
 import { Eye } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import PageTitle from "../../../components/PageTitle";
 import useProgramStore from '../../../store/programStore';
 import { useTranslation } from 'react-i18next';
+import Icon from '../../../components/Icons';
+import { t } from 'i18next';
 
 // Example usage
 const ProgramList = () => {
@@ -14,15 +15,13 @@ const ProgramList = () => {
   const [programsData, setProgramsData] = useState([]);
    const { t } = useTranslation();
 
+  //intial master function
   useEffect(() => {
-    getPrograms();
+    (async()=>{
+      await getPrograms();
+      setProgramsData(programs || []);
+    })()
   }, []);
-
-  useEffect(() => {
-    if (programs.length > 0) {
-      setProgramsData(programs);
-    }
-  }, [programs]);
  
   // Column configuration
   const columns = [
@@ -51,27 +50,20 @@ const ProgramList = () => {
   // Action buttons
   const actions = [
     {
-      label: t("VIEW_DETAILS"),
-      icon: <Eye size={18} />,
-      onClick: (row) => {
+      label: 'View Details',
+      icon: <Icon size={18} name="Eye" />,
+      onClick: () => {
         navigate('/program/create')
       }
     }
   ];
 
-  // Handle selection
-  const handleSelection = (selectedIds) => {
-    console.log('Selected IDs:', selectedIds);
-  };
-
   return (
     <Box sx={{ p: 3 }}>
-      <PageTitle title={t("PROGRAM_LIST")}/>
       <DataTable
         data={programsData}
         columns={columns}
-        onSelect={handleSelection}
-        title= {t("PROGRAM_LIST")}
+        title={t('PROGRAM_LIST')}
         actions={actions}
       />
     </Box>

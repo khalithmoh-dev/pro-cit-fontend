@@ -1,5 +1,5 @@
 // src/screens/CreateDegree/GenericMaster.jsx
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Checkbox,
@@ -24,6 +24,8 @@ import FormHelperText from '@mui/joy/FormHelperText';
 import useInstituteStore from "../../store/instituteStore";
 import useAuthStore from '../../store/authStore'
 import SmartField from "../SmartField";
+import { useLocation } from "react-router-dom";
+import { useLayout } from '../../modules/layout/LayoutContext'
 
 /** The generic form component to generate form dynamically using a JSON
     The working json can be referred from institute config
@@ -34,63 +36,70 @@ import SmartField from "../SmartField";
       - onSubmit: onSubmit function
 */
 
-const GenericMaster = ({ pageTitle, schema, onSubmit, isEditPerm= false, isEditDisableDflt = false ,oInitialValues , isSmartField}) => {
+const GenericMaster = ({ pageTitle, schema, onSubmit, isEditPerm = false, isEditDisableDflt = false, oInitialValues, isSmartField }) => {
   const [editPerm, setEditPerm] = useState(!isEditDisableDflt);
-  const [instDtls, setInstDtls] = useState({_id: '', insname: ''});
+  const [instDtls, setInstDtls] = useState({ _id: '', insname: '' });
   const instituteStore = useInstituteStore();
+  const { setRouteNm } = useLayout();
   const authStore = useAuthStore();
+  const location = useLocation();
 
-  
-  useEffect(()=>{
-      if(authStore?.user && instituteStore.getInstitute){
-        (async()=>{
-          const oInstituteDtls = await instituteStore.getLogInIns();
-          if(oInstituteDtls && Object.keys(oInstituteDtls).length){
-            setInstDtls(oInstituteDtls);
-          }
-        })();
-      }
-    },[authStore,instituteStore]);
+  useEffect(() => {
+    if (authStore?.user && instituteStore.getInstitute) {
+      (async () => {
+        const oInstituteDtls = await instituteStore.getLogInIns();
+        if (oInstituteDtls && Object.keys(oInstituteDtls).length) {
+          setInstDtls(oInstituteDtls);
+        }
+      })();
+    }
+  }, [authStore, instituteStore]);
 
+  useEffect(() => {
+    if (location.pathname) {
+      setRouteNm(location.pathname);
+    }
+  }, [location.pathname]);
+  console.log('location.pathname', location.pathname)
   // Build validation schema
   const validationSchema = Yup.object(
     Object.values(schema.fields).flat().reduce((acc, field) => {
-        if(field.isNullable){
+      if (field.isNullable) {
 
-        }else if (field.name && field.validation) {
-          acc[field.name] = field.validation;
-        }
+      } else if (field.name && field.validation) {
+        acc[field.name] = field.validation;
+      }
       return acc;
     }, {})
   );
-const formik = useFormik({
-  initialValues: Object.values(schema.fields)
-    .flat()
-    .reduce((acc, field) => {
-      if(field.name === "insId" && instDtls?._id && instDtls?.insname){
-        acc[field.name] = instDtls?._id;
-      }else if (oInitialValues && oInitialValues.hasOwnProperty(field.name)) {
-        // Use value from oInitialValues if available
-        acc[field.name] = oInitialValues[field.name];
-      } else if(field.isNullable){
-        acc[field.name] = null;
-      } else if (field.isMulti || field.type === 'file') {
-        acc[field.name] = [];
-      } else if (field.type === "checkbox") {
-        acc[field.name] = false;
-      } else if (field.type === "number") {
-        acc[field.name] = null;
-      } else {
-        acc[field.name] = "";
-      }
-      return acc;
-    }, {}),
+  const formik = useFormik({
+    initialValues: Object.values(schema.fields)
+      .flat()
+      .reduce((acc, field) => {
+        if (field.name === "insId" && instDtls?._id && instDtls?.insname) {
+          acc[field.name] = instDtls?._id;
+        } else if (oInitialValues && oInitialValues.hasOwnProperty(field.name)) {
+          // Use value from oInitialValues if available
+          acc[field.name] = oInitialValues[field.name];
+        } else if (field.isNullable) {
+          acc[field.name] = null;
+        } else if (field.isMulti || field.type === 'file') {
+          acc[field.name] = [];
+        } else if (field.type === "checkbox") {
+          acc[field.name] = false;
+        } else if (field.type === "number") {
+          acc[field.name] = null;
+        } else {
+          acc[field.name] = "";
+        }
+        return acc;
+      }, {}),
     enableReinitialize: true,
-      onSubmit: (values) => {
-        onSubmit(values);
-      },
-      validationSchema,
-    });
+    onSubmit: (values) => {
+      onSubmit(values);
+    },
+    validationSchema,
+  });
   // Render field by type
   const renderField = (field) => {
     switch (field.type) {
@@ -169,21 +178,21 @@ const formik = useFormik({
           <FileUpload
             maxSize={field.size ? field.size : 1 * 1024 * 1024} // 50MB
             multiple={field.isMulti}
-            accept={`${ field?.format ? field?.format + '/*': '*'}`}
-            onFileSelect={([File] = [])=>{
-                const newValue = [...formik.values[field.name]]
-                newValue.push(File)
-                formik.setFieldValue(field.name, newValue);
+            accept={`${field?.format ? field?.format + '/*' : '*'}`}
+            onFileSelect={([File] = []) => {
+              const newValue = [...formik.values[field.name]]
+              newValue.push(File)
+              formik.setFieldValue(field.name, newValue);
             }}
-            onFileRemove={(index)=>{
-                const newValue = [...formik.values[field.name]]
-                newValue.splice(index)
-                formik.setFieldValue(field.name, newValue);
+            onFileRemove={(index) => {
+              const newValue = [...formik.values[field.name]]
+              newValue.splice(index)
+              formik.setFieldValue(field.name, newValue);
             }}
             disabled={!editPerm || field.isDisabled}
           />
         );
-     case "checkbox":
+      case "checkbox":
         if (field.isMulti) {
           return (
             <FormGroup row>
@@ -227,25 +236,25 @@ const formik = useFormik({
             />
           );
         }
-    case "Textarea":
-      return (
-        <>
-          <Textarea
-            name={field.name}
-            color="neutral"
-            minRows={2}
-            size="lg"
-            variant="outlined"
-            value={formik.values[field.name]}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={formik.touched[field.name] && Boolean(formik.errors[field.name])}
-            helperText={formik.touched[field.name] && formik.errors[field.name]}
-            disabled={!editPerm || field.isDisabled}
-          />
-          {formik.touched[field.name] && Boolean(formik.errors[field.name]) && <FormHelperText className="error-text">{formik.errors[field.name]}</FormHelperText>}
-        </>
-      );
+      case "Textarea":
+        return (
+          <>
+            <Textarea
+              name={field.name}
+              color="neutral"
+              minRows={2}
+              size="lg"
+              variant="outlined"
+              value={formik.values[field.name]}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched[field.name] && Boolean(formik.errors[field.name])}
+              helperText={formik.touched[field.name] && formik.errors[field.name]}
+              disabled={!editPerm || field.isDisabled}
+            />
+            {formik.touched[field.name] && Boolean(formik.errors[field.name]) && <FormHelperText className="error-text">{formik.errors[field.name]}</FormHelperText>}
+          </>
+        );
       default:
         return null;
     }
@@ -254,7 +263,7 @@ const formik = useFormik({
   return (
     <div>
       {/* Page Header */}
-      {pageTitle && 
+      {/* {pageTitle && 
         <div className="d-flex justify-content-between mb-3">
           <PageTitle title={pageTitle}/>
           {isEditPerm && (
@@ -263,68 +272,69 @@ const formik = useFormik({
             </div>
           )}
         </div>
-      }
+      } */}
 
       {/* White Card Wrapper */}
-        <form
-          onSubmit={formik.handleSubmit}
-          onReset={formik.handleReset}
-        >
-          {Object.entries(schema.fields).map(([sectionName, fields]) => (
-            <Box key={sectionName} mb={4}>
-              {/* Section Heading */}
-      <div className="generic-master-card">
+      <form
+        onSubmit={formik.handleSubmit}
+        onReset={formik.handleReset}
+      >
+        {Object.entries(schema.fields).map(([sectionName, fields]) => (
+          <Box key={sectionName} mb={4}>
+            {/* Section Heading */}
+            <div className="generic-master-card">
               <SectionHeader sectionName={sectionName} />
-              <div className="row">
-                {(fields ?? []).map((field, index) => {
-                  const shouldShow =
-                    !field.showWhen ||
-                    formik.values[field.showWhen.field] === field.showWhen.value;
-
+              <div className="fields-row">
+                {fields.map((field, index) => {
+                  const shouldShow = !field.showWhen || formik.values[field.showWhen.field] === field.showWhen.value;
                   if (!shouldShow) return null;
-
                   return (
-                    <div className="col-12 col-md-4 p-2" key={index}>
+                    <div className="field-wrapper" key={index}>
                       {!field.removeHeader && !isSmartField && (
-                        <Label labelName={field.label} required={field.isRequired}/>
+                        <Label labelName={field.label} required={field.isRequired} />
                       )}
-                    {isSmartField ? <SmartField key={field.name} field={field} formik={formik} editPerm={editPerm} instDtls={instDtls} /> : renderField(field)}
+                      {isSmartField ? <SmartField field={field} formik={formik} editPerm={editPerm} /> : renderField(field)}
                     </div>
                   );
                 })}
               </div>
-              </div>
-            </Box>
-          ))}
+            </div>
 
+          </Box>
+        ))}
+
+
+        {/* Buttons */}
+        <div className="generic-form-footer">
           {/* Buttons */}
           <div className="generic-form-footer">
-          <Box display="flex" justifyContent="flex-end" gap={2} mt={4}>
-            {schema.buttons.map((btn, idx) => (
-              <Button
-                key={idx}
-                color={btn.color}
-                size={btn.size || "medium"}
-                onClick={btn.onClick}
-                type={btn.type ?? 'button'}
-                disabled={btn.isDisabled || (btn.name !== "Cancel" && (!editPerm || btn.isDisabled))}
-                variantType={
-                  btn.type === "submit"
-                    ? "submit"
-                    : btn.name === "Reset"
-                    ? "reset"
-                    : btn.name === "Cancel"
-                    ? "cancel"
-                    : "button"
-                }
-              >
-                {btn.name}
-              </Button>
-            ))}
-          </Box>
+            <Box display="flex" justifyContent="flex-end" gap={2} mt={4}>
+              {schema.buttons.map((btn, idx) => (
+                <Button
+                  key={idx}
+                  color={btn.color}
+                  size={btn.size || "medium"}
+                  onClick={btn.onClick}
+                  type={btn.type ?? 'button'}
+                  disabled={btn.isDisabled || (btn.name !== "Cancel" && (!editPerm || btn.isDisabled))}
+                  variantType={
+                    btn.type === "submit"
+                      ? "submit"
+                      : btn.name === "Reset"
+                        ? "reset"
+                        : btn.name === "Cancel"
+                          ? "cancel"
+                          : "button"
+                  }
+                >
+                  {btn.name}
+                </Button>
+              ))}
+            </Box>
           </div>
-        </form>
-    </div>
+          </div>
+      </form>
+    </div >
   );
 };
 

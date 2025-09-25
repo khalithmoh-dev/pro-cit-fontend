@@ -3,7 +3,6 @@ import DataTable from '../../common/generic-table';
 import { Chip,Box } from '@mui/material';
 import { Eye } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import PageTitle from "../../../components/PageTitle";
 import useDegreeStore from '../../../store/degreeStore';
 import { useTranslation } from 'react-i18next';
 
@@ -79,7 +78,6 @@ const DegreeList = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <PageTitle title={t("DEGREE_LIST")}/>
       <DataTable
         data={degreesData}
         columns={columns}

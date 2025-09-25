@@ -77,7 +77,7 @@ const CourseForm: React.FC = () => {
           type: 'select',
           validation: Yup.string().required('Institution Name is required'),
           isRequired: true,
-          isDisabled: true,
+          isDisabled: true
         },
         {
           name: 'crsId',
@@ -393,7 +393,7 @@ const CourseForm: React.FC = () => {
         onSubmit={handleFormSubmit}
         isEditPerm={true}
         oInitialValues={id ? editValues : oInitialValues}
-        isSmartField={true}
+        // isSmartField={true}
       />
     </>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import {
   Box,
   Paper,
@@ -22,8 +22,18 @@ import {
   ChevronDown,
   ChevronUp
 } from 'lucide-react';
-// import PageTitle from '../../../components/PageTitle'
-// Define the table component
+import { useLayout } from "../../../modules/layout/LayoutContext"
+
+interface DataTableI {
+  data?: object[]
+  columns?: object[]
+  selectable?: Boolean
+  onSelect?: Function
+  pagination?: Boolean
+  searchable?: Boolean
+  title?: string
+  actions?: object[]
+}
 const DataTable = ({
   data,
   columns,
@@ -40,6 +50,13 @@ const DataTable = ({
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
   const [selected, setSelected] = useState([]);
   const [filters, setFilters] = useState({});
+  const { setRouteNm } = useLayout();
+
+  useEffect(()=>{
+      if(location.pathname){
+        setRouteNm(location.pathname);
+      }
+    },[location.pathname]);
 
   // Handle sorting
   const handleSort = (key) => {
