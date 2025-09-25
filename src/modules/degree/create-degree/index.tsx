@@ -12,11 +12,12 @@ export default function CreateDegree() {
   const [editValues, setEditValues] = useState({});
   const { t } = useTranslation();
 
+  //form schema
   const schema = {
-  fields: {
-      General: [        
+    fields: {
+      General: [
         {
-          name: "insname",
+          name: "insId",
           label: t("INSTITUITION_NAME"),
           type: "select",
           validation: Yup.string().required(t("INSTITUITION_NAME_IS_REQUIRED")),
@@ -24,76 +25,78 @@ export default function CreateDegree() {
           isDisabled: true
         },
         {
-          name: "degreeId",
+          name: "degCd",
           label: t("DEGREE_ID"),
           type: "text",
           validation: Yup.string().required(t("DEGREE_ID_IS_REQUIRED")),
           isRequired: true
         },
-         {
-          name: "degreeName",
+        {
+          name: "degNm",
           label: t("DEGREE_NAME"),
           type: "text",
           validation: Yup.string().required(t("DEGREE_NAME_IS_REQUIRED")),
           isRequired: true
         },
-         {
-          name: "description",
-          label:  t("DESCRIPTION"),
+        {
+          name: "desc",
+          label: t("DESCRIPTION"),
           type: "text"
         }
-  ]
-},
-  buttons:[
-    {
-      name:t("CANCEL"), variant:"outlined", color:"secondary", onClick:()=>{navigate(-1)}
-    },{
-      name:t("RESET"), variant:"outlined", color:"warning", onClick:()=>{}
-    },{
-      name: id ? t("UPDATE") : t("SAVE"), variant:"contained", color:"primary", type: "submit"
-    },{
-      name:t("NEXT"), variant:"contained", color:"primary", onClick:()=>{}
-    }
-  ]
-};
+      ]
+    },
+    buttons: [
+      {
+        name: t("CANCEL"), variant: "outlined", color: "secondary", onClick: () => { navigate(-1) }
+      }, ...(id ? [{
+        name: t("RESET"), variant: "outlined", color: "warning", onClick: () => { }
+      }] : []), {
+        name: id ? t("UPDATE") : t("SAVE"), variant: "contained", color: "primary", type: "submit"
+      }
+    ]
+  };
 
-    //to get degree data by id for update
-    useEffect(()=>{
-      (async()=>{
-        if(id){
+  //to get degree data by id for update
+  useEffect(() => {
+    (async () => {
+      if (id) {
         const oDegree = await degreeStore.getDegree(id)
         setEditValues(oDegree);
       }
-      })()
-    },[id])
+    })()
+  }, [id])
 
+  // to handle submssion of form
   const handleDegreeSubmit = async (values: createDegreePayload) => {
-    try{
-      delete values.degreeId;
-      if(!id){
-        await degreeStore.createDegree(values);
-      }else{
+    let isSuccess = false
+    try {
+      if (!id) {
+        isSuccess = await degreeStore.createDegree(values);
+      } else {
         const oUpdtPayload = {
           ...values,
-          _id:id
+          _id: id
         }
-        await degreeStore.updateDegree(oUpdtPayload);
+        isSuccess = await degreeStore.updateDegree(oUpdtPayload);
       }
-      navigate(-1)
-    }catch(err){
+      if(isSuccess){
+        navigate(-1)
+      }
+    } catch (err) {
+      console.log('in to errorrrrrrrr')
       console.error(err)
     }
-    };
+  };
 
   return (
     <>
       <DynamicForm
         schema={schema}
         pageTitle={t("CREATE_DEGREE")}
-        onSubmit={handleDegreeSubmit} 
-        isEditPerm = {true}
-        isEditDisableDflt = {Boolean(id)}
-        oInitialValues = {id ? editValues :""}
+        onSubmit={handleDegreeSubmit}
+        isEditPerm={true}
+        isEditDisableDflt={Boolean(id)}
+        oInitialValues={id ? editValues : ""}
       />
     </>
   );

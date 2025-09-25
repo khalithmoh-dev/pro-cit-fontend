@@ -1,11 +1,15 @@
 import { create } from 'zustand';
 import httpRequest from '../utils/functions/http-request';
+import { useToastStore } from './toastStore';
+import {
+  updateErrorMessage,
+} from '../utils/functions/toast-message';
 
 export interface createDegreePayload{
   insId: string,
-  degreeId: String,
-  degreeName: String,
-  description: String,
+  degCd: String,
+  degNm: String,
+  desc: String,
   deleted: boolean;
 }
 
@@ -34,9 +38,9 @@ const useDegreeStore = create<DegreeState>((set,get) => ({
     degreeData: {},
     createDegree: async(oPayload = {
         insId: '',
-        degreeId: '',
-        degreeName: '',
-        description: '',
+        degCd: '',
+        degNm: '',
+        desc: '',
         deleted: false
     }) => {
         try{
@@ -44,6 +48,7 @@ const useDegreeStore = create<DegreeState>((set,get) => ({
             get().getDegree(data?._id);
             return true
         }catch(err){
+            useToastStore.getState().showToast('error', updateErrorMessage());
             return false
         }
     },

@@ -11,8 +11,8 @@ const deleteSuccessMessage = (name: string): string => {
 const createErrorMessage = (name: string): string => {
   return `Failed to Create ${name}`;
 };
-const updateErrorMessage = (name: string): string => {
-  return `Failed to Update ${name}`;
+const updateErrorMessage = (name?: string): string => {
+  return `Failed to Update ${name ?? ""}`;
 };
 const deleteErrorMessage = (name: string): string => {
   return `Failed to Delete ${name}`;

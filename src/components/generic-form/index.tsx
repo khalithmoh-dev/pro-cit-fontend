@@ -60,7 +60,7 @@ const GenericMaster = ({ pageTitle, schema, onSubmit, isEditPerm = false, isEdit
       setRouteNm(location.pathname);
     }
   }, [location.pathname]);
-  console.log('location.pathname', location.pathname)
+
   // Build validation schema
   const validationSchema = Yup.object(
     Object.values(schema.fields).flat().reduce((acc, field) => {
@@ -304,8 +304,6 @@ const GenericMaster = ({ pageTitle, schema, onSubmit, isEditPerm = false, isEdit
         ))}
 
 
-        {/* Buttons */}
-        <div className="generic-form-footer">
           {/* Buttons */}
           <div className="generic-form-footer">
             <Box display="flex" justifyContent="flex-end" gap={2} mt={4}>
@@ -331,8 +329,7 @@ const GenericMaster = ({ pageTitle, schema, onSubmit, isEditPerm = false, isEdit
                 </Button>
               ))}
             </Box>
-          </div>
-          </div>
+        </div>
       </form>
     </div >
   );

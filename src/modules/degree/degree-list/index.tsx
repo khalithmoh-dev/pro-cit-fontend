@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import DataTable from '../../common/generic-table';
-import { Chip,Box } from '@mui/material';
+import { Chip, Box } from '@mui/material';
 import { Eye } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import useDegreeStore from '../../../store/degreeStore';
 import { useTranslation } from 'react-i18next';
-
+import { useLayout } from '../../layout/LayoutContext';
+import Button from '../../../components/Button';
+import Icon from '../../../components/Icons';
 // Example usage
 const DegreeList = () => {
   const navigate = useNavigate();
-  const { getDegrees,degrees } = useDegreeStore();
+  const { getDegrees, degrees } = useDegreeStore();
   const [degreesData, setDegreesData] = useState([]);
   const { t } = useTranslation();
-  
+  const { setActionFields } = useLayout();
 
   useEffect(() => {
     if (getDegrees) {
@@ -22,6 +24,7 @@ const DegreeList = () => {
           if (Array.isArray(aDegreeList) && aDegreeList.length) {
             setDegreesData(aDegreeList);
           }
+          setActionFields([<Button variantType="add" Size="md" onClick={() => { navigate('/degree/form') }}>{t("ADD")}</Button>])
         } catch (error) {
           console.error("Failed to fetch degrees:", error);
         }
@@ -35,26 +38,26 @@ const DegreeList = () => {
       setDegreesData(degrees);
     }
   }, [degrees]);
- 
+
   // Column configuration
   const columns = [
-    { 
-      field: 'institutionName', 
-      headerName: t("INSTITUITION_NAME"), 
+    {
+      field: 'insname',
+      headerName: t("INSTITUITION_NAME"),
       sortable: false
     },
-    { 
-      field: 'degreeId', 
-      headerName: t("DEGREE_ID"), 
-      sortable: true      
+    {
+      field: 'degCd',
+      headerName: t("DEGREE_ID"),
+      sortable: true
     },
-    { 
-      field: 'degreeName', 
+    {
+      field: 'degNm',
       headerName: t("DEGREE_NAME"),
       sortable: true,
     },
-    { 
-      field: 'description', 
+    {
+      field: 'desc',
       headerName: t("DESCRIPTION"),
       sortable: true
     },
@@ -64,9 +67,9 @@ const DegreeList = () => {
   const actions = [
     {
       label: t("VIEW_DETAILS"),
-      icon: <Eye size={18} />,
+      icon: <Icon name="Eye" size={18} />,
       onClick: (row) => {
-        navigate('/degree/create')
+        navigate(`/degree/form/${row._id}`)
       }
     }
   ];
