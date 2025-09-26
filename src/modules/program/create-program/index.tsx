@@ -16,86 +16,86 @@ export default function CreateProgram() {
   const { user, permissions } = useAuthStore();
   const { createProgram } = useProgramStore();
   const schema = {
-  fields: {
-      General: [        
+    fields: {
+      General: [
         {
-          name: "institutionName",
+          name: "insId",
           label: t("INSTITUITION_NAME"),
+          type: "select",
           validation: Yup.string().required(t("INSTITUITION_NAME_IS_REQUIRED")),
-          type: "text",
-          isEdit: false
+          isRequired: true,
+          isDisabled: true
         },
         {
-          name: "programId",
+          name: "prgCd",
           label: t("PROGRAM_ID"),
           type: "text",
           validation: Yup.string().required(t("PROGRAM_ID_IS_REQUIRED")),
+          isDisabled: Boolean(id),
           isRequired: true
         },
-         {
-          name: "programName",
+        {
+          name: "prgNm",
           label: t("PROGRAM_NAME"),
           type: "text",
           validation: Yup.string().required(t("PROGRAM_NAME_IS_REQUIRED")),
           isRequired: true
         },
-         {
-          name: "description",
+        {
+          name: "desc",
           label: t("DESCRIPTION"),
           type: "text"
         }
-  ]
-},
-  buttons:[
-    {
-      name:t("CANCEL"), variant:"outlined", color:"secondary", onClick:()=>{navigate(-1)}
-    },{
-      name:t("RESET"),  variant:"outlined", color:"warning", onClick:()=>{}
-    },{
-      name: id ? t("UPDATE") : t("SAVE"), variant:"contained", color:"primary", type: "submit"
-    },{
-     name:t("NEXT"), variant:"contained", color:"primary", onClick:()=>{}
-    }
-  ]
-};
+      ]
+    },
+    buttons: [
+      {
+        name: t("CANCEL"), variant: "outlined", color: "secondary", onClick: () => { navigate(-1) }
+      }, ...(!id ? [{
+        name: t("RESET"), variant: "outlined", color: "warning", onClick: () => { }
+      }] : []), {
+        name: id ? t("UPDATE") : t("SAVE"), variant: "contained", color: "primary", type: "submit"
+      }
+    ]
+  };
 
- //to get degree data by id for update
-    useEffect(()=>{
-      (async()=>{
-        if(id){
+  //to get degree data by id for update
+  useEffect(() => {
+    (async () => {
+      if (id) {
         const oProgram = await programStore.getProgram(id)
         setEditValues(oProgram);
       }
-      })()
-    },[id])
+    })()
+  }, [id])
 
   const handleProgramSubmit = async (values: createProgramPayload) => {
-    try{
+    try {
       delete values.programId;
-      if(!id){
+      if (!id) {
         await programStore.createProgram(values);
-      }else{
+      } else {
         const oUpdtPayload = {
           ...values,
-          _id:id
+          _id: id
         }
         await programStore.updateProgram(oUpdtPayload);
       }
       navigate(-1)
-    }catch(err){
+    } catch (err) {
       console.error(err)
     }
-    };
+  };
 
   return (
     <>
       <DynamicForm
         schema={schema}
         pageTitle={t("CREATE_PROGRAM")}
-        onSubmit={handleProgramSubmit} 
-        isEditPerm = {true}
-        isEditDisableDflt = {Boolean(id)}
-        oInitialValues = {id ? editValues :""}
+        onSubmit={handleProgramSubmit}
+        isEditPerm={true}
+        isEditDisableDflt={Boolean(id)}
+        oInitialValues={id ? editValues : ""}
       />
     </>
   );

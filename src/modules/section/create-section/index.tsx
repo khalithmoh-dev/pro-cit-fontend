@@ -11,12 +11,12 @@ export default function CreateSection() {
   const { id } = useParams();
   const [editValues, setEditValues] = useState({});
   const { t } = useTranslation();
-  
+
   const schema = {
-  fields: {
-      General: [        
+    fields: {
+      General: [
         {
-          name: "insname",
+          name: "insId",
           label: t("INSTITUITION_NAME"),
           type: "select",
           validation: Yup.string().required(t("INSTITUITION_NAME_IS_REQUIRED")),
@@ -24,77 +24,76 @@ export default function CreateSection() {
           isDisabled: true
         },
         {
-          name: "sectionCode",
+          name: "secCd",
           label: t("SECTION_CODE"),
           type: "text",
           validation: Yup.string().required(t("SECTION_CODE_IS_REQUIRED")),
+          isDisabled: Boolean(id),
           isRequired: true
         },
-         {
-          name: "sectionName",
+        {
+          name: "secNm",
           label: t("SECTION_NAME"),
           type: "text",
           validation: Yup.string().required(t("SECTION_NAME_IS_REQUIRED")),
           isRequired: true
         },
-         {
-          name: "description",
+        {
+          name: "desc",
           label: t("DESCRIPTION"),
           type: "text"
         }
-  ]
-},
-  buttons:[
-    {
-      name:t("CANCEL"), variant:"outlined", color:"secondary", onClick:()=>{navigate(-1)}
-    },{
-       name:t("RESET"), variant:"outlined", color:"warning", onClick:()=>{}
-    },{
-      name: id ? t("UPDATE") : t("SAVE"), variant:"contained", color:"primary", type: "submit"
-    },{
-     name:t("NEXT"), variant:"contained", color:"primary", onClick:()=>{}
-    }
-  ]
-};
-
- 
-   //to get section data by id for update
-      useEffect(()=>{
-        (async()=>{
-          if(id){
-          const oSection = await sectionStore.getSection(id)
-          setEditValues(oSection);
-        }
-        })()
-      },[id])
-  
-    const handleSectionSubmit = async (values: createSectionPayload) => {
-      try{
-        delete values.sectionCode;
-        if(!id){
-          await sectionStore.createSection(values);
-        }else{
-          const oUpdtPayload = {
-            ...values,
-            _id:id
-          }
-          await sectionStore.updateSection(oUpdtPayload);
-        }
-        navigate(-1)
-      }catch(err){
-        console.error(err)
+      ]
+    },
+    buttons: [
+      {
+        name: t("CANCEL"), variant: "outlined", color: "secondary", onClick: () => { navigate(-1) }
+      }, ...(!id ? [{
+        name: t("RESET"), variant: "outlined", color: "warning", onClick: () => { }
+      }] : []), {
+        name: id ? t("UPDATE") : t("SAVE"), variant: "contained", color: "primary", type: "submit"
       }
-      };
+    ]
+  };
+
+
+  //to get section data by id for update
+  useEffect(() => {
+    (async () => {
+      if (id) {
+        const oSection = await sectionStore.getSection(id)
+        setEditValues(oSection);
+      }
+    })()
+  }, [id])
+
+  const handleSectionSubmit = async (values: createSectionPayload) => {
+    try {
+      delete values.sectionCode;
+      if (!id) {
+        await sectionStore.createSection(values);
+      } else {
+        const oUpdtPayload = {
+          ...values,
+          _id: id
+        }
+        await sectionStore.updateSection(oUpdtPayload);
+      }
+      navigate(-1)
+    } catch (err) {
+      console.error(err)
+    }
+  };
 
   return (
     <>
       <DynamicForm
         schema={schema}
         pageTitle={t("CREATE_SECTION")}
-        onSubmit={handleSectionSubmit} 
-        isEditPerm = {true}
-        isEditDisableDflt = {Boolean(id)}
-        oInitialValues = {id ? editValues :""}
+        onSubmit={handleSectionSubmit}
+        isEditPerm={true}
+        isEditDisableDflt={Boolean(id)}
+        oInitialValues={id ? editValues : ""}
       />
     </>
   );

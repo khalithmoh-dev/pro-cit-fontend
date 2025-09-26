@@ -62,7 +62,7 @@ export default function CreateSemester() {
               valueKey: '_id'
             },
             {
-              name: "prgId",
+              name: "prgCd",
               label: t("PROGRAM"),
               type: "select",
               // validation: Yup.string().required("Program Name is required"),
@@ -120,7 +120,7 @@ export default function CreateSemester() {
   //To handle submission of semester for both create and update
 const handleSemesterSubmit = async (values: createSemesterPayload) => {
   try{
-    delete values.prgId; //--------------TEMP: HAVE TO REMOVE ONCE PROGRAM IS DONE--------------------------
+    delete values.prgCd; //--------------TEMP: HAVE TO REMOVE ONCE PROGRAM IS DONE--------------------------
     if(!id){
       await semesterStore.createSemester(values);
     }else{

@@ -39,7 +39,6 @@ const UserProfilePage = () => {
       cardText: user?.user?.role?.name,
     },
   ];
-
   return (
     <div className={style.container}>
       <div className={style.profileBox}>

@@ -14,7 +14,6 @@ const DegreeList = () => {
   const { getDegrees, degrees } = useDegreeStore();
   const [degreesData, setDegreesData] = useState([]);
   const { t } = useTranslation();
-  const { setActionFields } = useLayout();
 
   useEffect(() => {
     if (getDegrees) {
@@ -24,7 +23,6 @@ const DegreeList = () => {
           if (Array.isArray(aDegreeList) && aDegreeList.length) {
             setDegreesData(aDegreeList);
           }
-          setActionFields([<Button variantType="add" Size="md" onClick={() => { navigate('/degree/form') }}>{t("ADD")}</Button>])
         } catch (error) {
           console.error("Failed to fetch degrees:", error);
         }
@@ -74,17 +72,12 @@ const DegreeList = () => {
     }
   ];
 
-  // Handle selection
-  const handleSelection = (selectedIds) => {
-    console.log('Selected IDs:', selectedIds);
-  };
-
   return (
     <Box sx={{ p: 3 }}>
       <DataTable
         data={degreesData}
         columns={columns}
-        onSelect={handleSelection}
+        addRoute = {'/degree/form'}
         title={t("DEGREE")}
         actions={actions}
       />

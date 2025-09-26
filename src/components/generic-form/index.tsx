@@ -40,7 +40,7 @@ const GenericMaster = ({ pageTitle, schema, onSubmit, isEditPerm = false, isEdit
   const [editPerm, setEditPerm] = useState(!isEditDisableDflt);
   const [instDtls, setInstDtls] = useState({ _id: '', insname: '' });
   const instituteStore = useInstituteStore();
-  const { setRouteNm } = useLayout();
+  const { setRouteNm,setActionFields } = useLayout();
   const authStore = useAuthStore();
   const location = useLocation();
 
@@ -58,8 +58,14 @@ const GenericMaster = ({ pageTitle, schema, onSubmit, isEditPerm = false, isEdit
   useEffect(() => {
     if (location.pathname) {
       setRouteNm(location.pathname);
+      setActionFields([<Switch checked={editPerm} onChange={() => {
+      setEditPerm(prevEditPerm => {
+        return !prevEditPerm;
+      });
+    }}  label="Edit mode"/>])
     }
   }, [location.pathname]);
+  console.log('editPerm',editPerm)
 
   // Build validation schema
   const validationSchema = Yup.object(
@@ -312,7 +318,7 @@ const GenericMaster = ({ pageTitle, schema, onSubmit, isEditPerm = false, isEdit
                   key={idx}
                   color={btn.color}
                   size={btn.size || "medium"}
-                  onClick={btn.onClick}
+                  onClick={btn.name === "Reset" ? formik.handleReset : btn.onClick}
                   type={btn.type ?? 'button'}
                   disabled={btn.isDisabled || (btn.name !== "Cancel" && (!editPerm || btn.isDisabled))}
                   variantType={

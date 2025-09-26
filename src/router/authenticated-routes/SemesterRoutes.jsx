@@ -12,8 +12,7 @@ const SemesterRoutes = () => {
     <Suspense fallback={<PageLoader />}>
       <Routes>
         <Route path="/list" element={<SemesterListPage />} />
-        <Route path="/create" element={<CreateSemesterPage />} />
-        <Route path="/update/:id" element={<CreateSemesterPage />} />
+        <Route path="/form/:id?" element={<CreateSemesterPage />} />
       </Routes>
     </Suspense>
   );

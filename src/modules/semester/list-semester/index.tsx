@@ -8,6 +8,7 @@ import useDegreeStore from '../../../store/degreeStore';
 import useSemesterStore from '../../../store/semesterStore';
 import TitleButton from '../../../components/TitleButton';
 import { useTranslation } from 'react-i18next';
+import Icon from '../../../components/Icons';
 
 const SemesterList = () => {
   const navigate = useNavigate();
@@ -64,21 +65,19 @@ const SemesterList = () => {
   const actions = [
     {
       label: 'View Details',
-      icon: <Eye size={18} />,
+      icon: <Icon name="Eye" size={18} />,
       onClick: (row) => {
-        navigate(`/semester/update/${row?._id}`);
+        navigate(`/semester/form/${row?._id}`);
       }
     }
   ];
 
   return (
     <Box sx={{ p: 3 }}>
-      <PageTitle title={'Semester list'}>
-        <TitleButton Btnname={t("ADD")} onClick={()=>navigate('/semester/create')} />
-      </PageTitle>
       <DataTable
         data={semesterData}
         columns={columns}
+        addRoute='/semester/form'
         title="Semester"
         actions={actions}
       />

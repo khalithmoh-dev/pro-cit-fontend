@@ -10,8 +10,7 @@ const ProgramRoutes = () => {
     <Suspense fallback={<PageLoader />}>
       <Routes>
         <Route path="/list" element={<ProgramListPage />} />
-        <Route path="/create" element={<CreateProgramPage />} />
-        <Route path="/update/:id" element={<CreateProgramPage />} />
+        <Route path="/form/:id?" element={<CreateProgramPage />} />
       </Routes>
     </Suspense>
   );

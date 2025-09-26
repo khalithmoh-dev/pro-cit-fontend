@@ -10,7 +10,7 @@ const SectionRoutes = () => {
     <Suspense fallback={<PageLoader />}>
       <Routes>
         <Route path="/list" element={<SectionListPage />} />
-        <Route path="/create" element={<CreateSectionPage />} />
+        <Route path="/form/:id?" element={<CreateSectionPage />} />
       </Routes>
     </Suspense>
   );

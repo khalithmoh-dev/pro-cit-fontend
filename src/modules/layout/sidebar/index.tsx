@@ -434,7 +434,6 @@ export const AppSidebar: React.FC = () => {
     }
   }, [user?.role?.modules]);
 
-
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout>;
     if (collapsed) {

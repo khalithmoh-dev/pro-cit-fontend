@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import PageTitle from "../../../components/PageTitle";
 import useSectionStore from '../../../store/sectionStore';
 import { useTranslation } from 'react-i18next';
+import Icon from '../../../components/Icons';
  
 const SectionList = () => {
   const navigate = useNavigate();
@@ -38,22 +39,22 @@ const SectionList = () => {
   // Column configuration
   const columns = [
     { 
-      field: 'institutionName', 
+      field: 'insname', 
       headerName: t("INSTITUITION_NAME"),
       sortable: false
     },
     { 
-      field: 'sectionCode', 
+      field: 'secCd', 
       headerName: t("SECTION_CODE"),
       sortable: true      
     },
     { 
-      field: 'sectionName', 
+      field: 'secNm', 
       headerName: t("SECTION_NAME"),
       sortable: true,
     },
     { 
-      field: 'description', 
+      field: 'desc', 
       headerName: t("DESCRIPTION"),
       sortable: true
     },
@@ -63,25 +64,19 @@ const SectionList = () => {
   const actions = [
     {
       label: t("VIEW_DETAILS"),
-      icon: <Eye size={18} />,
+      icon: <Icon name="Eye" size={18} />,
       onClick: (row) => {
-        navigate('/section/create')
+        navigate(`/section/form/${row._id}`)
       }
     }
   ];
 
-  // Handle selection
-  const handleSelection = (selectedIds) => {
-    console.log('Selected IDs:', selectedIds);
-  };
-
   return (
     <Box sx={{ p: 3 }}>
-      <PageTitle title={t("SECTION_LIST")}/>
       <DataTable
         data={sectionsData}
         columns={columns}
-        onSelect={handleSelection}
+        addRoute = {'/section/form'}
         title= {t("SECTION")}
         actions={actions}
       />

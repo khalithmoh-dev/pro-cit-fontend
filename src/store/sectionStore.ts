@@ -6,11 +6,11 @@ export interface createSectionPayload{
   sectionCode: String,
   sectionName: String,
   description: String,
+  _id?: String,
   deleted: boolean;
 }
 
 export interface SectionIF {
-  _id: string;
   createdAt: string;
   updatedAt: string;
   insId: String;
@@ -66,10 +66,11 @@ const useSectionStore = create<SectionState>((set,get) => ({
         sectionCode: '',
         sectionName: '',
         description: '',
+        _id: '',
         deleted: false
     }) => {
         try{
-            const {data} = await httpRequest('POST',`${import.meta.env.VITE_API_URL}/section/update`,oPayload);
+            const {data} = await httpRequest('POST',`${import.meta.env.VITE_API_URL}/section/update/${oPayload._id}`,oPayload);
             get().getSection(data?._id);
             return true
         }catch(err){

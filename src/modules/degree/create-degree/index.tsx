@@ -29,6 +29,7 @@ export default function CreateDegree() {
           label: t("DEGREE_ID"),
           type: "text",
           validation: Yup.string().required(t("DEGREE_ID_IS_REQUIRED")),
+          isDisabled: Boolean(id),
           isRequired: true
         },
         {
@@ -48,7 +49,7 @@ export default function CreateDegree() {
     buttons: [
       {
         name: t("CANCEL"), variant: "outlined", color: "secondary", onClick: () => { navigate(-1) }
-      }, ...(id ? [{
+      }, ...(!id ? [{
         name: t("RESET"), variant: "outlined", color: "warning", onClick: () => { }
       }] : []), {
         name: id ? t("UPDATE") : t("SAVE"), variant: "contained", color: "primary", type: "submit"
@@ -83,7 +84,6 @@ export default function CreateDegree() {
         navigate(-1)
       }
     } catch (err) {
-      console.log('in to errorrrrrrrr')
       console.error(err)
     }
   };

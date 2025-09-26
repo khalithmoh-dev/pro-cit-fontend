@@ -4,7 +4,7 @@ import httpRequest from '../utils/functions/http-request';
 export interface createSemesterPayload{
     insId: string,
     degId: string,
-    prgId: string,
+    prgCd: string,
     semId: string,
     semNm: string,
     desc:  string,
@@ -14,7 +14,7 @@ export interface createSemesterPayload{
 interface SemesterIF {
     insId: string,
     degId: string,
-    prgId: string,
+    prgCd: string,
     semId: string,
     semNm: string,
     desc:  string
@@ -36,7 +36,7 @@ const useDegreeStore = create<SemesterState>((set,get) => ({
     createSemester: async(oPayload = {
         insId: '',
         degId: '',
-        prgId: '',
+        prgCd: '',
         semId: '',
         semNm: '',
         desc: ''
@@ -67,7 +67,7 @@ const useDegreeStore = create<SemesterState>((set,get) => ({
     updateSemester: async(oPayload = {
         insId: '',
         degId: '',
-        prgId: '',
+        prgCd: '',
         semId: '',
         semNm: '',
         desc: '',

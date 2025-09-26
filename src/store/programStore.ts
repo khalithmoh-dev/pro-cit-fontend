@@ -3,9 +3,9 @@ import httpRequest from '../utils/functions/http-request';
 
 export interface createProgramPayload{
   insId: string,
-  programId: String,
-  programName: String,
-  description: String,
+  prgCd: String,
+  prgNm: String,
+  desc: String,
   deleted: boolean
 }
 
@@ -14,9 +14,9 @@ export interface ProgramIF {
   createdAt: string;
   updatedAt: string;
   insId: String;
-  programId: String;
-  programName: String;
-  description: String;
+  prgCd: String;
+  prgNm: String;
+  desc: String;
 }
 
 interface ProgramState {
@@ -24,7 +24,7 @@ interface ProgramState {
     programData: object,
     createProgram: (payload: createProgramPayload) => Promise<boolean>,
     getProgram: (id: string) => Promise<boolean>,
-    getPrograms: (firstRender?: boolean) => Promise<boolean>;
+    getPrograms: () => Promise<[]>;
     updateProgram: (payload: createProgramPayload) => Promise<boolean>
 }
 
@@ -34,9 +34,9 @@ const useProgramStore = create<ProgramState>((set,get) => ({
     programData: {},
     createProgram: async(oPayload = {
         insId: '',
-        programId: '',
-        programName: '',
-        description: '',
+        prgCd: '',
+        prgNm: '',
+        desc: '',
         deleted: false
     }) => {
         try{
@@ -63,9 +63,9 @@ const useProgramStore = create<ProgramState>((set,get) => ({
     },
     updateProgram: async(oPayload = {
         insId: '',
-        programId: '',
-        programName: '',
-        description: '',
+        prgCd: '',
+        prgNm: '',
+        desc: '',
         deleted: false
     }) => {
         try{

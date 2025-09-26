@@ -23,6 +23,9 @@ import {
   ChevronUp
 } from 'lucide-react';
 import { useLayout } from "../../../modules/layout/LayoutContext"
+import { useNavigate } from 'react-router-dom';
+import Button from '../../../components/Button';
+import { useTranslation } from 'react-i18next';
 
 interface DataTableI {
   data?: object[]
@@ -43,6 +46,7 @@ const DataTable = ({
   searchable = true,
   title = "Data Table",
   actions = [],
+  addRoute = ''
 }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -50,13 +54,21 @@ const DataTable = ({
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
   const [selected, setSelected] = useState([]);
   const [filters, setFilters] = useState({});
-  const { setRouteNm } = useLayout();
+  const { setRouteNm, setActionFields } = useLayout();
+  const navigate = useNavigate();
+  const {t} = useTranslation();
 
   useEffect(()=>{
       if(location.pathname){
         setRouteNm(location.pathname);
       }
     },[location.pathname]);
+
+    useEffect(() => {
+      if(addRoute){
+        setActionFields([<Button variantType="add" Size="md" onClick={() => { navigate(addRoute) }}>{t("ADD")}</Button>])
+      }
+    },[addRoute])
 
   // Handle sorting
   const handleSort = (key) => {
@@ -221,7 +233,7 @@ const DataTable = ({
       </Box> */}
 
       {/* Table */}
-      <TableContainer component={Paper} elevation={0} sx={{ overflow: 'hidden', px: 2  }}>
+      <TableContainer component={Paper} elevation={0} sx={{ overflow: 'scroll', px: 2  }}>
         <Table sx={{ minWidth: 650, borderCollapse: 'separate', borderSpacing: '0 8px',   }} aria-label="data table">
           <TableHead style={{ background: `
       linear-gradient(
