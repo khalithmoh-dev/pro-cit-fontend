@@ -27,6 +27,11 @@ const ProgramList = () => {
       headerName: t("INSTITUITION_NAME"), 
       sortable: false
     },
+    {
+      field: 'degNm',
+      headerName: t("DEGREE"),
+      sortable: true
+    },
     { 
       field: 'prgCd', 
       headerName: t("PROGRAM_ID"),

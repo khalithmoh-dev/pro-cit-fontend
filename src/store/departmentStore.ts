@@ -14,7 +14,9 @@ import { SelectOptionIF } from '../interface/component.interface';
 export interface createDepartmentPayloadIF {
   name: string;
   departmentCode: string;
-  totalSemesters: number | null;
+  description: String;
+  maxmStgth: number | null;
+  hod: string | null;
 }
 
 export interface DepartmentIF {
@@ -23,6 +25,9 @@ export interface DepartmentIF {
   updatedAt: string;
   name: string;
   departmentCode: string;
+  description: String;
+  maxmStgth: number | null;
+  hod: string | null;
   totalSemesters: number;
 }
 
@@ -35,8 +40,8 @@ interface DepartmentState {
   initialLoading: boolean;
   createDepartment: (payload: createDepartmentPayloadIF) => Promise<boolean>;
   updateDepartment: (payload: createDepartmentPayloadIF, id: string) => Promise<boolean>;
-  getDepartments: (firstRender?: boolean) => Promise<boolean>;
-  getDepartment: (id: string) => Promise<boolean>;
+  getDepartments: (firstRender?: boolean) => Promise<object[] |boolean>;
+  getDepartment: (id: string) => Promise<object | boolean>;
   deleteDepartment: (id: string) => Promise<boolean>;
 }
 
@@ -82,15 +87,7 @@ const useDepartmentStore = create<DepartmentState>((set, get) => ({
     set({ loading: !firstRender, initialLoading: firstRender });
     try {
       const res = await httpRequest('GET', `${import.meta.env.VITE_API_URL}/department/`);
-      if (!res.data.length) return true;
-      const options = res.data.map((department: DepartmentIF) => {
-        return {
-          label: department.departmentCode,
-          value: department._id,
-        };
-      });
-      set({ departments: res.data, departmentOptions: options });
-      return true;
+      return res?.data;
     } catch (error) {
       return false;
     } finally {
@@ -103,7 +100,7 @@ const useDepartmentStore = create<DepartmentState>((set, get) => ({
     try {
       const res = await httpRequest('GET', `${import.meta.env.VITE_API_URL}/department/${id}`);
       set({ department: res.data });
-      return true;
+      return res?.data;
     } catch (error) {
       return false;
     } finally {

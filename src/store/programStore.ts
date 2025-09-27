@@ -3,6 +3,7 @@ import httpRequest from '../utils/functions/http-request';
 
 export interface createProgramPayload{
   insId: string,
+  degId: string,
   prgCd: String,
   prgNm: String,
   desc: String,

@@ -73,5 +73,14 @@
   "INSTITUTION_IS_REQUIRED": "Institution is required",
   "DEGREE_IS_REQUIRED": "Degree is required",
   "SEMESTER_ID_IS_REQUIRED": "Semester id is required",
-  "SEMESTER_NAME_IS_REQUIRED": "Semester name is required"
+  "SEMESTER_NAME_IS_REQUIRED": "Semester name is required",
+  "DEPARTMENT":"Department",
+  "CREATE_DEPARTMENT":"Create Department",
+  "UPDATE_DEPARTMENT":"Update Department",
+  "DEPARTMENT_CODE" : "Department Code",
+  "DEPARTMENT_CODE_IS_REQUIRED":"Department Code is required",
+  "DEPARTMENT_NAME_IS_REQUIRED":"Department name is required",
+  "DEPARTMENT_NAME":"Department name",
+  "MAXIMUM_STRENGTH":"Maximum strength",
+  "HEAD_OF_THE_DEPARTMENT":"Head of the deparment"
 }

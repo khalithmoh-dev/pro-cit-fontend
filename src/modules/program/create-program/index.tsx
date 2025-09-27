@@ -5,6 +5,7 @@ import useAuthStore from '../../../store/authStore';
 import useProgramStore, { createProgramPayload } from "../../../store/programStore";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import useBaseStore from './../../../store/baseStore';
 
 export default function CreateProgram() {
   const navigate = useNavigate();
@@ -15,6 +16,24 @@ export default function CreateProgram() {
 
   const { user, permissions } = useAuthStore();
   const { createProgram } = useProgramStore();
+  const baseStore = useBaseStore();
+  const [baseData, setBaseData] = useState({ degree: [] });
+
+  //to get the initial base data eg: program data and degree data
+  useEffect(() => {
+    try {
+      if (baseStore) {
+        (async () => {
+          const aReq = ['degree'];
+          const oBaseData = await baseStore.getBaseData(aReq);
+          setBaseData(oBaseData);
+        })();
+      }
+    } catch (err) {
+      console.error(err)
+    }
+  }, [baseStore]);
+
   const schema = {
     fields: {
       General: [
@@ -25,6 +44,16 @@ export default function CreateProgram() {
           validation: Yup.string().required(t("INSTITUITION_NAME_IS_REQUIRED")),
           isRequired: true,
           isDisabled: true
+        },
+        {
+          name: "degId",
+          label: t("DEGREE"),
+          type: "select",
+          labelKey: "degNm",
+          valueKey: "_id",
+          validation: Yup.string().required(t("DEGREE_NAME_IS_REQUIRED")),
+          isRequired: true,
+          options: baseData?.degree ?? []
         },
         {
           name: "prgCd",

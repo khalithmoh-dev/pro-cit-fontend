@@ -401,6 +401,7 @@ export const AppSidebar: React.FC = () => {
   const { user, logout } = useAuthStore();
   const [showText, setShowText] = useState(!collapsed);
   const [oNavBar, setoNavBar] = useState({})
+  // logout();
   useEffect(() => {
     if (user?.role?.modules) {
       const mainMenus = user?.role?.modules.filter(
