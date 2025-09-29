@@ -127,6 +127,8 @@ interface EmployeeState {
   getAvailableTeachers: (query?: any) => Promise<boolean>;
   getAllTeacherList: (query?: any) => Promise<boolean>;
   clearEmployee: () => void;
+  getStfsForSrch: (req:string)=> Promise<object[] | boolean>;
+  getStfsByIds: (req:string)=> Promise<object[] | boolean>;
 }
 
 const useEmployeeStore = create<EmployeeState>((set, get) => ({
@@ -276,6 +278,30 @@ const useEmployeeStore = create<EmployeeState>((set, get) => ({
   clearEmployee: () => {
     set({ employee: null });
   },
+  getStfsForSrch: async(aReq) => {
+    try{
+      const res = await httpRequest(
+        "POST",
+        `${import.meta.env.VITE_API_URL}/employee/get-by-name`,
+        {aRqstdFlds: aReq}
+      );
+      return res?.data;
+    }catch(err){
+      return false;
+    }
+  },
+  getStfsByIds: async(aReq) => {
+    try{
+      const res = await httpRequest(
+        "POST",
+        `${import.meta.env.VITE_API_URL}/employee/get-by-ids`,
+        {aRqstdFlds: aReq}
+      );
+      return res?.data;
+    }catch(err){
+      return false;
+    }
+  }
 }));
 
 export default useEmployeeStore;

@@ -1,11 +1,11 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import useDepartmentStore, { createDepartmentPayloadIF } from '../../../store/departmentStore';
+import useEmployeeStore from '../../../store/employeeStore';
 import DynamicForm from "../../../components/generic-form";
 import * as Yup from "yup";
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useRef } from 'react';
 import { useTranslation } from "react-i18next";
 import useBaseStore from './../../../store/baseStore';
-
 
 interface PropsIF {
   update?: boolean;
@@ -16,34 +16,61 @@ const CreateDepartmentPage: React.FC<PropsIF> = ({ update }) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const baseStore = useBaseStore();
+  const employeeStore = useEmployeeStore();
   const [editValues, setEditValues] = useState({});
   const { updateDepartment, createDepartment, getDepartment } = useDepartmentStore();
   const [baseData, setBaseData] = useState({ employee: [] });
+  const [stfInptVal, setStfInptVal] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const searchTimeoutRef = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
     if (!id) return;
     (async () => {
       if (id) {
-        const oCourse = await getDepartment(id);
-        if(oCourse) setEditValues(oCourse);
+        const oDepartment = await getDepartment(id);
+        if (oDepartment) setEditValues(oDepartment);
+        if (oDepartment?.hod?.length) {
+          const staffDtls = await employeeStore.getStfsByIds(oDepartment.hod);
+          // setStfInptVal(oDepartment.hod?.length ? staffDtls.map((stf: any) => stf.empName).join(', ') : '');
+          setBaseData({ employee: staffDtls });
+        }
       }
     })()
   }, [id]);
 
-  //to get the initial base data eg: program data and degree data
-  useEffect(() => {
+  // Fixed searchStaff function
+  const searchStaff = useCallback(async (searchValue: string) => {
     try {
-      if (baseStore) {
-        (async () => {
-          const aReq = ['employee'];
-          const oBaseData = await baseStore.getBaseData(aReq);
-          setBaseData(oBaseData);
-        })();
+      if (searchValue?.length > 2) {
+        setIsLoading(true);
+        const staffDtls = await employeeStore.getStfsForSrch(searchValue);
+        setBaseData({
+          employee: staffDtls
+        });
       }
     } catch (err) {
-      console.error(err)
+      console.error(err);
+    } finally {
+      setIsLoading(false);
     }
-  }, [baseStore]);
+  }, [employeeStore]);
+
+  // Debounced input handler
+  const handleInputChange = useCallback((newInputValue: string) => {
+    setStfInptVal(newInputValue);
+
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
+    }
+
+    if (newInputValue.length > 2) {
+      searchTimeoutRef.current = setTimeout(() => {
+        searchStaff(newInputValue);
+      }, 500);
+    }
+  }, [searchStaff]);
 
   const schema = {
     fields: {
@@ -86,7 +113,12 @@ const CreateDepartmentPage: React.FC<PropsIF> = ({ update }) => {
           type: "select",
           labelKey: "empName",
           valueKey: "_id",
-          options: baseData?.employee ?? []
+          isMulti: true,
+          isApi: true,
+          inputValue: stfInptVal,
+          setInputValue: handleInputChange,
+          options: baseData?.employee ?? [],
+          isLoading: isLoading
         }
       ]
     },

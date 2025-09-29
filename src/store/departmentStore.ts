@@ -40,7 +40,7 @@ interface DepartmentState {
   initialLoading: boolean;
   createDepartment: (payload: createDepartmentPayloadIF) => Promise<boolean>;
   updateDepartment: (payload: createDepartmentPayloadIF, id: string) => Promise<boolean>;
-  getDepartments: (firstRender?: boolean) => Promise<object[] |boolean>;
+  getDepartments: (firstRender?: boolean) => Promise<object[] | boolean>;
   getDepartment: (id: string) => Promise<object | boolean>;
   deleteDepartment: (id: string) => Promise<boolean>;
 }

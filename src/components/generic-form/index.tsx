@@ -9,6 +9,7 @@ import {
   MenuItem,
   Select,
   TextField,
+  Autocomplete
 } from "@mui/material";
 import Typography from '@mui/material/Typography'
 import PageTitle from '../PageTitle';
@@ -39,6 +40,7 @@ import { useLayout } from '../../modules/layout/LayoutContext'
 const GenericMaster = ({ pageTitle, schema, onSubmit, isEditPerm = false, isEditDisableDflt = false, oInitialValues, isSmartField }) => {
   const [editPerm, setEditPerm] = useState(!isEditDisableDflt);
   const [instDtls, setInstDtls] = useState({ _id: '', insname: '' });
+  const [aMultiSelectVal, setAMultiSelectVal] = useState([]);
   const instituteStore = useInstituteStore();
   const { setRouteNm,setActionFields } = useLayout();
   const authStore = useAuthStore();
@@ -128,11 +130,121 @@ const GenericMaster = ({ pageTitle, schema, onSubmit, isEditPerm = false, isEdit
       case "select":
         const labelKey = field.labelKey || "label";
         const valueKey = field.valueKey || "value";
-        const options =
+        let options =
           field.name === "insId"
             ? [{ [valueKey]: instDtls._id, [labelKey]: instDtls.insname }]
             : field.options || [];
+        const isMulti = !!field?.isMulti;
+        if (isMulti) {
+          // Use Map to ensure uniqueness by _id
+          const optionMap = new Map();
+          
+          // Add all options from both arrays, newer ones will overwrite older ones with same _id
+          [...aMultiSelectVal, ...options].forEach(option => {
+            optionMap.set(option._id, option);
+          });
+          
+          options = Array.from(optionMap.values());
+        }
 
+        // --- If API-based autocomplete ---
+        // In your DynamicForm component's Autocomplete section
+        if (field.isApi) {
+          return (
+            <FormControl fullWidth size="small">
+              <Autocomplete
+                multiple={isMulti}
+                disableCloseOnSelect={isMulti}
+                options={options}
+                getOptionLabel={(opt) => opt[labelKey] || ""}
+                value={
+                  isMulti
+                    ? options.filter((opt) =>
+                      (formik.values[field.name] || []).includes(opt[valueKey])
+                    )
+                    : options.find(
+                      (opt) => opt[valueKey] === formik.values[field.name]
+                    ) || null
+                }
+                onChange={(_, newValue) => {
+                  if(field?.isMulti){
+                    setAMultiSelectVal(pre=>[...newValue,...pre]);
+                    if(field.setInputValue){
+                      field.setInputValue('');
+                    }
+                  }else if(field.setInputValue){
+                    field.setInputValue(newValue ? newValue[labelKey] : '');
+                  }
+                  formik.setFieldValue(
+                    field.name,
+                    isMulti
+                      ? newValue.map((opt) => opt[valueKey])
+                      : newValue
+                        ? newValue[valueKey]
+                        : ""
+                  );
+                }}
+                inputValue={field?.inputValue || ""}
+                onInputChange={(_, newInputValue, reason) => {
+                  if(field?.isMulti && oInitialValues?.[field.name] && Array.isArray(oInitialValues?.[field.name]) && oInitialValues?.[field.name]?.length && !aMultiSelectVal.length){
+                    setAMultiSelectVal(pre=>[...pre,...options]);
+                  }
+                  // Only trigger on input, not on clear or selection
+                  if (reason === 'input' && field.setInputValue) {
+                    field.setInputValue(newInputValue);
+                  }
+                }}
+                loading={field.isLoading}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    size="small"
+                    variant="outlined"
+                    onBlur={formik.handleBlur}
+                    error={
+                      formik.touched[field.name] &&
+                      Boolean(formik.errors[field.name])
+                    }
+                    helperText={
+                      formik.touched[field.name] && formik.errors[field.name]
+                        ? formik.errors[field.name]
+                        : ""
+                    }
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        borderRadius: "var(--input-radius, 15px)",
+                      },
+                    }}
+                  />
+                )}
+                renderOption={(props, option, { selected }) => (
+                  <li {...props} key={option[valueKey]}>
+                    {isMulti && (
+                      <Checkbox
+                        style={{ marginRight: 8 }}
+                        checked={selected}
+                        disabled={!editPerm || field.isDisabled}
+                      />
+                    )}
+                    {option[labelKey]}
+                  </li>
+                )}
+                disabled={!editPerm || field.isDisabled}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: "var(--input-radius, 15px)",
+                  },
+                }}
+              />
+
+              {formik.touched[field.name] && formik.errors[field.name] && (
+                <Typography variant="caption" color="error">
+                  {formik.errors[field.name]}
+                </Typography>
+              )}
+            </FormControl>
+          );
+        }
         return (
           <FormControl fullWidth size="small">
             <Select
