@@ -46,6 +46,7 @@ const DataTable = ({
   searchable = true,
   title = "Data Table",
   actions = [],
+  headerAction = [{actionName: "", onClick: () => {}}],
   addRoute = ''
 }) => {
   const [page, setPage] = useState(0);
@@ -64,11 +65,39 @@ const DataTable = ({
       }
     },[location.pathname]);
 
-    useEffect(() => {
-      if(addRoute){
-        setActionFields([<Button variantType="add" Size="md" onClick={() => { navigate(addRoute) }}>{t("ADD")}</Button>])
-      }
-    },[addRoute])
+  useEffect(() => {
+    if (addRoute) {
+      const aHeaderBtns = headerAction
+        .filter(action => action.actionName) // only keep actions with a name
+        .map(action => (
+          <Button
+            key={action.actionName} // always add a key in lists
+            variantType="upload"
+            Size="md"
+            onClick={action.onClick}
+          >
+            {action.actionName}
+          </Button>
+        ));
+
+      // Add the "Add New" button if addRoute is defined
+      aHeaderBtns.push(
+        <Button
+          key="add-new"
+          variantType="contained"
+          Size="md"
+          onClick={() => navigate(addRoute)}
+        >
+          {t("ADD_NEW")}
+        </Button>
+      );
+
+      setActionFields(aHeaderBtns);
+    } else {
+      setActionFields([]);
+    }
+  }, [addRoute, headerAction, navigate, t]);
+
 
   // Handle sorting
   const handleSort = (key) => {
