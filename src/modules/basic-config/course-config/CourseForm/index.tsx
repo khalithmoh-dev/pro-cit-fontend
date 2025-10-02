@@ -7,13 +7,14 @@ import useBaseStore from '../../../../store/baseStore';
 import useCourseStore, { createCoursePayload } from "../../../../store/courseStores";
 import Popup from '../../../../components/modal';
 import SmartField from '../../../../components/SmartField';
+import { sanitizePayload } from '../../../../utils';
 
 const CourseForm: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const baseStore = useBaseStore();
   const courseStore = useCourseStore();
-  const [baseData, setBaseData] = useState({ dept: [], courseCat: [], courseSubCat: [] });
+  const [baseData, setBaseData] = useState({ departments: [], courseCat: [], courseSubCat: [] });
   const { id } = useParams<{ id: string }>();
   const [editValues, setEditValues] = useState({});
   const [isCatPopOpen, setIsCatPopOpen] = useState(false);
@@ -21,19 +22,19 @@ const CourseForm: React.FC = () => {
   const [isSubCatPopOpen, setIsSubCatPopOpen] = useState(false);
   const [oCourseSubCat, setOCourseSubCat] = useState({ catId: '', subCatId: '', subCatNm: '', _id: '' });
   const [subCatList, setSubCatList] = useState([]);
-  const oInitialValues: object = {
-    crsId: '',
-    crsNm: '',
-    offDept: '',
-    crsType: '',
-    isSplit: false,
-    crdt: undefined,
-    tCrdt: undefined,
-    pCrdt: undefined,
-    category: '',
-    subCat: '',
-    isExamCrs: false
-  };
+  // const oInitialValues: object = {
+  //   crsId: '',
+  //   crsNm: '',
+  //   offDept: '',
+  //   crsType: '',
+  //   isSplit: false,
+  //   crdt: undefined,
+  //   tCrdt: undefined,
+  //   pCrdt: undefined,
+  //   category: '',
+  //   subCat: '',
+  //   isExamCrs: false
+  // };
 
   // Open popup for add/edit course category
   const handleAddEditCatClick = async (cat, isEdit) => {
@@ -66,7 +67,7 @@ const CourseForm: React.FC = () => {
       setSubCatList([]);
     }
   }
-
+console.log('baseData?.departments',baseData?.departments)
   // Course form schema design
   const schema = {
     fields: {
@@ -97,7 +98,9 @@ const CourseForm: React.FC = () => {
           name: 'offDept',
           label: t('OFFERING_DEPARTMENT'),
           type: 'select',
-          options: baseData?.dept ?? [],
+          options: baseData?.departments ?? [],
+          labelKey: "deptNm",
+          valueKey: "_id"
         },
         {
           name: 'crsType',
@@ -107,7 +110,7 @@ const CourseForm: React.FC = () => {
             { value: 'THEORY', label: t("THEORY") },
             { value: 'PRAC', label: t("PRACTICAL") },
             { value: 'BOTH', label: t("BOTH") },
-          ]
+          ],
         },
         {
           name: 'isSplit',
@@ -131,8 +134,7 @@ const CourseForm: React.FC = () => {
           validation: Yup.string().when('isSplit', {
             is: true,
             then: () => Yup.string().required(t("THEORY_CREDIT_IS_REQUIRED")),
-            otherwise: () => Yup.number(),
-          }),
+          }).nullable(),
           isRequired: true,
         },
         {
@@ -146,9 +148,17 @@ const CourseForm: React.FC = () => {
           validation: Yup.string().when('isSplit', {
             is: true,
             then: () => Yup.string().required(t("PRACTICAL_CREDIT_IS_REQUIRED")),
-            otherwise: () => Yup.number(),
-          }),
+          }).nullable(),
           isRequired: true,
+        },
+        {
+          name: 'subCrdt',
+          label: t("DEFAULT_CREDIT"),
+          type: 'number',
+          showWhen: {
+            field: "crsType",
+            value: ["PRAC","THEORY"],
+          },
         },
         {
           name: 'category',
@@ -225,13 +235,13 @@ const CourseForm: React.FC = () => {
   // Function for submit course form
   const handleFormSubmit = async (values: createCoursePayload): Promise<void> => {
     if (!id) {
-      await courseStore.createCourse(values);
+      await courseStore.createCourse(sanitizePayload(values));
     } else {
       const oUpdtPayload = {
         ...values,
         _id: id
       }
-      await courseStore.updateCourse(oUpdtPayload);
+      await courseStore.updateCourse(sanitizePayload(oUpdtPayload));
     }
     navigate(-1)
   };
@@ -392,7 +402,7 @@ const CourseForm: React.FC = () => {
         pageTitle={t("COURSE")}
         onSubmit={handleFormSubmit}
         isEditPerm={true}
-        oInitialValues={id ? editValues : oInitialValues}
+        oInitialValues={id ? editValues : ""}
         // isSmartField={true}
       />
     </>

@@ -82,5 +82,6 @@
   "DEPARTMENT_NAME_IS_REQUIRED":"Department name is required",
   "DEPARTMENT_NAME":"Department name",
   "MAXIMUM_STRENGTH":"Maximum strength",
-  "HEAD_OF_THE_DEPARTMENT":"Head of the deparment"
+  "HEAD_OF_THE_DEPARTMENT":"Head of the deparment",
+  "DEFAULT_CREDIT": "Default Credit"
 }

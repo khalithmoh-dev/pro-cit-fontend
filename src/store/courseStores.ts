@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import httpRequest from '../utils/functions/http-request';
+import httpUploadRequest from '../utils/functions/http-upload-request';
 
 export interface createCoursePayload{
     crsId: string,
@@ -56,7 +57,7 @@ interface CourseState {
 }
 
 // Course Store to handle Degree create update get functionalities
-const useCourseStore = create<CourseState>(() => ({
+const useCourseStore = create<CourseState>((set,get) => ({
     courseList:[],
     createCourse: async(oPayload) => {
         try{
@@ -121,6 +122,19 @@ const useCourseStore = create<CourseState>(() => ({
             await httpRequest('POST',`${import.meta.env.VITE_API_URL}/course/sub-cat/update`, oPayload);
             return true;
         }catch {
+            return false;
+        }
+    },
+
+    uploadCourses: async (file: File, departmentId: string) => {
+        try {
+        const formData = new FormData();
+            formData.append("files",file)
+console.log([...formData.entries()]);
+            await httpUploadRequest("POST", `${import.meta.env.VITE_API_URL}/course/upload`, formData);
+
+            return true;
+        } catch (error) {
             return false;
         }
     }

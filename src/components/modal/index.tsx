@@ -31,7 +31,7 @@ interface PopupProps {
     open: boolean;
     onClose: () => void;
     title: string;
-    children: React.ReactNode;
+    children?: React.ReactNode;
     actions?: ActionButton[];
     maxWidth?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
     fullWidth?: boolean;
