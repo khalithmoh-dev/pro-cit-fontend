@@ -12,8 +12,7 @@ import {
   Autocomplete
 } from "@mui/material";
 import Typography from '@mui/material/Typography'
-import PageTitle from '../PageTitle';
-import SectionHeader from '../SectionHeader'
+import SectionHeader from '../SectionHeader';
 import Label from '../Label';
 import Switch from '../switch'
 import Button from '../../components/Button';
@@ -67,13 +66,12 @@ const GenericMaster = ({ pageTitle, schema, onSubmit, isEditPerm = false, isEdit
     }}  label="Edit mode"/>])
     }
   }, [location.pathname]);
-  console.log('editPerm',editPerm)
 
   // Build validation schema
   const validationSchema = Yup.object(
     Object.values(schema.fields).flat().reduce((acc, field) => {
       if (field.isNullable) {
-
+          acc[field.name] = field.validation.nullable();
       } else if (field.name && field.validation) {
         acc[field.name] = field.validation;
       }
@@ -108,6 +106,8 @@ const GenericMaster = ({ pageTitle, schema, onSubmit, isEditPerm = false, isEdit
     },
     validationSchema,
   });
+
+
   // Render field by type
   const renderField = (field) => {
     switch (field.type) {
@@ -404,7 +404,14 @@ const GenericMaster = ({ pageTitle, schema, onSubmit, isEditPerm = false, isEdit
               <SectionHeader sectionName={sectionName} />
               <div className="fields-row">
                 {fields.map((field, index) => {
-                  const shouldShow = !field.showWhen || formik.values[field.showWhen.field] === field.showWhen.value;
+                  const shouldShow =
+                    !field.showWhen ||
+                    (field.showWhen && Array.isArray(field.showWhen.value)
+                      ? // if showWhen.value is an array, check membership
+                      field.showWhen.value.includes(formik.values[field.showWhen.field])
+                      : // otherwise, check equality
+                      formik.values[field.showWhen.field] === field.showWhen.value
+                    );
                   if (!shouldShow) return null;
                   return (
                     <div className="field-wrapper" key={index}>
