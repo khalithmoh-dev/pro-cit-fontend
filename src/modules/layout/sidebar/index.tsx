@@ -382,7 +382,7 @@
 // }
 // Example usage component
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import {
   Sidebar,
   SidebarContent,
@@ -394,54 +394,20 @@ import {
 } from '../../../components/SideBarContents';
 import useAuthStore from '../../../store/authStore';
 import Icon from '../../../components/Icons';
-import { Link } from 'react-router-dom';
+import {useNavigationData} from '../../../components/NavigationContext'
 
 export const AppSidebar: React.FC = () => {
   const { collapsed } = useSidebar();
-  const { user, logout } = useAuthStore();
+  const { oNavBar,userDtls } = useNavigationData(); // Use context instead of local state
   const [showText, setShowText] = useState(!collapsed);
-  const [oNavBar, setoNavBar] = useState({})
-  // logout();
-  useEffect(() => {
-    if (user?.role?.modules) {
-      const mainMenus = user?.role?.modules.filter(
-        (item) => item.menuType === 'mainMenu' && !item.deleted && item.permissions.read,
-      );
+  const { logout } = useAuthStore();
 
-      const oNavData: Record<string, { icon?: string; children: any[] }> = {};
-
-      mainMenus.forEach((mainMenu) => {
-        const subMenus = user?.role?.modules.filter(
-          (item) =>
-            item.menuType === 'subMenu' && item.mainMenu === mainMenu.key && !item.deleted && item.permissions.read,
-        );
-
-        if (!oNavData[mainMenu.name]) {
-          oNavData[mainMenu.name] = {
-            children: [],
-            icon: mainMenu.icon,
-          };
-        }
-
-        oNavData[mainMenu.name].children = subMenus.map((subMenu) => ({
-          key: subMenu.key,
-          name: subMenu.name,
-          path: subMenu.path,
-          icon: subMenu.icon,
-        }));
-      });
-
-      setoNavBar(oNavData);
-    }
-  }, [user?.role?.modules]);
-
+  // logout()
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout>;
     if (collapsed) {
-      // hide immediately when collapsing
       setShowText(false);
     } else {
-      // delay showing until width transition finishes (0.3s) -> for smooth effect
       timer = setTimeout(() => setShowText(true), 300);
     }
     return () => clearTimeout(timer);
@@ -451,12 +417,16 @@ export const AppSidebar: React.FC = () => {
     <Sidebar>
       <div style={{ padding: '1rem', borderBottom: '1px solid #ccc' }} className='d-flex'>
         <div className="profileText">
-          {user.user.institutes?.insname[0]}
+          {userDtls?.institutes?.insname[0]}
         </div>
-        {!collapsed && showText && <div className='d-flex flex-column' style={{ fontSize: "14px", fontWeight: "600" }}>
-          <span className='ps-2'>{"MKIT"}</span>
-          <span className='ps-2' style={{ fontSize: "12px", fontWeight: "400" }}>{user?.user?.institutes?.insname || ""}</span>
-        </div>}
+        {!collapsed && showText && (
+          <div className='d-flex flex-column' style={{ fontSize: "14px", fontWeight: "600" }}>
+            <span className='ps-2'>{"MKIT"}</span>
+            <span className='ps-2' style={{ fontSize: "12px", fontWeight: "400" }}>
+              {"Institute Name"}
+            </span>
+          </div>
+        )}
       </div>
 
       <SidebarContent>
@@ -482,7 +452,6 @@ export const AppSidebar: React.FC = () => {
           );
         })}
       </SidebarContent>
-
     </Sidebar>
   );
 };

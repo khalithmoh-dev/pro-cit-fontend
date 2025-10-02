@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { AppSidebar } from './sidebar';
 import { SidebarProvider, SidebarTrigger, useSidebar } from '../../components/SideBarContents'
+import { NavigationProvider } from '../../components/NavigationContext'
 import { LayoutProvider, useLayout } from './LayoutContext'
 import Separator from '../../components/Seperator';
 import { Outlet } from 'react-router-dom';
@@ -8,7 +9,6 @@ import { Outlet } from 'react-router-dom';
 const LayoutInner = () => {
   const { collapsed } = useSidebar();
   const { routeNm, actionFields } = useLayout();
-  console.log('routeNm', routeNm)
   return (
       <div
         className="flex-grow-1 d-flex flex-column"
@@ -48,6 +48,7 @@ const LayoutInner = () => {
 };
 
 const Layout = () => {
+
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     return (localStorage.getItem('app-theme') as 'light' | 'dark') || 'light';
   });
@@ -65,8 +66,10 @@ const Layout = () => {
     <div style={{ display: 'flex', height: '100vh', overflow: "hidden" }}>
       <LayoutProvider>
         <SidebarProvider>
-          <AppSidebar />
-          <LayoutInner />
+          <NavigationProvider>
+            <AppSidebar />
+            <LayoutInner />
+          </NavigationProvider>
         </SidebarProvider>
       </LayoutProvider>
     </div>
