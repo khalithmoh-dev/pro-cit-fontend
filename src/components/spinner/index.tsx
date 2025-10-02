@@ -7,8 +7,10 @@ interface PropsIF {
 
 const Spinner: React.FC<PropsIF> = ({ large }) => {
   return (
-    <div className={styles.spinner}>
-      <div className={`${styles.inner} ${large ? styles.largeInner : ''}`}></div>
+    // <div className={styles.spinner}>
+    //   <div className={`${styles.inner} ${large ? styles.largeInner : ''}`}></div>
+    // </div>
+    <div className={styles.loader}>
     </div>
   );
 };
