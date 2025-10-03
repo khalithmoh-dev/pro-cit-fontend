@@ -82,6 +82,14 @@
   "DEPARTMENT_NAME_IS_REQUIRED":"Department name is required",
   "DEPARTMENT_NAME":"Department name",
   "MAXIMUM_STRENGTH":"Maximum strength",
-  "HEAD_OF_THE_DEPARTMENT":"Head of the deparment",
-  "DEFAULT_CREDIT": "Default Credit"
+  "HEAD_OF_THE_DEPARTMENT":"Head of the department",
+  "DEFAULT_CREDIT": "Default Credit",
+  "DEPARTMENT_IS_REQUIRED": "Department is required",
+  "SEMESTER_IS_REQUIRED": "Semester is required",
+  "COURSE_SCHEDULE":"Course schedule",
+  "PROGRAM_IS_REQUIRED":"Program is required",
+  "SEARCH":"Search",
+  "MANDATORY":"Mandatory Courses",
+  "ELECTIVE":"Elective Courses",
+  "COURSE_ALREADY_ADDED":"Course already added"
 }
