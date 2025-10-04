@@ -9,7 +9,6 @@ import {
   updateErrorMessage,
   updateSuccessMessage,
 } from '../utils/functions/toast-message';
-import { SelectOptionIF } from '../interface/component.interface';
 
 export interface srchCrsSchdlPyldIF {
   insId: String;
@@ -48,7 +47,7 @@ const useCourseScheduleStore = create<CourseScheduleState>((set, get) => ({
 
   searchCoursesByName: async (payload) => {
     try {
-      const res = await httpRequest('POST', `${import.meta.env.VITE_API_URL}/course-schedule/fetch-course`, { name: payload });
+      const res = await httpRequest('POST', `${import.meta.env.VITE_API_URL}/course-schedule/fetch-course`, { name: payload }, { skipLoader: true });
       return res.data || [];
     } catch (err) {
       console.error(err);

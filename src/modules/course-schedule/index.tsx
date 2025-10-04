@@ -147,9 +147,6 @@ const CourseSchedulePage: React.FC = () => {
         electiveCrs: electiveCourses?.map(crs => ({ crsId: crs._id, capacity: crs?.capacity, isDeleted: crs?.isDeleted })) ?? []
       };
       const res = update ? await updateCourseSchedule(payload, editValues?._id) : await createCourseSchedule(payload);
-      if(res?.['_id']){
-        window.location.reload();
-      }
 
     } catch (err) {
       console.error(err);

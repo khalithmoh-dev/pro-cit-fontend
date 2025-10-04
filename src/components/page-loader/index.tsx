@@ -3,7 +3,16 @@ import Spinner from '../spinner';
 
 const PageLoader = () => {
   return (
-    <div style={{ height: '100%', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    }}>
       <Spinner />
     </div>
   );

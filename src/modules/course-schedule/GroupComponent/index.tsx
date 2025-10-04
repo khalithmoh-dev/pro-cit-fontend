@@ -126,7 +126,7 @@ const ElectiveGroup: React.FC<ElectiveGroupProps> = ({
                             },
                         }}
                     />
-                    <Button
+                    {!showInput && <Button
                         variant="contained"
                         size="small"
                         sx={{
@@ -140,7 +140,7 @@ const ElectiveGroup: React.FC<ElectiveGroupProps> = ({
                         disabled={!isEditPerm}
                     >
                         Add
-                    </Button>
+                    </Button>}
                 </Box>
             </Box>
 
@@ -212,7 +212,7 @@ const ElectiveGroup: React.FC<ElectiveGroupProps> = ({
                         variant="outlined"
                         size="small"
                         color="secondary"
-                        sx={{ height: 40 }}
+                        sx={{ height: 40, borderRadius: 2 }}
                         onClick={() => {
                             setShowInput(false);
                             setSelectedCourse(null);
@@ -222,7 +222,7 @@ const ElectiveGroup: React.FC<ElectiveGroupProps> = ({
                     >
                         Cancel
                     </Button>
-                    <Button variant="contained" size="small" onClick={saveAddedCourse} sx={{ height: 40 }}>
+                    <Button variant="contained" size="small" onClick={saveAddedCourse} sx={{ height: 40, borderRadius: 2 }}>
                         Save
                     </Button>
                 </Box>

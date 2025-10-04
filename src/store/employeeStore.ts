@@ -283,7 +283,8 @@ const useEmployeeStore = create<EmployeeState>((set, get) => ({
       const res = await httpRequest(
         "POST",
         `${import.meta.env.VITE_API_URL}/employee/get-by-name`,
-        {aRqstdFlds: aReq}
+        {aRqstdFlds: aReq},
+        { skipLoader: true }
       );
       return res?.data;
     }catch(err){

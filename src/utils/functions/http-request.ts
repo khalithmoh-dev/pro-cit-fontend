@@ -1,4 +1,17 @@
-const httpRequest = async (method: string, url: string, data: Record<string, any> = {}) => {
+const activeRequests: { count: number } = { count: 0 }; // tracks concurrent requests
+let setLoadingGlobal: ((val: boolean) => void) | null = null;
+
+export const initGlobalLoader = (setLoadingFn: (val: boolean) => void) => {
+  setLoadingGlobal = setLoadingFn;
+};
+
+const httpRequest = async (
+  method: string,
+  url: string,
+  data: Record<string, any> = {},
+  addons?: { skipLoader?: boolean } // optional flag
+) => {
+  const { skipLoader = false } = addons || {};
   const accessToken = window?.sessionStorage?.getItem('accessToken') as string;
 
   const jsonHeaders = {
@@ -6,6 +19,12 @@ const httpRequest = async (method: string, url: string, data: Record<string, any
     'Content-Type': 'application/json;charset=UTF-8',
     authorization: `Bearer ${accessToken ? JSON.parse(accessToken) : ''}`,
   };
+
+  if (!skipLoader) {
+    activeRequests.count++;
+    setLoadingGlobal?.(true);
+  }
+
   try {
     const options: RequestInit = {
       method,
@@ -23,6 +42,11 @@ const httpRequest = async (method: string, url: string, data: Record<string, any
     return response.json();
   } catch (error: any) {
     throw new Error(error.message);
+  } finally {
+    if (!skipLoader) {
+      activeRequests.count--;
+      if (activeRequests.count === 0) setLoadingGlobal?.(false);
+    }
   }
 };
 

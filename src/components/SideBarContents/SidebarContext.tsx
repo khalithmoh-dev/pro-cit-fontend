@@ -23,7 +23,7 @@ interface SidebarProviderProps {
 
 export const SidebarProvider: React.FC<SidebarProviderProps> = ({
   children,
-  defaultCollapsed = false,
+  defaultCollapsed = true,
 }) => {
   const [collapsed, setCollapsed] = useState(defaultCollapsed);
 
