@@ -67,13 +67,13 @@ const DataTable = ({
 
   useEffect(() => {
     if (addRoute) {
-      const aHeaderBtns = headerAction
+      const aHeaderBtns = (headerAction ?? [])
         .filter(action => action.actionName) // only keep actions with a name
         .map(action => (
           <Button
             key={action.actionName} // always add a key in lists
             variantType="upload"
-            Size="md"
+            size="md"
             onClick={action.onClick}
           >
             {action.actionName}
@@ -85,7 +85,7 @@ const DataTable = ({
         <Button
           key="add-new"
           variantType="contained"
-          Size="md"
+          size="md"
           onClick={() => navigate(addRoute)}
         >
           {t("ADD_NEW")}
@@ -96,7 +96,7 @@ const DataTable = ({
     } else {
       setActionFields([]);
     }
-  }, [addRoute, headerAction, navigate, t]);
+  }, [addRoute, navigate, t]);
 
 
   // Handle sorting
@@ -310,9 +310,9 @@ const DataTable = ({
           </TableHead>
           <TableBody>
             {paginatedData.length > 0 ? (
-              paginatedData.map(row => (
+              paginatedData.map((row, index ) => (
                 <TableRow
-                  key={row.id}
+                  key={index}
                   hover
                   selected={selected.includes(row.id)}
                   onClick={() => handleSelect(row.id)}

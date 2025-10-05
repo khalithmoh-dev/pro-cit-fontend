@@ -10,7 +10,7 @@ const InstituteRoutes = () => {
     <Suspense fallback={<PageLoader />}>
       <Routes>
         {/* <Route path="/list" element={<DegreeListPage />} /> */}
-        <Route path="/create" element={<ManageInstitute />} />
+        <Route path="/form" element={<ManageInstitute />} />
       </Routes>
     </Suspense>
   );

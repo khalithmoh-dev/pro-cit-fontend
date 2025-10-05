@@ -30,7 +30,7 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({
           {icon}
         </span>
       )}
-      {!collapsed && <span>{children}</span>}
+      {!collapsed && <span style={{fontSize: "0.9rem", padding:"0"}}>{children}</span>}
     </Link>
   );
 };

@@ -32,6 +32,8 @@ const DegreeList = () => {
 
 
   useEffect(() => {
+    console.log('inn')
+
     if (degrees.length > 0) {
       setDegreesData(degrees);
     }

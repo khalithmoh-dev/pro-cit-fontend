@@ -616,7 +616,7 @@ html {
   display: flex;
   background-color: rgb(94, 94, 94);
   color: white;
-  border-radius: 50%;
+  border-radius: 40%;
   height: 40px;
   width: 40px;
   align-items: center;

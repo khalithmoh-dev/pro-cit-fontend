@@ -2,11 +2,11 @@ import * as React from "react"
 import MuiButton, { ButtonProps as MuiButtonProps } from "@mui/material/Button"
 
 type Variant = "submit" | "cancel" | "reset | add"
-type Size = "sm" | "md" | "lg"
+type size = "sm" | "md" | "lg"
 
 export interface ButtonProps extends Omit<MuiButtonProps, "variant"> {
   variantType?: Variant
-  sizeType?: Size
+  sizeType?: size
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(

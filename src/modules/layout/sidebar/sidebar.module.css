@@ -199,3 +199,61 @@
     display: none;
   }
 }
+
+/* Add these styles to your existing CSS */
+
+/* Smooth transitions for all sidebar elements */
+.sidebar-children-wrapper > * {
+  transition: all 0.3s ease-in-out !important;
+}
+
+
+/* Ensure smooth sidebar collapse/expand */
+.sidebar-group,
+/* Add smooth transitions to all sidebar elements */
+.sidebar-item {
+  transition: all 0.3s ease-in-out !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  overflow: hidden !important;
+}
+
+/* Ensure consistent icon sizing and transitions */
+.sidebar-item > span:first-child {
+  transition: all 0.3s ease-in-out !important;
+  flex-shrink: 0 !important;
+}
+
+/* Smooth text transitions */
+.sidebar-item > span:last-child {
+  transition: all 0.3s ease-in-out !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+}
+
+/* Profile icons smooth scaling */
+.profileText {
+  transition: all 0.3s ease-in-out !important;
+  flex-shrink: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+/* Smooth icon transitions */
+.sidebar-icon {
+  transition: all 0.3s ease-in-out !important;
+}
+
+/* Prevent layout shifts */
+.sidebar-content {
+  overflow: hidden;
+}
+
+/* Smooth text appearance */
+.sidebar-text {
+  transition: 
+    opacity 0.3s ease-in-out,
+    transform 0.3s ease-in-out,
+    margin 0.3s ease-in-out !important;
+}
