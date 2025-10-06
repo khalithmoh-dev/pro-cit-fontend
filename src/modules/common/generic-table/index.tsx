@@ -201,7 +201,7 @@ const DataTable = ({
   };
 
   return (
-    <Box sx={{ width: '100%', mt: 2, boxShadow: '10px 10px 15px rgba(0, 0, 0, 0.2)' }}>
+    <Box sx={{ width: '100%', mt: 2, px: 2, boxShadow: '10px 10px 15px rgba(0, 0, 0, 0.2)' }}>
       {/* Header with title and search */}
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height:'fit-content', backgroundColor: "white",  borderTop: '4px solid var(--logout-button)', borderRadius: "16px 16px 0 0" }}>
         {/* <Typography variant="h6" component="h2">
@@ -262,16 +262,9 @@ const DataTable = ({
       </Box> */}
 
       {/* Table */}
-      <TableContainer component={Paper} elevation={0} sx={{ overflow: 'scroll', px: 2  }}>
-        <Table sx={{ minWidth: 650, borderCollapse: 'separate', borderSpacing: '0 8px',   }} aria-label="data table">
-          <TableHead style={{ background: `
-      linear-gradient(
-        to right,
-        transparent,
-        aliceblue 1%,
-        aliceblue 99%,
-        transparent
-      )`}}>
+      <TableContainer component={Paper} elevation={0} sx={{ overflow: 'auto',border: '1px solid rgba(224, 224, 224, 1)', borderRadius: 2 }}>
+        <Table sx={{ minWidth: 650, borderCollapse: 'collapse', }} aria-label="data table">
+          <TableHead style={{ background:'aliceblue'}} sx={{ '& .MuiTableCell-root': { py: 1.5, px: 1.5 } }}>
             <TableRow>
               {selectable && (
                 <TableCell padding="checkbox">

@@ -37,7 +37,17 @@ import { useTranslation } from "react-i18next";
       - onSubmit: onSubmit function
 */
 
-const EnterpriseFilter = ({ schema, onSubmit, isEditPerm = false, isEditDisableDflt = false, oInitialValues, isSmartField, setIsEditPerm }) => {
+interface EnterpriseFilterProps {
+  schema: any; 
+  onSubmit: (values: Record<string, any>) => void; 
+  isEditPerm?: boolean; 
+  isEditDisableDflt?: boolean; 
+  oInitialValues?: Record<string, any>; 
+  isSmartField?: boolean; 
+  setIsEditPerm?: React.Dispatch<React.SetStateAction<boolean>>; 
+}
+
+const EnterpriseFilter: React.FC<EnterpriseFilterProps> = ({ schema, onSubmit, isEditPerm = false, isEditDisableDflt = false, oInitialValues, isSmartField, setIsEditPerm }) => {
   const [editPerm, setEditPerm] = useState(!isEditDisableDflt);
   const [instDtls, setInstDtls] = useState({ _id: '', insname: '' });
   const [aMultiSelectVal, setAMultiSelectVal] = useState([]);

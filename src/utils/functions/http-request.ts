@@ -41,6 +41,11 @@ const httpRequest = async (
 
     return response.json();
   } catch (error: any) {
+    if (error?.message === 'Login Expired') {
+      window.sessionStorage.clear();
+      window.location.href = '/login';
+      return;
+    }
     throw new Error(error.message);
   } finally {
     if (!skipLoader) {
