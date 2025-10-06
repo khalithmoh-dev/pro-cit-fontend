@@ -21,6 +21,7 @@ export const LayoutProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const { routeInfo, logout } = useAuthStore();
     const [routeNm, setRouterNm] = useState("Dashboard");
     const [actionFields, setActionFields] = useState<React.ReactElement[]>([]);
+    console.log('actionFields',actionFields)
     const setRouteNm = (routePath: string) => {
 
         // Clear action fields first

@@ -493,8 +493,9 @@ export const AppSidebar: React.FC = () => {
                 />
               }
             >
+              {console.log('group.children',group.children)}
               {group.children && group.children.length > 0 && (
-                <div style={{ display: 'flex', flexDirection: 'column'}} className="ps-3">
+                <div style={{ display: 'flex', flexDirection: 'column'}} >
                   {group.children.map((item) => (
                     <SidebarItem 
                       key={item.key} 
@@ -634,7 +635,7 @@ export const AppSidebar: React.FC = () => {
               flexShrink: 0
             }}
           >
-            <Icon name="logout" /> {/* Make sure you have a logout icon */}
+            <Icon name="LogOut" color="white" />
           </div>
           {!collapsed && (
             <span
@@ -671,73 +672,14 @@ export const AppSidebar: React.FC = () => {
               }}
               className="logout-tooltip"
             >
-              !
+              <Icon name="LogOut"/>
             </div>
           )}
         </button>
         
         {/* Tooltip for collapsed state */}
-        {collapsed && (
-          <div
-            style={{
-              position: 'absolute',
-              bottom: '80px',
-              left: '70px',
-              backgroundColor: '#1f2937',
-              color: 'white',
-              padding: '0.5rem 0.75rem',
-              borderRadius: '0.375rem',
-              fontSize: '12px',
-              fontWeight: '500',
-              whiteSpace: 'nowrap',
-              zIndex: 1000,
-              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-              opacity: 0,
-              transform: 'translateX(-10px)',
-              transition: 'all 0.2s ease-in-out',
-              pointerEvents: 'none'
-            }}
-            className="logout-hover-tooltip"
-          >
-            Logout
-          </div>
-        )}
+        
       </div>
     </Sidebar>
   );
 };
-// const MainContent: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-//   const { collapsed } = useSidebar();
-  
-//   return (
-//     <div 
-//       className="flex-grow-1 d-flex flex-column"
-//       style={{
-//         marginLeft: collapsed ? '56px' : '240px',
-//         transition: 'margin-left 0.3s ease',
-//         width: 'fit-content',
-//         height: '98vh', // Slightly shorter than 100vh
-//         margin: '10px', // Push it inward so radius is visible
-//         borderRadius: '30px', // Rounded corners
-//         color: 'var(--sidebar-text)',
-//         backgroundColor: 'var(--sidebar-bg)',
-//         boxShadow: '13px 13px 15px rgba(0, 0, 0, 0.15)',
-//         overflow: 'hidden', // Ensures inner content respects radius
-//       }}
-//     >
-//       <header className="bg-white border-bottom p-3 d-flex align-items-center justify-content-between shadow-sm">
-//         <div className="d-flex align-items-center gap-3">
-//           <SidebarTrigger />
-//           <h4 className="mb-0 fw-semibold">My Application</h4>
-//         </div>
-//         <div className="d-flex align-items-center gap-2">
-//           <span className="badge bg-primary">Pro</span>
-//         </div>
-//       </header>
-      
-//       <main className="flex-grow-1 p-4" style={{ backgroundColor: '#f8f9fa' }}>
-//         {children}
-//       </main>
-//     </div>
-//   );
-// };

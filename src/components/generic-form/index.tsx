@@ -60,10 +60,10 @@ const GenericMaster = ({ pageTitle, schema, onSubmit, isEditPerm = false, isEdit
     if (location.pathname) {
       setRouteNm(location.pathname);
       setActionFields([<Switch checked={editPerm} onChange={() => {
-      setEditPerm(prevEditPerm => {
-        return !prevEditPerm;
-      });
-    }}  label="Edit mode"/>])
+        setEditPerm(prevEditPerm => {
+          return !prevEditPerm;
+        });
+      }} label="Edit mode" />])
     }
   }, [location.pathname]);
 

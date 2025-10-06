@@ -30,15 +30,40 @@ export const SidebarGroup: React.FC<SidebarGroupProps> = ({
     }
   };
 
+  // Count the number of children for the connecting line
+  const childrenArray = React.Children.toArray(children);
+  const childrenCount = childrenArray.length;
+
   return (
     <div 
       className={`sidebar-group ${className}`} 
       style={{
         marginBottom: '0.5rem',
         transition: 'all 0.3s ease-in-out',
+        position: 'relative',
         ...style
       }}
     >
+      {/* Connecting line container */}
+      {!collapsed && childrenCount > 0 && (
+        <div 
+          style={{
+            position: 'absolute',
+            left: '28px', // Align with the center of the icon
+            top: '48px', // Start below the group label
+            bottom: '8px', // End before next group
+            width: '2px',
+            backgroundColor: '#e5e7eb',
+            transition: 'all 0.3s ease-in-out',
+            opacity: isOpen ? 1 : 0,
+            transform: `scaleY(${isOpen ? 1 : 0})`,
+            transformOrigin: 'top',
+            zIndex: 0,
+            borderRadius: '1px'
+          }}
+        />
+      )}
+      
       <div
         className={`sidebar-group-label d-flex align-items-center justify-content-between ${
           (collapsible && !collapsed) ? 'cursor-pointer' : ''
@@ -49,7 +74,20 @@ export const SidebarGroup: React.FC<SidebarGroupProps> = ({
           padding: '0.5rem 0.75rem',
           transition: 'all 0.3s ease-in-out',
           borderRadius: '0.375rem',
-          margin: '0 0.25rem'
+          margin: '0 0.25rem',
+          position: 'relative',
+          zIndex: 1,
+          backgroundColor: 'var(--sidebar-bg)'
+        }}
+        onMouseEnter={(e) => {
+          if (collapsible && !collapsed) {
+            e.currentTarget.style.backgroundColor = 'rgba(59, 130, 246, 0.1)';
+          }
+        }}
+        onMouseLeave={(e) => {
+          if (collapsible && !collapsed) {
+            e.currentTarget.style.backgroundColor = 'var(--sidebar-bg)';
+          }
         }}
       >
         <div className='d-flex align-items-center' style={{ overflow: 'hidden', flex: 1 }}>
@@ -60,7 +98,9 @@ export const SidebarGroup: React.FC<SidebarGroupProps> = ({
                 minWidth: '20px',
                 transition: 'all 0.3s ease-in-out',
                 transform: collapsed ? 'scale(0.9)' : 'scale(1)',
-                flexShrink: 0
+                flexShrink: 0,
+                position: 'relative',
+                zIndex: 2
               }}
             >
               {icon}
@@ -76,7 +116,8 @@ export const SidebarGroup: React.FC<SidebarGroupProps> = ({
               flex: collapsed ? '0 1 0px' : '1 1 auto',
               width: collapsed ? '0' : 'auto',
               marginLeft: collapsed ? '0' : '0.5rem',
-              pointerEvents: collapsed ? 'none' : 'auto'
+              pointerEvents: collapsed ? 'none' : 'auto',
+              textTransform: 'none'
             }}
           >
             {label}
@@ -89,10 +130,11 @@ export const SidebarGroup: React.FC<SidebarGroupProps> = ({
               transition: 'all 0.3s ease-in-out',
               opacity: collapsed ? 0 : 1,
               flexShrink: 0,
-              marginLeft: '0.25rem'
+              marginLeft: '0.25rem',
+              transform: `rotate(${isOpen ? '0deg' : '-90deg'})`
             }}
           >
-            {isOpen ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
+            <ChevronDown size={12} />
           </span>
         )}
       </div>
@@ -101,10 +143,27 @@ export const SidebarGroup: React.FC<SidebarGroupProps> = ({
         className="sidebar-group-content"
         style={{
           transition: 'all 0.3s ease-in-out',
-          overflow: 'hidden'
+          overflow: 'hidden',
+          position: 'relative'
         }}
       >
-        {(!collapsible || isOpen) && children}
+        <div
+          style={{
+            opacity: isOpen ? 1 : 0,
+            transition: 'all 0.3s ease-in-out',
+            transform: `translateY(${isOpen ? '0' : '-10px'})`
+          }}
+        >
+          {(!collapsible || isOpen) && (
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              {childrenArray[0].props.children.map((child, index) => (
+                <div key={index} style={{ position: 'relative' }}>
+                  {child}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

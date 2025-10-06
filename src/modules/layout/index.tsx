@@ -5,10 +5,12 @@ import { NavigationProvider } from '../../components/NavigationContext'
 import { LayoutProvider, useLayout } from './LayoutContext'
 import Separator from '../../components/Seperator';
 import { Outlet } from 'react-router-dom';
+import useAuthStore from '../../store/authStore';
 
 const LayoutInner = () => {
-  const { collapsed } = useSidebar();
   const { routeNm, actionFields } = useLayout();
+  const {permissions} = useAuthStore();
+  console.log('permissions',permissions)
   return (
       <div
         className="flex-grow-1 d-flex flex-column"

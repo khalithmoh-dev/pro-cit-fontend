@@ -564,7 +564,7 @@ html {
   color: #000000;
   font-size: 0.75rem;
   font-weight: 600;
-  text-transform: uppercase;
+  text-transform: capitalize;
   letter-spacing: 0.05em;
   padding: 6px 20px 3px 20px;
   margin-bottom: 4px;
