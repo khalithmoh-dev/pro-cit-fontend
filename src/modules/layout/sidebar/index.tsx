@@ -417,7 +417,7 @@ export const AppSidebar: React.FC = () => {
           transition: 'all 0.3s ease-in-out',
           display: 'flex',
           alignItems: 'center',
-          minHeight: '64px',
+          minHeight: '73px',
           margin: '0 0.5rem',
           borderRadius: '0.5rem',
           marginBottom: '0.5rem'

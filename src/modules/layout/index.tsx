@@ -21,7 +21,7 @@ const LayoutInner = () => {
         }}
       >
         <div style={{position: "sticky", top:0, zIndex: 1000}}>
-          <header className="bg-white border-bottom p-3 d-flex align-items-center justify-content-between shadow-sm">
+          <header className="bg-white border-bottom p-3 d-flex align-items-center justify-content-between shadow-sm" style={{ height: '73px' }}>
             {/* Remove the justify-content-between from this div */}
             <div className='d-flex align-items-center' style={{ gap: '12px' }}>
               <SidebarTrigger />
