@@ -83,9 +83,9 @@ const DataTable = ({
       // Add the "Add New" button if addRoute is defined
       aHeaderBtns.push(
         <Button
+          className='btn-small'
           key="add-new"
           variantType="contained"
-          size="md"
           onClick={() => navigate(addRoute)}
         >
           {t("ADD_NEW")}

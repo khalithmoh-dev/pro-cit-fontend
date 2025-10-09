@@ -628,3 +628,31 @@ html {
   justify-content: center;
   text-transform: uppercase;
 }
+
+/* Color for Buttons */
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-warning {
+  background-color: #f0ad4e;
+  color: white;
+}
+
+.btn-small {
+  width: 70px !important;
+  height: 40px !important;
+  cursor: pointer;
+}

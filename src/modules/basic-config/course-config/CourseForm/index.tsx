@@ -204,7 +204,7 @@ console.log('baseData?.departments',baseData?.departments)
       {
         name: 'Cancel',
         variant: 'outlined',
-        color: 'secondary',
+        nature: 'secondary',
         onClick: () => {
           navigate(-1);
         },
@@ -212,7 +212,7 @@ console.log('baseData?.departments',baseData?.departments)
       {
         name: id ? 'UPDATE' : 'SUBMIT',
         variant: 'contained',
-        color: 'primary',
+        nature: 'primary',
         type: 'submit',
       },
     ],

@@ -231,9 +231,9 @@ export default function InstiteConfig() {
     },
     buttons:[
       {
-        name:"Cancel", variant:"outlined", color:"secondary", onClick:()=>{navigate(-1)}
+        name:"Cancel", variant:"outlined", nature:"secondary", onClick:()=>{navigate(-1)}
       },{
-        name:"Update", variant:"contained", color:"primary", type:'submit'
+        name:"Update", variant:"contained", nature:"primary", type:'submit'
       }
     ]
   };

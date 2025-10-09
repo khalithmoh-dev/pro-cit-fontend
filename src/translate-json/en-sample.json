@@ -91,5 +91,6 @@
   "SEARCH":"Search",
   "MANDATORY":"Mandatory Courses",
   "ELECTIVE":"Elective Courses",
-  "COURSE_ALREADY_ADDED":"Course already added"
+  "COURSE_ALREADY_ADDED":"Course already added",
+  "ADD_NEW": "Add"
 }

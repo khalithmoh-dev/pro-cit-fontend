@@ -420,7 +420,7 @@ const EnterpriseFilter: React.FC<EnterpriseFilterProps> = ({ schema, onSubmit, i
                   {schema.buttons.map((btn, idx) => (
                     <Button
                       key={idx}
-                      color={btn.color}
+                      className={`btn-${btn?.nature?.toLowerCase()} btn-small`}
                       size={btn.size || "medium"}
                       onClick={(e) => {
                         if (btn.name === "Reset") {

@@ -124,11 +124,11 @@ const CreateDepartmentPage: React.FC<PropsIF> = ({ update }) => {
     },
     buttons: [
       {
-        name: t("CANCEL"), variant: "outlined", color: "secondary", onClick: () => { navigate(-1) }
+        name: t("CANCEL"), variant: "outlined", nature: "secondary", onClick: () => { navigate(-1) }
       }, ...(!id ? [{
-        name: t("RESET"), variant: "outlined", color: "warning", onClick: () => { }
+        name: t("RESET"), variant: "outlined", nature: "warning", onClick: () => { }
       }] : []), {
-        name: id ? t("UPDATE") : t("SAVE"), variant: "contained", color: "primary", type: "submit"
+        name: id ? t("UPDATE") : t("SAVE"), variant: "contained", nature: "primary", type: "submit"
       }
     ]
   };

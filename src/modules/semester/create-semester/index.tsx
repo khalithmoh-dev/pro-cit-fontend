@@ -93,7 +93,7 @@ export default function CreateSemester() {
     {
       name: "Cancel",
       variant: "outlined",
-      color: "secondary",
+      nature: "secondary",
       onClick: () => {
         navigate(-1);
       }
@@ -103,7 +103,7 @@ export default function CreateSemester() {
           {
             name: "Reset",
             variant: "outlined",
-            color: "warning",
+            nature: "warning",
             onClick: () => {}
           }
         ]
@@ -111,7 +111,7 @@ export default function CreateSemester() {
     {
       name: id ? "Update" : "Save",
       variant: "contained",
-      color: "primary",
+      nature: "primary",
       type: "submit"
     }
   ]

@@ -446,7 +446,7 @@ const GenericMaster = ({ pageTitle, schema, onSubmit, isEditPerm = false, isEdit
               {schema.buttons.map((btn, idx) => (
                 <Button
                   key={idx}
-                  color={btn.color}
+                  className={`btn-${btn?.nature?.toLowerCase()} btn-small`}
                   size={btn.size || "medium"}
                   onClick={btn.name === "Reset" ? formik.handleReset : btn.onClick}
                   type={btn.type ?? 'button'}
