@@ -1,6 +1,6 @@
 import React from 'react'
 import Typography from '@mui/material/Typography'
-
+import './index.css'
 interface SectionHeaderProps {
   sectionName: string;
 }
@@ -8,10 +8,10 @@ interface SectionHeaderProps {
 const SectionHeader: React.FC<SectionHeaderProps> = ({ sectionName }) => {
   return (
     <>
-        <Typography className='section-header'>
+      <Typography className='section-header'>
         {sectionName}
-        </Typography>
-        <hr className='m-0 p-0' style={{color: 'black'}}/>
+      </Typography>
+      <hr className='m-0 p-0' style={{ color: 'black' }} />
     </>
   )
 }

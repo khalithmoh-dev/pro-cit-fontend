@@ -83,9 +83,9 @@ const DataTable = ({
       // Add the "Add New" button if addRoute is defined
       aHeaderBtns.push(
         <Button
-          className='btn-small'
+          className={`btn-primary btn-small`}
           key="add-new"
-          variantType="contained"
+          variantType="submit"
           onClick={() => navigate(addRoute)}
         >
           {t("ADD_NEW")}
@@ -201,15 +201,11 @@ const DataTable = ({
   };
 
   return (
-    <Box sx={{ width: '100%', mt: 2, px: 2, boxShadow: '10px 10px 15px rgba(0, 0, 0, 0.2)' }}>
+    <Box sx={{ width: '100%', mt: 2,mb: 2, px: 2, border: '1px solid rgba(224, 224, 224, 1)', borderRadius: 3 }}>
       {/* Header with title and search */}
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height:'fit-content', backgroundColor: "white",  borderTop: '4px solid var(--logout-button)', borderRadius: "16px 16px 0 0" }}>
-        {/* <Typography variant="h6" component="h2">
-          {}
-        </Typography> */}
-        {/* <PageTitle title={title}/> */}
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height:'fit-content', backgroundColor: "white",  borderBottom: '1px solid rgba(224, 224, 224, 1)' ,borderRadius: "16px 16px 0 0" }}>
         <div className='mt-3 mx-2'>
-          <p className='fw-semibold'>{title}</p>
+          <p className='fw-semibold fsd-0'>{title}</p>
           <p style={{color: 'slategrey'}}>{`Showing ${paginatedData?.length} of ${data?.length}`}</p>
         </div>
         {searchable && (
@@ -229,40 +225,9 @@ const DataTable = ({
           />
         )}
       </Box>
-
-      {/* Filters */}
-      {/* <Box sx={{ display: 'flex', gap: 2, mb: 2, flexWrap: 'wrap' }}>
-        {columns
-          .filter(col => col.filterable)
-          .map(col => (
-            <FormControl key={col.field} size="small" sx={{ minWidth: 120 }}>
-              <InputLabel>{col.headerName}</InputLabel>
-              <Select
-                value={filters[col.field] || ''}
-                label={col.headerName}
-                onChange={(e) => handleFilterChange(col.field, e.target.value)}
-              >
-                <MenuItem value="">All</MenuItem>
-                {[...new Set(data.map(item => item[col.field]))].map(value => (
-                  <MenuItem key={value} value={value}>
-                    {value}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          ))}
-        
-        {(Object.values(filters).some(Boolean) || searchTerm) && (
-          <Tooltip title="Clear filters">
-            <IconButton onClick={clearFilters} size="small">
-              <Filter size={18} />
-            </IconButton>
-          </Tooltip>
-        )}
-      </Box> */}
-
       {/* Table */}
-      <TableContainer component={Paper} elevation={0} sx={{ overflow: 'auto',border: '1px solid rgba(224, 224, 224, 1)', borderRadius: 2 }}>
+      
+      <TableContainer component={Paper} elevation={0} sx={{ overflow: 'auto',border: '1px solid rgba(224, 224, 224, 1)',mt:2, borderRadius: 4 }}>
         <Table sx={{ minWidth: 650, borderCollapse: 'collapse', }} aria-label="data table">
           <TableHead style={{ background:'aliceblue'}} sx={{ '& .MuiTableCell-root': { py: 1.5, px: 1.5 } }}>
             <TableRow>
@@ -277,8 +242,8 @@ const DataTable = ({
               )}
               
               {columns.map(col => (
-                <TableCell key={col.field}>
-                  {col.sortable ? (
+                <TableCell key={col.field} className='fwd-1'>
+                  {/* {col.sortable ? (
                     <TableSortLabel
                       active={sortConfig.key === col.field}
                       direction={sortConfig.key === col.field ? sortConfig.direction : 'asc'}
@@ -292,12 +257,13 @@ const DataTable = ({
                     </TableSortLabel>
                   ) : (
                     col.headerName
-                  )}
+                  )} */}
+                  {col.headerName}
                 </TableCell>
               ))}
               
               {actions.length > 0 && (
-                <TableCell align="center">Actions</TableCell>
+                <TableCell align="center" className='fwd-1'>Actions</TableCell>
               )}
             </TableRow>
           </TableHead>

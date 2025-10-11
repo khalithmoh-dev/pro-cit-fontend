@@ -1,0 +1,6 @@
+.section-header {
+  font-size: var(--fsd-0); /* 20px */
+  font-weight: var(--fwd-1); /* 600 */
+  margin: 0;
+  padding: 0;
+}

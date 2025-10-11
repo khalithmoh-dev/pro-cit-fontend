@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import DataTable from '../../common/generic-table';
-import { Chip, Box } from '@mui/material';
-import { Eye } from 'lucide-react';
+import { Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import useDegreeStore from '../../../store/degreeStore';
 import { useTranslation } from 'react-i18next';
-import { useLayout } from '../../layout/LayoutContext';
-import Button from '../../../components/Button';
 import Icon from '../../../components/Icons';
 // Example usage
 const DegreeList = () => {
@@ -32,7 +29,6 @@ const DegreeList = () => {
 
 
   useEffect(() => {
-    console.log('inn')
 
     if (degrees.length > 0) {
       setDegreesData(degrees);

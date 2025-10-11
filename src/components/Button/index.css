@@ -1,0 +1,123 @@
+/* Button Base Styles */
+.btn-base {
+  border-radius: 0.65rem !important;
+  font-weight: 600 !important;
+  text-transform: none;
+  transition: all 0.2s ease-in-out;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid;
+  height: 38px;
+  text-transform: capitalize !important;
+}
+
+/* Button Sizes */
+.btn-sm {
+  padding: 6px 16px !important;
+  font-size: 0.875rem !important;
+  min-height: 36px !important;
+}
+
+.btn-md {
+  padding: 8px 18px !important;
+  font-size: 0.875rem !important;
+  min-height: 15px !important;
+}
+
+.btn-lg {
+  padding: 10px 22px !important;
+  font-size: 1rem !important;
+  min-height: 44px !important;
+}
+
+/* Primary/Submit Button */
+.btn-primary {
+  background-color: #2563eb !important; /* Professional blue */
+  color: #ffffff !important;
+  border-color: #2563eb !important;
+}
+
+.btn-primary:hover {
+  background-color: #1d4ed8 !important;
+  border-color: #1d4ed8 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.btn-primary:active {
+  background-color: #1e40af !important;
+  transform: translateY(0);
+}
+
+/* Cancel Button */
+.btn-cancel {
+  background-color: #6b7280 !important;
+  color: #ffffff !important;
+  border-color: #6b7280 !important;
+}
+
+.btn-cancel:hover {
+  background-color: #4b5563 !important;
+  border-color: #4b5563 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3);
+}
+
+.btn-cancel:active {
+  background-color: #374151 !important;
+  transform: translateY(0);
+}
+
+/* Reset Button */
+.btn-reset {
+  background-color: #f59e0b !important;
+  color: #ffffff !important;
+  border-color: #f59e0b !important;
+}
+
+.btn-reset:hover {
+  background-color: #d97706 !important;
+  border-color: #d97706 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+.btn-reset:active {
+  background-color: #b45309 !important;
+  transform: translateY(0);
+}
+
+/* Add Button */
+.btn-add {
+  background-color: #059669 !important;
+  color: #ffffff !important;
+  border-color: #059669 !important;
+}
+
+.btn-add:hover {
+  background-color: #047857 !important;
+  border-color: #047857 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+}
+
+.btn-add:active {
+  background-color: #065f46 !important;
+  transform: translateY(0);
+}
+
+/* Disabled State */
+.btn-base:disabled {
+  background-color: #d1d5db !important;
+  color: #9ca3af !important;
+  border-color: #d1d5db !important;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Focus State for Accessibility */
+.btn-base:focus {
+  outline: 2px solid #3b82f6 !important;
+  outline-offset: 2px !important;
+}

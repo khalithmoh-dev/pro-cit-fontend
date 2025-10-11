@@ -3,18 +3,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
 @import 'bootstrap/dist/css/bootstrap.min.css';
 
-* {
+/* * {
   font-family: "Inter", "Arial", sans-serif !important;
   font-weight: 400 !important;
-}
+} */
 
 html, body, #root {
   margin: 0;
   padding: 0;
   height: 100%;
   background-color: var(--bg-color); /* Global page background */
-  font-size: 16px;
-  font-family: var(--font-family-1) !important;
+  font-family: 'Roboto', sans-serif;
 }
 
 /* Common Variables */
@@ -37,51 +36,41 @@ html, body, #root {
 
 /* #region theme styles*/
 /* Light Theme */
-[data-theme='light'] {
-  --bg-color: #e0e0e0;        /* Light grey background for the whole page */
-  --sidebar-bg: #d6d6d6;      /* Sidebar slightly darker grey */
-  --sidebar-text: #222222;
-  --main-text: #000000;
-  --header-color: #000000;
-  --logout-button: #ec407a;
-  --logout-text: #ffffff;
-  --sidebar-hover-bg: rgba(0, 0, 0, 0.05);
-  --sidebar-selected-bg: #4c6b5a;
-  --sidebar-selected-text: #ffffff;
-}
+/* [data-theme='light'] { */
+  /* --bg-color: #e0e0e0;        Light grey background for the whole page */
+  /* --sidebar-bg: #d6d6d6;      Sidebar slightly darker grey */
+  /* --sidebar-text: #222222; */
+  /* --main-text: #000000; */
+  /* --header-color: #000000; */
+  /* --logout-button: #ec407a; */
+  /* --logout-text: #ffffff; */
+  /* --sidebar-hover-bg: rgba(0, 0, 0, 0.05); */
+  /* --sidebar-selected-bg: #4c6b5a; */
+  /* --sidebar-selected-text: #ffffff; */
+/* } */
 
 /* Dark Theme */
-[data-theme='dark'] {
+/* [data-theme='dark'] {
   --bg-color: #fcf4fc;        /* Dark grey page background */
-  --sidebar-bg: #f5f2ff;      /* Darker sidebar */
-  --sidebar-text: #000000;
-  --main-text: #000000;
-  --logo-color: #ffffff;
-  --form-bg: #ffffff;
-  --header-color: #f5f5f5;
-  --logout-button: #756AB6;
-  --logout-text: #ffffff;
-  --sidebar-hover-bg: rgba(255, 255, 255, 0.1);
-  --sidebar-selected-bg: #4c6b5a;
-  --sidebar-selected-text: #ffffff;
-  --font-family-1: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-}
+  /* --sidebar-bg: #f5f2ff;      /* Darker sidebar */
+  /* --sidebar-text: #000000; */
+  /* --main-text: #000000; */
+  /* --logo-color: #ffffff; */
+  /* --form-bg: #ffffff; */
+  /* --header-color: #f5f5f5; */
+  /* --logout-button: #756AB6; */
+  /* --logout-text: #ffffff; */
+  /* --sidebar-hover-bg: rgba(255, 255, 255, 0.1); */
+  /* --sidebar-selected-bg: #4c6b5a; */
+  /* --sidebar-selected-text: #ffffff; */
+  /* --font-family-1: "SF Pro Display,SF Pro Icons,Helvetica Neue,Helvetica,Arial,sans-serif" */ 
+/* } */
 /* #endregion */
 
 /* Headers */
 .page-header {
-  font-size: 2rem;
-  font-weight: 600;
   color: var(--header-color);
   line-height: 1.334;
-}
-
-.section-header {
-  font-size: 1.5rem !important;
-  font-weight: 600 !important;
-  color: var(--main-text) !important;
-  line-height: 0.75 !important;
-  padding-bottom: 0px !important;
 }
 
 /* Scrollbar */
@@ -149,41 +138,14 @@ html, body, #root {
 
 .default
 /* #region mui styles*/
-.css-1miy0lu-MuiTypography-root{
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-  --fs-2: 16px;
-}
-.css-rizt0-MuiTypography-root{
-  font-family: var(--font-family-1) !important;
-  font-weight: 600 !important;
-  line-height: 1.3rem !important;
-}
-
-.css-1pzfmz2-MuiInputBase-input-MuiOutlinedInput-input{
-  font-family: var(--font-family-1) !important;
-}
 
 .generic-form-footer > .MuiBox-root.css-ku0b5b {
   margin-top: 0 !important;
 }
 
-.css-1blp12k-MuiInputBase-root-MuiOutlinedInput-root{
-  border-radius: var(--input-radius, 15px) !important;
-}
 
-.css-1pzfmz2-MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled{
-  background-color: #e2e8f0;
-  border-radius: var(--input-radius, 15px) !important;
-  color: #000 !important;
-}
 
-.css-trm6af-MuiNativeSelect-root-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled{
-  background-color: #e2e8f0;
-  border-radius: var(--input-radius, 15px) !important;
-  color: #000 !important;
-}
-
-.css-11qxch-MuiButtonBase-root-MuiButton-root.Mui-disabled{
+/* .css-11qxch-MuiButtonBase-root-MuiButton-root.Mui-disabled{
   color: #fff5f5 !important;
   background-color: rgba(0, 0, 0, 0.38);
 }
@@ -199,7 +161,7 @@ html, body, #root {
 
 .css-7oysng{
   border-radius: 15px;
-}
+} */
 /* #endregion */
 
 /* GenericMaster Card */
@@ -261,7 +223,6 @@ div[class*="-control--is-disabled"] {
 /* Placeholder text */
 div[class*="-placeholder"] {
   font-family: var(--font-family-1) !important;
-  font-size: 14px;
   color: #666;
 }
 
@@ -401,7 +362,7 @@ div[class*="-control--is-disabled"] div[class*="-multiValue"] {
   --sidebar-ring: oklch(0.439 0 0);
 }
 
-@theme inline {
+/* @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -440,9 +401,9 @@ div[class*="-control--is-disabled"] div[class*="-multiValue"] {
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-}
+} */
 
-@layer base {
+/* @layer base {
   * {
     @apply border-border outline-ring/50;
   }
@@ -450,12 +411,12 @@ div[class*="-control--is-disabled"] div[class*="-multiValue"] {
   body {
     @apply bg-background text-foreground;
   }
-}
+} */
 
 /**
  * Base typography. This is not applied to elements which have an ancestor with a Tailwind text class.
  */
-@layer base {
+/* @layer base {
   :where(:not(:has([class*=" text-"]), :not(:has([class^="text-"])))) {
     h1 {
       font-size: var(--text-2xl);
@@ -505,11 +466,11 @@ div[class*="-control--is-disabled"] div[class*="-multiValue"] {
       line-height: 1.5;
     }
   }
-}
+} */
 
-html {
+/* html {
   font-size: var(--font-size);
-}
+} */
 
 
 /* Custom Design System - Bootstrap + Material UI Integration */
@@ -565,16 +526,6 @@ html {
   color: var(--sidebar-active-text);
 }
 
-.sidebar-group-label {
-  color: #000000;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: capitalize;
-  letter-spacing: 0.05em;
-  padding: 6px 20px 3px 20px;
-  margin-bottom: 4px;
-}
-
 .sidebar-trigger {
   background: none;
   border: none;
@@ -593,8 +544,6 @@ html {
   margin-left: 1.2rem;
   padding-left: 1rem;
   padding-right: 2px;
-  font-size: 0.9rem;
-  font-weight: 600;
 }
 
 .sidebar-children-wrapper::before {
@@ -631,10 +580,15 @@ html {
 
 /* Color for Buttons */
 
-.btn-primary {
+/* .btn-primary {
   background-color: #007bff;
   color: white;
 }
+
+.btn-primary:hover {
+  background-color: #1d4ed8;
+}
+
 
 .btn-secondary {
   background-color: #6c757d;
@@ -655,4 +609,199 @@ html {
   width: 70px !important;
   height: 40px !important;
   cursor: pointer;
+}
+
+/* Cancel Button (destructive action) */
+/* .btn-cancel {
+  background-color: #ef4444;
+  color: #ffffff;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  text-transform: none;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease-in-out,
+    box-shadow 0.2s ease-in-out,
+    transform 0.1s ease-in-out;
+} */
+
+/* Hover state */
+/* .btn-cancel:hover {
+  background-color: #dc2626;
+} */
+
+/* Active (pressed) state */
+/* .btn-cancel:active {
+  background-color: #b91c1c;
+  transform: scale(0.98);
+} */
+
+/* Focus (keyboard navigation) state */
+/* .btn-cancel:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.3);
+} */
+
+/* Disabled state */
+/* .btn-cancel:disabled {
+  background-color: #fca5a5;
+  cursor: not-allowed;
+  opacity: 0.7;
+}  */
+
+/* Button Base Styles */
+.btn-base {
+  border-radius: 0.5rem;
+  font-weight: 600;
+  text-transform: none;
+  transition: all 0.2s ease-in-out;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Button Sizes */
+.btn-sm {
+  padding: 6px 16px;
+  font-size: 0.875rem;
+  min-height: 36px;
+}
+
+.btn-md {
+  padding: 8px 18px;
+  font-size: 0.875rem;
+  min-height: 40px;
+}
+
+.btn-lg {
+  padding: 10px 22px;
+  font-size: 1rem;
+  min-height: 44px;
+}
+
+/* Primary/Submit Button */
+.btn-primary {
+  background-color: #2563eb; /* Professional blue */
+  color: #ffffff;
+  border: 1px solid #2563eb;
+}
+
+.btn-primary:hover {
+  background-color: #1d4ed8; /* Darker blue */
+  border-color: #1d4ed8;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.btn-primary:active {
+  background-color: #1e40af;
+  transform: translateY(0);
+}
+
+/* Cancel Button */
+.btn-cancel {
+  background-color: #6b7280; /* Professional gray */
+  color: #ffffff;
+  border: 1px solid #6b7280;
+}
+
+.btn-cancel:hover {
+  background-color: #4b5563; /* Darker gray */
+  border-color: #4b5563;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3);
+}
+
+.btn-cancel:active {
+  background-color: #374151;
+  transform: translateY(0);
+}
+
+/* Reset Button */
+/* .btn-reset {
+  background-color: #f59e0b;
+  color: #ffffff;
+  border: 1px solid #f59e0b;
+} */
+
+/* .btn-reset:hover {
+  background-color: #d97706;
+  border-color: #d97706;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+} */
+
+/* .btn-reset:active {
+  background-color: #b45309;
+  transform: translateY(0);
+} */
+
+/* Add Button */
+/* .btn-add {
+  background-color: #059669;
+  color: #ffffff;
+  border: 1px solid #059669;
+} */
+
+/* .btn-add:hover {
+  background-color: #047857;
+  border-color: #047857;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+} */
+
+/* .btn-add:active {
+  background-color: #065f46;
+  transform: translateY(0);
+} */
+
+/* Disabled State */
+/* .btn-base:disabled {
+  background-color: #d1d5db;
+  color: #9ca3af;
+  border-color: #d1d5db;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+} */
+
+/* Focus State for Accessibility */
+/* .btn-base:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+} */
+
+
+
+/* DONT MAKE ANY CHANGES BELOW (HIGH IMPACT) */
+
+/* #region font sizes*/
+.fsd-3{
+  font-size: 12px;
+}
+.fsd-2{
+  font-size: 14px;
+}
+
+.fsd-1{
+  font-size: 16px;
+}
+
+.fsd-0{
+  font-size: 20px;
+}
+/* endregion */
+
+.fwd-1{
+  font-weight: 600 !important;
+}
+.fwd-2{
+  font-weight: 500 !important;
+}
+
+/* colors */
+.color-primary_text{
+  color: #000000;
 }

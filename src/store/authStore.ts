@@ -112,10 +112,9 @@ const useAuthStore = create<AuthState>()(
           const permissionsObject: { [key: string]: ModulePermissions } = {};
           const pathDtls: Record<string, RouteDetails> = {};
           data.data.role.modules.forEach((module: ModuleIF) => {
-            permissionsObject[module.key] = module.permissions;
             if(!module.deleted){
               const currentPath = module.path
-              console.log('currentPath',currentPath)
+              permissionsObject[currentPath] = module.permissions;
               pathDtls[currentPath]= {icon: module.icon, name: module.name};
             }
           });

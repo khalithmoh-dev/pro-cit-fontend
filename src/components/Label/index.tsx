@@ -8,9 +8,8 @@ interface LabelProps {
 
 const FormLabel = (props: LabelProps) => {
   return (
-    <Typography className={`form-label fw-semibold ${props.className}`}
+    <Typography className={`form-label fwd-1 ${props.className}`}
       sx={{
-        fontWeight: '430 !important',
         marginBottom: '2px'
       }}
     >

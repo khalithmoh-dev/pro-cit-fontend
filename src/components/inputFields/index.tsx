@@ -13,6 +13,7 @@ import {
 import { Autocomplete } from "@mui/material";
 import Textarea from "@mui/joy/Textarea"; // adjust import as needed
 import FileUpload from "../fileupload"; // adjust import as needed
+import "./index.css"
 
 interface InputFieldsProps {
   field: any;
@@ -137,8 +138,8 @@ const InputFields: FC<InputFieldsProps> = ({
                   }
                   sx={{
                     "& .MuiOutlinedInput-root": {
-                      minHeight: 40,
-                      height: 40,
+                      minHeight: 38,
+                      height: 38,
                       borderRadius: "var(--input-radius, 15px)",
                       display: "flex",
                       alignItems: "center",
@@ -163,11 +164,7 @@ const InputFields: FC<InputFieldsProps> = ({
                 </li>
               )}
               disabled={!editPerm || field.isDisabled}
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  borderRadius: "var(--input-radius, 15px)",
-                },
-              }}
+             
             />
             {formik.touched[field.name] && formik.errors[field.name] && (
               <Typography variant="caption" color="error">
@@ -201,9 +198,9 @@ const InputFields: FC<InputFieldsProps> = ({
               return selectedOption ? selectedOption[labelKey] : "";
             }}
             disabled={!editPerm || field.isDisabled}
-            sx={{
-              borderRadius: "var(--input-radius, 15px)",
-            }}
+            // sx={{
+            //   borderRadius: "var(--input-radius, 15px)",
+            // }}
           >
             {options.map((opt: any) => (
               <MenuItem key={opt[valueKey]} value={opt[valueKey]}>

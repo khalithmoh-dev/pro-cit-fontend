@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ChevronDown, ChevronRight } from 'lucide-react';
 import { useSidebar } from './SidebarContext';
-
+import "./sidebar.css"
 interface SidebarGroupProps {
   children: React.ReactNode;
   label?: string;
@@ -65,20 +65,11 @@ export const SidebarGroup: React.FC<SidebarGroupProps> = ({
       )}
       
       <div
-        className={`sidebar-group-label d-flex align-items-center justify-content-between ${
-          (collapsible && !collapsed) ? 'cursor-pointer' : ''
-        }`}
         onClick={handleToggle}
-        style={{ 
-          cursor: (collapsible && !collapsed) ? 'pointer' : 'default',
-          padding: '0.5rem 0.75rem',
-          transition: 'all 0.3s ease-in-out',
-          borderRadius: '0.375rem',
-          margin: '0 0.25rem',
-          position: 'relative',
-          zIndex: 1,
-          backgroundColor: 'var(--sidebar-bg)'
-        }}
+        className={`sidebar-group-label color-primary_text d-flex align-items-center justify-content-between sidebar-group fsd-2 fwd-1
+          ${collapsible ? 'collapsible' : ''}
+          ${collapsed ? 'collapsed' : ''}
+          ${collapsible && !collapsed ? 'cursor-pointer' : ''}`} 
         onMouseEnter={(e) => {
           if (collapsible && !collapsed) {
             e.currentTarget.style.backgroundColor = 'rgba(59, 130, 246, 0.1)';
@@ -126,7 +117,6 @@ export const SidebarGroup: React.FC<SidebarGroupProps> = ({
         {collapsible && !collapsed && (
           <span 
             style={{ 
-              fontSize: '12px',
               transition: 'all 0.3s ease-in-out',
               opacity: collapsed ? 0 : 1,
               flexShrink: 0,
