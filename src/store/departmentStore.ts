@@ -40,7 +40,7 @@ interface DepartmentState {
   initialLoading: boolean;
   createDepartment: (payload: createDepartmentPayloadIF) => Promise<boolean>;
   updateDepartment: (payload: createDepartmentPayloadIF, id: string) => Promise<boolean>;
-  getDepartments: (firstRender?: boolean) => Promise<object[] | boolean>;
+  getDepartments: (page?:number,limit?:number,searchTerm?:string) => Promise<object[] | boolean>;
   getDepartment: (id: string) => Promise<object | boolean>;
   deleteDepartment: (id: string) => Promise<boolean>;
 }
@@ -83,15 +83,15 @@ const useDepartmentStore = create<DepartmentState>((set, get) => ({
     }
   },
 
-  getDepartments: async (firstRender) => {
-    set({ loading: !firstRender, initialLoading: firstRender });
+  getDepartments: async (page,limit,searchTerm) => {
+    set({ loading: true });
     try {
-      const res = await httpRequest('GET', `${import.meta.env.VITE_API_URL}/department/`);
+      const res = await httpRequest('GET', `${import.meta.env.VITE_API_URL}/department/?page=${page}&limit=${limit}&search=${searchTerm}`);
       return res?.data;
     } catch (error) {
       return false;
     } finally {
-      set({ loading: false, initialLoading: false });
+      set({ loading: false });
     }
   },
 

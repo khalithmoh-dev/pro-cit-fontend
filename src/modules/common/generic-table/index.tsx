@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Paper,
@@ -36,18 +36,22 @@ interface DataTableI {
   searchable?: Boolean
   title?: string
   actions?: object[]
+  apiService?: string[];
+  serverSide?: boolean;
 }
 const DataTable = ({
   data,
   columns,
   selectable = false,
-  onSelect = () => {},
+  onSelect = () => { },
   pagination = true,
   searchable = true,
   title = "Data Table",
   actions = [],
-  headerAction = [{actionName: "", onClick: () => {}}],
-  addRoute = ''
+  headerAction = [{ actionName: "", onClick: () => { } }],
+  addRoute = '',
+  apiService = (page?: number, rowsPerPage?: number, searchTerm?: string) => { },
+  serverSide = false
 }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -55,15 +59,19 @@ const DataTable = ({
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
   const [selected, setSelected] = useState([]);
   const [filters, setFilters] = useState({});
+  const [tableData, setTableData] = useState<any[]>(serverSide ? [] : data);
+  const [filteredData, setFilteredData] = useState<any[]>(tableData);
+  const [paginatedData, setPaginatedData] = useState<any[]>(tableData);
+  const [total, setTotal] = useState(0);
   const { setRouteNm, setActionFields } = useLayout();
   const navigate = useNavigate();
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
-  useEffect(()=>{
-      if(location.pathname){
-        setRouteNm(location.pathname);
-      }
-    },[location.pathname]);
+  useEffect(() => {
+    if (location.pathname) {
+      setRouteNm(location.pathname);
+    }
+  }, [location.pathname]);
 
   useEffect(() => {
     if (addRoute) {
@@ -98,6 +106,28 @@ const DataTable = ({
     }
   }, [addRoute, navigate, t]);
 
+  useEffect(() => {
+    if (serverSide && apiService) {
+      const fetchData = async () => {
+        try {
+
+          const tblData = await apiService(page, rowsPerPage, searchTerm);
+
+          setTableData(tblData?.data || []);
+          setTotal(tblData?.total || 0);
+        } catch (err) {
+          console.error('Error fetching data:', err);
+        }
+      };
+
+      const delayDebounce = setTimeout(fetchData, 400); // debounce search
+      return () => clearTimeout(delayDebounce);
+    } else {
+      // fallback for static data
+      setTableData(data);
+      setTotal(data.length);
+    }
+  }, [page, rowsPerPage, searchTerm, apiService, serverSide, data?.length]);
 
   // Handle sorting
   const handleSort = (key) => {
@@ -136,46 +166,50 @@ const DataTable = ({
     }
   };
 
-  // Apply search and filters
-  const filteredData = data
-    .filter(item => {
-      // Apply search
-      if (searchTerm) {
-        const matchesSearch = Object.values(item).some(value => 
+  useEffect(() => {
+    let data = [...tableData];
+
+    // Apply search
+    if (searchTerm) {
+      data = data.filter(item =>
+        Object.values(item).some(value =>
           String(value).toLowerCase().includes(searchTerm.toLowerCase())
-        );
-        if (!matchesSearch) return false;
-      }
+        )
+      );
+    }
 
-      // Apply filters
-      for (const [key, value] of Object.entries(filters)) {
-        if (value && item[key] !== value) {
-          return false;
-        }
+    // Apply filters
+    for (const [key, value] of Object.entries(filters)) {
+      if (value) {
+        data = data.filter(item => item[key] === value);
       }
+    }
 
-      return true;
-    })
-    .sort((a, b) => {
-      // Apply sorting
-      if (!sortConfig.key) return 0;
-      
-      const aValue = a[sortConfig.key];
-      const bValue = b[sortConfig.key];
-      
-      if (aValue < bValue) {
-        return sortConfig.direction === 'asc' ? -1 : 1;
-      }
-      if (aValue > bValue) {
-        return sortConfig.direction === 'asc' ? 1 : -1;
-      }
-      return 0;
-    });
+    // Apply sorting
+    if (sortConfig.key) {
+      data.sort((a, b) => {
+        const aValue = a[sortConfig.key];
+        const bValue = b[sortConfig.key];
+        if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
+        if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
+        return 0;
+      });
+    }
+
+    setFilteredData(data);
+  }, [tableData, searchTerm, filters, sortConfig]);
+
 
   // Pagination
-  const paginatedData = pagination
-    ? filteredData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-    : filteredData;
+  useEffect(() => {
+    if (pagination && !serverSide) {
+      const start = page * rowsPerPage;
+      const end = start + rowsPerPage;
+      setPaginatedData(filteredData.slice(start, end));
+    } else {
+      setPaginatedData(filteredData);
+    }
+  }, [filteredData, page, rowsPerPage, pagination]);
 
   // Handle page change
   const handleChangePage = (event, newPage) => {
@@ -201,18 +235,21 @@ const DataTable = ({
   };
 
   return (
-    <Box sx={{ width: '100%', mt: 2,mb: 2, px: 2, border: '1px solid rgba(224, 224, 224, 1)', borderRadius: 3 }}>
+    <Box sx={{ width: '100%', mt: 2, mb: 2, px: 2, border: '1px solid rgba(224, 224, 224, 1)', borderRadius: 3 }}>
       {/* Header with title and search */}
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height:'fit-content', backgroundColor: "white",  borderBottom: '1px solid rgba(224, 224, 224, 1)' ,borderRadius: "16px 16px 0 0" }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: 'fit-content', backgroundColor: "white", borderBottom: '1px solid rgba(224, 224, 224, 1)', borderRadius: "16px 16px 0 0" }}>
         <div className='mt-3 mx-2'>
           <p className='fw-semibold fsd-0'>{title}</p>
-          <p style={{color: 'slategrey'}}>{`Showing ${paginatedData?.length} of ${data?.length}`}</p>
+          <p style={{ color: 'slategrey' }}>{`Showing ${paginatedData?.length} of ${total}`}</p>
         </div>
         {searchable && (
           <TextField
             placeholder="Search..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              setPage(0);
+            }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -226,10 +263,10 @@ const DataTable = ({
         )}
       </Box>
       {/* Table */}
-      
-      <TableContainer component={Paper} elevation={0} sx={{ overflow: 'auto',border: '1px solid rgba(224, 224, 224, 1)',mt:2, borderRadius: 4 }}>
+
+      <TableContainer component={Paper} elevation={0} sx={{ overflow: 'auto', border: '1px solid rgba(224, 224, 224, 1)', mt: 2, borderRadius: 4 }}>
         <Table sx={{ minWidth: 650, borderCollapse: 'collapse', }} aria-label="data table">
-          <TableHead style={{ background:'aliceblue'}} sx={{ '& .MuiTableCell-root': { py: 1.5, px: 1.5 } }}>
+          <TableHead style={{ background: 'aliceblue' }} sx={{ '& .MuiTableCell-root': { py: 1.5, px: 1.5 } }}>
             <TableRow>
               {selectable && (
                 <TableCell padding="checkbox">
@@ -240,7 +277,7 @@ const DataTable = ({
                   />
                 </TableCell>
               )}
-              
+
               {columns.map(col => (
                 <TableCell key={col.field} className='fwd-1'>
                   {/* {col.sortable ? (
@@ -261,7 +298,7 @@ const DataTable = ({
                   {col.headerName}
                 </TableCell>
               ))}
-              
+
               {actions.length > 0 && (
                 <TableCell align="center" className='fwd-1'>Actions</TableCell>
               )}
@@ -269,7 +306,7 @@ const DataTable = ({
           </TableHead>
           <TableBody>
             {paginatedData.length > 0 ? (
-              paginatedData.map((row, index ) => (
+              paginatedData.map((row, index) => (
                 <TableRow
                   key={index}
                   hover
@@ -282,13 +319,13 @@ const DataTable = ({
                       <Checkbox checked={selected.includes(row.id)} />
                     </TableCell>
                   )}
-                  
+
                   {columns.map(col => (
                     <TableCell key={col.field}>
                       {col.renderCell ? col.renderCell(row) : row[col.field]}
                     </TableCell>
                   ))}
-                  
+
                   {actions.length > 0 && (
                     <TableCell align="center">
                       <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1 }}>
@@ -327,12 +364,12 @@ const DataTable = ({
       </TableContainer>
 
       {/* Pagination */}
-      <div className='d-flex justify-content-center align-items-center bg-white' style={{borderRadius: "0 0 10px 10px"}}>
+      <div className='d-flex justify-content-center align-items-center bg-white' style={{ borderRadius: "0 0 10px 10px" }}>
         {pagination && (
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={filteredData.length}
+            count={total}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
