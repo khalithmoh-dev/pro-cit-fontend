@@ -11,18 +11,17 @@ const NavigationContext = createContext<NavigationContextType | undefined>(undef
 
 export const NavigationProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user } = useAuthStore();
-
   const oNavBar = useMemo(() => {
-    if (!user?.role?.modules) return {};
+    if (!user?.user?.modules) return {};
 
-    const mainMenus = user.role.modules.filter(
+    const mainMenus = (user?.user?.modules ?? []).filter(
       (item) => item.menuType === 'mainMenu' && !item.deleted && item.permissions.read,
     );
 
     const oNavData: Record<string, { icon?: string; children: any[] }> = {};
 
     mainMenus.forEach((mainMenu) => {
-      const subMenus = user.role.modules.filter(
+      const subMenus = (user?.user?.modules ?? []).filter(
         (item) =>
           item.menuType === 'subMenu' && 
           item.mainMenu === mainMenu.key && 
@@ -46,7 +45,7 @@ export const NavigationProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     });
 
     return oNavData;
-  }, [user?.role?.modules]);
+  }, [user?.user?.modules]);
 
   return (
     <NavigationContext.Provider value={{ oNavBar, userDtls: user?.user }}>

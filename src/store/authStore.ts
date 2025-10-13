@@ -111,7 +111,7 @@ const useAuthStore = create<AuthState>()(
           // const transformedData = transformNavData(data.data.role.modules);
           const permissionsObject: { [key: string]: ModulePermissions } = {};
           const pathDtls: Record<string, RouteDetails> = {};
-          data.data.role.modules.forEach((module: ModuleIF) => {
+          (data.data.user?.modules ?? []).forEach((module: ModuleIF) => {
             if(!module.deleted){
               const currentPath = module.path
               permissionsObject[currentPath] = module.permissions;
@@ -147,7 +147,6 @@ const useAuthStore = create<AuthState>()(
           const res = await httpRequest('PATCH', `${import.meta.env.VITE_API_URL}/user/password/forgot`, {
             email,
           });
-          console.log("🚀 ~ forgotPassword: ~ res:", res);
           useToastStore.getState().showToast('success', 'Verification code sent successfully');
           return true;
         } catch (error: any) {
@@ -165,7 +164,6 @@ const useAuthStore = create<AuthState>()(
           const res = await httpRequest('POST', `${import.meta.env.VITE_API_URL}/user/password/change`, {
             email,
           });
-          console.log("🚀 ~ changePassword: ~ res:", res)
           useToastStore.getState().showToast('success', 'Password changed successfully');
           return true;
         } catch (error: any) {
@@ -180,7 +178,6 @@ const useAuthStore = create<AuthState>()(
         set({ isLoading: true });
         try {
           const res = await httpRequest('POST', `${import.meta.env.VITE_API_URL}/user/verify`, payload);
-          console.log('See http response---->', res);
           useToastStore.getState().showToast('success', 'Verified success');
           return true;
         } catch (error: any) {

@@ -291,7 +291,6 @@ const InputFields: FC<InputFieldsProps> = ({
       return (
         <>
           <Textarea
-            component="textarea"
             name={field.name}
             value={formik.values[field.name]}
             onChange={formik.handleChange}

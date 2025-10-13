@@ -18,12 +18,11 @@ export default function InstiteConfig() {
     fields: {
         General: [
           {
-            name: "insId",
+            name: "insname",
             label: "Institution name",
-            type: "select",
+            type: "text",
             validation: Yup.string().required("Institution Name is required"),
             isRequired: true,
-            isDisabled: true
           },
           {
             name: "insCode",

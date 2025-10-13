@@ -28,7 +28,7 @@ const Switch: React.FC<SwitchPropsIF> = ({ checked, onChange, label="" }) => {
           '& .MuiSwitch-thumb': {
             width: 18,
             height: 18,
-            boxSizing: 'border-box',
+            boxSizing: 'border-box'
           },
           '& .MuiSwitch-track': {
             borderRadius: 10,

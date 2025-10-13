@@ -10,7 +10,6 @@ import useAuthStore from '../../store/authStore';
 const LayoutInner = () => {
   const { routeNm, actionFields } = useLayout();
   const {permissions} = useAuthStore();
-  console.log('permissions',permissions)
   return (
       <div
         className="flex-grow-1 d-flex flex-column"

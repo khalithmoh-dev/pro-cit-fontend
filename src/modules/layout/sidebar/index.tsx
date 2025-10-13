@@ -493,7 +493,6 @@ export const AppSidebar: React.FC = () => {
                 />
               }
             >
-              {console.log('group.children',group.children)}
               {group.children && group.children.length > 0 && (
                 <div style={{ display: 'flex', flexDirection: 'column'}} >
                   {group.children.map((item) => (

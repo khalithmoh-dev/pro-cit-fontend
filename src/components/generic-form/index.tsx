@@ -15,6 +15,7 @@ import SmartField from "../SmartField";
 import { useLocation } from "react-router-dom";
 import { useLayout } from '../../modules/layout/LayoutContext'
 import InputFields from "../inputFields";
+import useCheckPermission from "../../hooks/useCheckPermission";
 
 /** The generic form component to generate form dynamically using a JSON
     The working json can be referred from institute config

@@ -1,4 +1,4 @@
-import { useEffect,useState } from 'react';
+import { useEffect, useState } from 'react';
 import DynamicForm from "../../../components/generic-form";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
@@ -11,129 +11,131 @@ export default function CreateSemester() {
   const navigate = useNavigate();
   const baseStore = useBaseStore();
   const semesterStore = useSemesterStore();
-  const [baseData,setBaseData] = useState({degree: []});
+  const [baseData, setBaseData] = useState({ degree: [], program: [] });
   const { id } = useParams();
-  const [editValues,setEditValues] = useState({});
-  
+  const [editValues, setEditValues] = useState({});
+
   //to get the initial base data eg: program data and degree data
-  useEffect(()=> {
-    try{
-      if(baseStore){
-        (async()=>{
-            const aReq = ['degree', 'program'];
-            setBaseData(await baseStore.getBaseData(aReq));
+  useEffect(() => {
+    try {
+      if (baseStore) {
+        (async () => {
+          const aReq = ['degree', 'program'];
+          setBaseData(await baseStore.getBaseData(aReq));
         })();
       }
-    } catch(err){
+    } catch (err) {
       console.error(err)
     }
-  },[baseStore]);
-
+  }, [baseStore]);
   //to get semester data by id for update
-  useEffect(()=>{
-    (async()=>{
-      if(id){
-      const oSemester = await semesterStore.getSemesterById(id)
-      setEditValues(oSemester);
-    }
+  useEffect(() => {
+    (async () => {
+      if (id) {
+        const oSemester = await semesterStore.getSemesterById(id)
+        setEditValues(oSemester);
+      }
     })()
-  },[id])
+  }, [id])
 
   //form schema
   const schema = {
     fields: {
-          General: [        
-            {
-              name: "insId",
-              label: t("INSTITUTION"),
-              type: "select",
-              validation: Yup.string().required(t('INSTITUTION_IS_REQUIRED')),
-              isRequired: true,
-              isDisabled: true
-            },
-            {
-              name: "degId",
-              label: t("DEGREE"),
-              type: "select",
-              options:(baseData?.degree ?? []),
-              validation: Yup.string().required(t("DEGREE_IS_REQUIRED")),
-              isRequired: true,
-              labelKey: 'degreeName',
-              valueKey: '_id'
-            },
-            {
-              name: "prgCd",
-              label: t("PROGRAM"),
-              type: "select",
-              // validation: Yup.string().required("Program Name is required"),
-              // isRequired: true,
-            },
-            {
-              name: "semId",
-              label: t("SEMESTER_ID"),
-              type: "text",
-              validation: Yup.string().required("SEMESTER_ID_IS_REQUIRED"),
-              isRequired: true
-            },
-            {
-              name: "semNm",
-              label: t("SEMESTER_NAME"),
-              type: "text",
-              validation: Yup.string().required("SEMESTER_NAME_IS_REQUIRED"),
-              isRequired: true
-            },
-            {
-              name: "desc",
-              label: t("DESCRIPTION"),
-              type: "text"
-            }
+      General: [
+        {
+          name: "insId",
+          label: t("INSTITUTION"),
+          type: "select",
+          validation: Yup.string().required(t('INSTITUTION_IS_REQUIRED')),
+          isRequired: true,
+          isDisabled: true
+        },
+        {
+          name: "degId",
+          label: t("DEGREE"),
+          type: "select",
+          options: (baseData?.degree ?? []),
+          validation: Yup.string().required(t("DEGREE_IS_REQUIRED")),
+          isRequired: true,
+          labelKey: 'degNm',
+          valueKey: '_id'
+        },
+        {
+          name: "prgNm",
+          label: t("PROGRAM"),
+          type: "select",
+          options: (baseData?.program ?? []),
+          labelKey:"prgNm",
+          valueKey: '_id'
+          // validation: Yup.string().required("Program Name is required"),
+          // isRequired: true,
+        },
+        {
+          name: "semId",
+          label: t("SEMESTER_ID"),
+          type: "text",
+          validation: Yup.string().required("SEMESTER_ID_IS_REQUIRED"),
+          isRequired: true
+        },
+        {
+          name: "semNm",
+          label: t("SEMESTER_NAME"),
+          type: "text",
+          validation: Yup.string().required("SEMESTER_NAME_IS_REQUIRED"),
+          isRequired: true
+        },
+        {
+          name: "desc",
+          label: t("DESCRIPTION"),
+          type: "text"
+        }
       ]
     },
-     buttons: [
-    {
-      name: "Cancel",
-      variant: "outlined",
-      nature: "secondary",
-      onClick: () => {
-        navigate(-1);
-      }
-    },
-    ...(!id
-      ? [
+    buttons: [
+      {
+        name: "Cancel",
+        variant: "outlined",
+        nature: "secondary",
+        onClick: () => {
+          navigate(-1);
+        }
+      },
+      ...(!id
+        ? [
           {
             name: "Reset",
             variant: "outlined",
             nature: "warning",
-            onClick: () => {}
+            onClick: () => { }
           }
         ]
-      : []),
-    {
-      name: id ? "Update" : "Save",
-      variant: "contained",
-      nature: "primary",
-      type: "submit"
-    }
-  ]
+        : []),
+      {
+        name: id ? "Update" : "Save",
+        variant: "contained",
+        nature: "primary",
+        type: "submit"
+      }
+    ]
   };
 
   //To handle submission of semester for both create and update
-const handleSemesterSubmit = async (values: createSemesterPayload) => {
-  try{
-    delete values.prgCd; //--------------TEMP: HAVE TO REMOVE ONCE PROGRAM IS DONE--------------------------
-    if(!id){
-      await semesterStore.createSemester(values);
-    }else{
-      const oUpdtPayload = {
-        ...values,
-        _id:id
+  const handleSemesterSubmit = async (values: createSemesterPayload) => {
+    try {
+      delete values.prgCd; //--------------TEMP: HAVE TO REMOVE ONCE PROGRAM IS DONE--------------------------
+      if (!id) {
+        await semesterStore.createSemester(values);
+      } else {
+        const oUpdtPayload = {
+          ...values,
+          _id: id
+        }
+        await semesterStore.updateSemester(oUpdtPayload);
       }
-      await semesterStore.updateSemester(oUpdtPayload);
+      navigate(-1)
+    } catch (err) {
+      console.error(err)
     }
-    navigate(-1)
-  }catch(err){
-    console.error(err)
-  }
   };
 
   return (
@@ -142,9 +144,9 @@ const handleSemesterSubmit = async (values: createSemesterPayload) => {
         schema={schema}
         pageTitle={`${t("CREATE_SEMESTER")}`}
         onSubmit={handleSemesterSubmit}
-        isEditPerm = {true}
-        isEditDisableDflt = {Boolean(id)}
-        oInitialValues = {id ? editValues :""}
+        isEditPerm={true}
+        isEditDisableDflt={Boolean(id)}
+        oInitialValues={id ? editValues : ""}
       />
     </>
   );

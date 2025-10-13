@@ -52,9 +52,9 @@ const EnterpriseFilter: React.FC<EnterpriseFilterProps> = ({ schema, onSubmit, i
   const [instDtls, setInstDtls] = useState({ _id: '', insname: '' });
   const [aMultiSelectVal, setAMultiSelectVal] = useState([]);
   const instituteStore = useInstituteStore();
-  const { setRouteNm, setActionFields } = useLayout();
+  // const { setRouteNm, setActionFields } = useLayout();
   const authStore = useAuthStore();
-  const location = useLocation();
+  // const location = useLocation();
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -68,17 +68,17 @@ const EnterpriseFilter: React.FC<EnterpriseFilterProps> = ({ schema, onSubmit, i
     }
   }, [authStore, instituteStore]);
 
-  useEffect(() => {
-    if (location.pathname) {
-      setRouteNm(location.pathname);
-      setActionFields([<Switch checked={editPerm} onChange={(e) => {
-        setIsEditPerm(e?.target?.checked);
-        setEditPerm(prevEditPerm => {
-          return !prevEditPerm;
-        });
-      }} label="Edit mode" />])
-    }
-  }, [location.pathname]);
+  // useEffect(() => {
+  //   if (location.pathname) {
+  //     setRouteNm(location.pathname);
+  //     setActionFields([<Switch checked={editPerm} onChange={(e) => {
+  //       setIsEditPerm(e?.target?.checked);
+  //       setEditPerm(prevEditPerm => {
+  //         return !prevEditPerm;
+  //       });
+  //     }} label="Edit mode" />])
+  //   }
+  // }, [location.pathname]);
 
   // Build validation schema
   const validationSchema = Yup.object(

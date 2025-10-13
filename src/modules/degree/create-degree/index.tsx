@@ -59,13 +59,15 @@ export default function CreateDegree() {
 
   //to get degree data by id for update
   useEffect(() => {
+    console.log('api count')
+    if (id) {
     (async () => {
-      if (id) {
         const oDegree = await degreeStore.getDegree(id)
         setEditValues(oDegree);
-      }
-    })()
+      })()
+    }
   }, [id])
+
 
   // to handle submssion of form
   const handleDegreeSubmit = async (values: createDegreePayload) => {

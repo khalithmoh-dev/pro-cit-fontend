@@ -10,7 +10,7 @@ export interface createDegreePayload {
   degCd: String,
   degNm: String,
   desc: String,
-  _id: '',
+  _id?: '',
   deleted: boolean;
 }
 
