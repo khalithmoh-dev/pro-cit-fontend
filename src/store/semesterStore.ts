@@ -26,13 +26,17 @@ interface SemesterState {
     createSemester: (payload: createSemesterPayload) => Promise<boolean>,
     getSemesterById: (id: string) => Promise<boolean>,
     getSemester: (firstRender?: boolean) => Promise<object[] | boolean >;
-    updateSemester: (payload: createSemesterPayload) => Promise<boolean>
+    updateSemester: (payload: createSemesterPayload) => Promise<boolean>;
+    getSemesterGroup: (firstRender?: boolean) => Promise<object[] | boolean >;
+    createSemesterGroup: (payload) => Promise<boolean>,
+    semesterGroupList: object[];
 }
 
 // Degree Store to handle Degree create update get functionalities
 const useDegreeStore = create<SemesterState>((set,get) => ({
     semesterList:[],
     degreeData: {},
+    semesterGroupList: [],
     createSemester: async(oPayload = {
         insId: '',
         degId: '',
@@ -82,6 +86,25 @@ const useDegreeStore = create<SemesterState>((set,get) => ({
         }catch(err){
             return false
         }
-    }
+    },
+    createSemesterGroup: async(oPayload) => {
+        try{
+            const {data} = await httpRequest('POST',`${import.meta.env.VITE_API_URL}/semester/create-semester-group`,oPayload);
+            get().getSemesterGroup();
+            return true
+        }catch(err){
+            return false
+        }
+    },
+    getSemesterGroup: async() => {
+       try{
+         const aSemesterGroupList = await httpRequest('GET',`${import.meta.env.VITE_API_URL}/semester/get-all-semester-group`);
+         console.log('aSemesterGroupList?.data',aSemesterGroupList?.data)
+         set({semesterGroupList: aSemesterGroupList?.data});
+         return aSemesterGroupList?.data;
+       }catch(err){
+        return false
+       }
+    },
 }))
 export default useDegreeStore;

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import DynamicForm from "../../../components/generic-form";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
@@ -6,6 +6,7 @@ import useSemesterStore, { createSemesterPayload } from "../../../store/semester
 import useBaseStore from '../../../store/baseStore';
 import { useParams } from 'react-router-dom';
 import { t } from 'i18next';
+import { useToastStore } from '../../../store/toastStore';
 
 export default function CreateSemester() {
   const navigate = useNavigate();
@@ -14,7 +15,8 @@ export default function CreateSemester() {
   const [baseData, setBaseData] = useState({ degree: [], program: [] });
   const { id } = useParams();
   const [editValues, setEditValues] = useState({});
-
+  const [aSemGroup, setSemGroup] = useState([{}])
+  const { showToast } = useToastStore();
   //to get the initial base data eg: program data and degree data
   useEffect(() => {
     try {
@@ -28,112 +30,153 @@ export default function CreateSemester() {
       console.error(err)
     }
   }, [baseStore]);
+
+  //to get semester group data for select with add field
+  useEffect(() => {
+    (async () => {
+      const aSemGroupBase = await semesterStore.getSemesterGroup();
+      if (Array.isArray(aSemGroupBase)) {
+        setSemGroup(aSemGroupBase);
+      }
+    })()
+  }, []);
+
   //to get semester data by id for update
   useEffect(() => {
     (async () => {
       if (id) {
-        const oSemester = await semesterStore.getSemesterById(id)
-        setEditValues(oSemester);
+        try {
+          const oSemester = await semesterStore.getSemesterById(id)
+          setEditValues(oSemester);
+        } catch (err) {
+          showToast('error', t('FAILED_TO_FETCH_SEMESTER_DETAILS'));
+        }
       }
     })()
   }, [id])
 
+  const handleAddSemesterGroup = async (value) => {
+    try {
+      await semesterStore.createSemesterGroup({ value });
+    } catch (err) {
+      showToast('error', t('FAILED_TO_ADD_SEMESTER_GROUP'));
+    }
+  }
+
   //form schema
-  const schema = {
-    fields: {
-      General: [
+  const schema = useMemo(() => {
+    return {
+      fields: {
+        General: [
+          {
+            name: "insId",
+            label: t("INSTITUTION"),
+            type: "select",
+            validation: Yup.string().required(t('INSTITUTION_IS_REQUIRED')),
+            isRequired: true,
+            isDisabled: true
+          },
+          {
+            name: "degId",
+            label: t("DEGREE"),
+            type: "select",
+            options: (baseData?.degree ?? []),
+            validation: Yup.string().required(t("DEGREE_IS_REQUIRED")),
+            isRequired: true,
+            labelKey: 'degNm',
+            valueKey: '_id'
+          },
+          {
+            name: "prgNm",
+            label: t("PROGRAM"),
+            type: "select",
+            options: (baseData?.program ?? []),
+            labelKey: "prgNm",
+            valueKey: '_id'
+            // validation: Yup.string().required("Program Name is required"),
+            // isRequired: true,
+          },
+          {
+            name: "semId",
+            label: t("SEMESTER_ID"),
+            type: "text",
+            validation: Yup.string().required("SEMESTER_ID_IS_REQUIRED"),
+            isRequired: true
+          },
+          {
+            name: "semNm",
+            label: t("SEMESTER_NAME"),
+            type: "text",
+            validation: Yup.string().required("SEMESTER_NAME_IS_REQUIRED"),
+            isRequired: true
+          },
+          {
+            name: "desc",
+            label: t("DESCRIPTION"),
+            type: "text"
+          },
+          {
+            type: "selectWithAdd",
+            name: "semGrpId",
+            label: t("SEMESTER_GROUP"),
+            addOption: handleAddSemesterGroup,
+            labelKey: "semGrpNm",
+            valueKey: "_id",
+            options: aSemGroup
+          }
+
+        ]
+      },
+      buttons: [
         {
-          name: "insId",
-          label: t("INSTITUTION"),
-          type: "select",
-          validation: Yup.string().required(t('INSTITUTION_IS_REQUIRED')),
-          isRequired: true,
-          isDisabled: true
+          name: "Cancel",
+          variant: "outlined",
+          nature: "secondary",
+          onClick: () => {
+            navigate(-1);
+          }
         },
+        ...(!id
+          ? [
+            {
+              name: "Reset",
+              variant: "outlined",
+              nature: "warning",
+              onClick: () => { }
+            }
+          ]
+          : []),
         {
-          name: "degId",
-          label: t("DEGREE"),
-          type: "select",
-          options: (baseData?.degree ?? []),
-          validation: Yup.string().required(t("DEGREE_IS_REQUIRED")),
-          isRequired: true,
-          labelKey: 'degNm',
-          valueKey: '_id'
-        },
-        {
-          name: "prgNm",
-          label: t("PROGRAM"),
-          type: "select",
-          options: (baseData?.program ?? []),
-          labelKey:"prgNm",
-          valueKey: '_id'
-          // validation: Yup.string().required("Program Name is required"),
-          // isRequired: true,
-        },
-        {
-          name: "semId",
-          label: t("SEMESTER_ID"),
-          type: "text",
-          validation: Yup.string().required("SEMESTER_ID_IS_REQUIRED"),
-          isRequired: true
-        },
-        {
-          name: "semNm",
-          label: t("SEMESTER_NAME"),
-          type: "text",
-          validation: Yup.string().required("SEMESTER_NAME_IS_REQUIRED"),
-          isRequired: true
-        },
-        {
-          name: "desc",
-          label: t("DESCRIPTION"),
-          type: "text"
+          name: id ? "Update" : "Save",
+          variant: "contained",
+          nature: "primary",
+          type: "submit"
         }
       ]
-    },
-    buttons: [
-      {
-        name: "Cancel",
-        variant: "outlined",
-        nature: "secondary",
-        onClick: () => {
-          navigate(-1);
-        }
-      },
-      ...(!id
-        ? [
-          {
-            name: "Reset",
-            variant: "outlined",
-            nature: "warning",
-            onClick: () => { }
-          }
-        ]
-        : []),
-      {
-        name: id ? "Update" : "Save",
-        variant: "contained",
-        nature: "primary",
-        type: "submit"
-      }
-    ]
-  };
+    };
+  },[baseData, navigate, id, aSemGroup]);
 
+  console.log('semGrpNmsemGrpNm', aSemGroup)
   //To handle submission of semester for both create and update
   const handleSemesterSubmit = async (values: createSemesterPayload) => {
+    console.log('values', values )
+    return
     try {
       delete values.prgCd; //--------------TEMP: HAVE TO REMOVE ONCE PROGRAM IS DONE--------------------------
       if (!id) {
         await semesterStore.createSemester(values);
+        showToast('success', t('SEMESTER_CREATED_SUCCESSFULLY'));
       } else {
         const oUpdtPayload = {
           ...values,
           _id: id
         }
         await semesterStore.updateSemester(oUpdtPayload);
+        showToast('success', t('SEMESTER_UPDATED_SUCCESSFULLY'));
       }
       navigate(-1)
     } catch (err) {
+      showToast('error', id ? t('FAILED_TO_UPDATE_SEMESTER') : t('FAILED_TO_CREATE_SEMESTER'));
       console.error(err)
     }
   };

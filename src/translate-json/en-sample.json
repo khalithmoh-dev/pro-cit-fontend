@@ -92,5 +92,12 @@
   "MANDATORY":"Mandatory Courses",
   "ELECTIVE":"Elective Courses",
   "COURSE_ALREADY_ADDED":"Course already added",
-  "ADD_NEW": "Add"
+  "ADD_NEW": "Add",
+  "FAILED_TO_ADD_SEMESTER_GROUP": "Failed to add semester group",
+  "FAILED_TO_FETCH_SEMESTER_DETAILS": "Failed to fetch semester details",
+  "FAILED_TO_UPDATE_SEMESTER": "Failed to update semester",
+  "FAILED_TO_CREATE_SEMESTER": "Failed to create semester",
+  "SEMESTER_CREATED_SUCCESSFULLY": "Semester created successfully",
+  "SEMESTER_UPDATED_SUCCESSFULLY": "Semester updated successfully",
+  "SEMESTER_GROUP": "Semester Group"
 }

@@ -139,7 +139,6 @@ const httpRequest = async <T = any>(
     // Handle non-axios errors
     throw new Error(error.message || 'Network request failed');
   } finally {
-    console.log('in to finally block')
     if (!skipLoader) {
       activeRequests.count--;
       if (activeRequests.count === 0) setLoadingGlobal?.(false);
