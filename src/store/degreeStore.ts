@@ -1,9 +1,5 @@
 import { create } from 'zustand';
 import httpRequest from '../utils/functions/http-request';
-import { useToastStore } from './toastStore';
-import {
-  updateErrorMessage,
-} from '../utils/functions/toast-message';
 
 export interface createDegreePayload {
   insId: string,
@@ -49,8 +45,7 @@ const useDegreeStore = create<DegreeState>((set, get) => ({
       get().getDegree(data?._id);
       return true
     } catch (err) {
-      useToastStore.getState().showToast('error', updateErrorMessage());
-      return false
+      throw err
     }
   },
   getDegree: async (id = '') => {
@@ -80,7 +75,7 @@ const useDegreeStore = create<DegreeState>((set, get) => ({
       get().getDegree(data?._id);
       return true
     } catch (err) {
-      return false
+      throw err
     }
   }
 }))

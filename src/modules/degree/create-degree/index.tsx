@@ -2,8 +2,10 @@ import DynamicForm from "../../../components/generic-form";
 import * as Yup from "yup";
 import { useNavigate, useParams } from "react-router-dom";
 import useDegreeStore, { createDegreePayload } from "../../../store/degreeStore";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useToastStore } from "../../../store/toastStore";
+import { use } from "i18next";
 
 export default function CreateDegree() {
   const navigate = useNavigate();
@@ -11,55 +13,59 @@ export default function CreateDegree() {
   const { id } = useParams();
   const [editValues, setEditValues] = useState({});
   const { t } = useTranslation();
+  const showToast = useToastStore((state) => state.showToast);
 
   //form schema
-  const schema = {
-    fields: {
-      General: [
-        {
-          name: "insId",
-          label: t("INSTITUITION_NAME"),
-          type: "select",
-          validation: Yup.string().required(t("INSTITUITION_NAME_IS_REQUIRED")),
-          isRequired: true,
-          isDisabled: true
-        },
-        {
-          name: "degCd",
-          label: t("DEGREE_ID"),
-          type: "text",
-          validation: Yup.string().required(t("DEGREE_ID_IS_REQUIRED")),
-          isDisabled: Boolean(id),
-          isRequired: true
-        },
-        {
-          name: "degNm",
-          label: t("DEGREE_NAME"),
-          type: "text",
-          validation: Yup.string().required(t("DEGREE_NAME_IS_REQUIRED")),
-          isRequired: true
-        },
-        {
-          name: "desc",
-          label: t("DESCRIPTION"),
-          type: "text"
-        }
-      ]
-    },
-    buttons: [
+  const schema = useMemo(() => {
+    return (
       {
-        name: t("CANCEL"), variant: "outlined", nature: "secondary", onClick: () => { navigate(-1) }
-      }, ...(!id ? [{
-        name: t("RESET"), variant: "outlined", nature: "warning", onClick: () => { }
-      }] : []), {
-        name: id ? t("UPDATE") : t("SAVE"), variant: "contained", nature: "primary", type: "submit"
+        fields: {
+          General: [
+            {
+              name: "insId",
+              label: t("INSTITUITION_NAME"),
+              type: "select",
+              validation: Yup.string().required(t("INSTITUITION_NAME_IS_REQUIRED")),
+              isRequired: true,
+              isDisabled: true
+            },
+            {
+              name: "degCd",
+              label: t("DEGREE_ID"),
+              type: "text",
+              validation: Yup.string().required(t("DEGREE_ID_IS_REQUIRED")),
+              isDisabled: Boolean(id),
+              isRequired: true
+            },
+            {
+              name: "degNm",
+              label: t("DEGREE_NAME"),
+              type: "text",
+              validation: Yup.string().required(t("DEGREE_NAME_IS_REQUIRED")),
+              isRequired: true
+            },
+            {
+              name: "desc",
+              label: t("DESCRIPTION"),
+              type: "text"
+            }
+          ]
+        },
+        buttons: [
+          {
+            name: t("CANCEL"), variant: "outlined", nature: "secondary", onClick: () => { navigate(-1) }
+          }, ...(!id ? [{
+            name: t("RESET"), variant: "outlined", nature: "warning", onClick: () => { }
+          }] : []), {
+            name: id ? t("UPDATE") : t("SAVE"), variant: "contained", nature: "primary", type: "submit"
+          }
+        ]
       }
-    ]
-  };
+    )
+  }, [t, navigate, id])
 
   //to get degree data by id for update
   useEffect(() => {
-    console.log('api count')
     if (id) {
     (async () => {
         const oDegree = await degreeStore.getDegree(id)
@@ -83,9 +89,14 @@ export default function CreateDegree() {
         isSuccess = await degreeStore.updateDegree(oUpdtPayload);
       }
       if(isSuccess){
+        showToast('success', id ? t("DEGREE_UPDATED_SUCCESSFULLY") : t("DEGREE_CREATED_SUCCESSFULLY"));
         navigate(-1)
       }
     } catch (err) {
+      console.log('err.message',err)
+      if(err.message === "Duplicate_Found"){
+        showToast('error', t("DEGREE_ID_ALREADY_EXISTS"));
+      }
       console.error(err)
     }
   };

@@ -156,7 +156,6 @@ export default function CreateSemester() {
     };
   },[baseData, navigate, id, aSemGroup]);
 
-  console.log('semGrpNmsemGrpNm', aSemGroup)
   //To handle submission of semester for both create and update
   const handleSemesterSubmit = async (values: createSemesterPayload) => {
     console.log('values', values )
