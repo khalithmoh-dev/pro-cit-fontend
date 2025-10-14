@@ -2,7 +2,7 @@ import * as React from "react"
 import MuiButton, { ButtonProps as MuiButtonProps } from "@mui/material/Button"
 import "./index.css"
 
-type Variant = "submit" | "cancel" | "reset" | "add"
+type Variant = "submit" | "cancel" | "reset" | "add" | "primary"
 type Size = "sm" | "md" | "lg"
 
 export interface ButtonProps extends Omit<MuiButtonProps, "variant"> {

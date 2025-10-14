@@ -13,8 +13,9 @@ import {
 import { Autocomplete } from "@mui/material";
 import Textarea from "@mui/joy/Textarea"; // adjust import as needed
 import FileUpload from "../fileupload"; // adjust import as needed
+import Button from "../Button";
 import "./index.css"
-
+import { useTranslation } from "react-i18next";
 interface InputFieldsProps {
   field: any;
   formik: any;
@@ -34,6 +35,8 @@ const InputFields: FC<InputFieldsProps> = ({
   oInitialValues,
   instDtls,
 }) => {
+  const { t } = useTranslation();
+
   switch (field.type) {
     case "text":
     case "number":
@@ -146,7 +149,7 @@ const InputFields: FC<InputFieldsProps> = ({
                       padding: 0,
                     },
                     "& .MuiOutlinedInput-root.MuiInputBase-sizeSmall": {
-                      padding:0
+                      padding: 0
                     }
                   }}
                 />
@@ -164,7 +167,7 @@ const InputFields: FC<InputFieldsProps> = ({
                 </li>
               )}
               disabled={!editPerm || field.isDisabled}
-             
+
             />
             {formik.touched[field.name] && formik.errors[field.name] && (
               <Typography variant="caption" color="error">
@@ -198,9 +201,9 @@ const InputFields: FC<InputFieldsProps> = ({
               return selectedOption ? selectedOption[labelKey] : "";
             }}
             disabled={!editPerm || field.isDisabled}
-            // sx={{
-            //   borderRadius: "var(--input-radius, 15px)",
-            // }}
+          // sx={{
+          //   borderRadius: "var(--input-radius, 15px)",
+          // }}
           >
             {options.map((opt: any) => (
               <MenuItem key={opt[valueKey]} value={opt[valueKey]}>
@@ -308,6 +311,119 @@ const InputFields: FC<InputFieldsProps> = ({
 
         </>
       );
+
+    case "selectWithAdd": {
+      const labelKey = field.labelKey || "label";
+      const valueKey = field.valueKey || "value";
+      const [adding, setAdding] = React.useState(false);
+      const [newOption, setNewOption] = React.useState("");
+      // const [options, setOptions] = React.useState(field.options || []);
+
+      const handleAdd = () => {
+        setAdding(true);
+      };
+
+      const handleCancel = () => {
+        setNewOption("");
+        setAdding(false);
+      };
+
+      return (
+        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+          {adding ? (
+            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flex: 1 }}>
+              <TextField
+                fullWidth
+                size="small"
+                value={newOption}
+                onChange={(e) => setNewOption(e.target.value)}
+                placeholder="Enter new option"
+                disabled={!editPerm || field.isDisabled}
+              />
+              <Button
+                className={`btn-cancel btn-small`}
+                size={"medium"}
+                onClick={handleCancel}
+                type={'button'}
+                variantType={"cancel"}
+              >
+                {t("CANCEL")}
+              </Button>
+              <Button
+                className={`btn-save btn-small`}
+                size={"medium"}
+                onClick={()=>{field.addOption(newOption)}}
+                type={'button'}
+                variantType={"primary"}
+                disabled={!newOption.trim() || (!editPerm || field.isDisabled)}
+              >
+                {t("ADD")}
+              </Button>
+            </div>
+          ) : (
+            <>
+              <FormControl fullWidth size="small">
+          <Select
+            name={field.name}
+            multiple={field.isMulti}
+            value={formik.values[field.name] || (field.isMulti ? [] : "")}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            renderValue={(selected) => {
+              if (field.isMulti) {
+                return selected
+                  .map((val: any) => {
+                    const opt = field.options.find((o) => o[valueKey] === val);
+                    return opt ? opt[labelKey] : val;
+                  })
+                  .join(", ");
+              }
+              const selectedOption = field.options.find(
+                (opt) => opt[valueKey] === selected
+              );
+              return selectedOption ? selectedOption[labelKey] : "";
+            }}
+            disabled={!editPerm || field.isDisabled}
+          // sx={{
+          //   borderRadius: "var(--input-radius, 15px)",
+          // }}
+          >
+            {field.options.map((opt: any) => (
+              <MenuItem key={opt[valueKey]} value={opt[valueKey]}>
+                {field.isMulti && (
+                  <Checkbox
+                    checked={formik.values[field.name]?.includes(opt[valueKey])}
+                    disabled={!editPerm || field.isDisabled}
+                  />
+                )}
+                {opt[labelKey]}
+              </MenuItem>
+            ))}
+          </Select>
+          {formik.touched[field.name] && formik.errors[field.name] && (
+            <Typography variant="caption" color="error">
+              {formik.errors[field.name]}
+            </Typography>
+          )}
+        </FormControl>
+              {editPerm && !field.isDisabled && (
+                <Button
+                  className={`btn-primary btn-small`}
+                  size={"medium"}
+                  onClick={handleAdd}
+                  type={'button'}
+                  disabled={!editPerm || field.isDisabled}
+                  variantType={"add"}
+                >
+                  {t('ADD')}
+                </Button>
+              )}
+            </>
+          )}
+        </div>
+      );
+    }
+
 
     default:
       return null;
