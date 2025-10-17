@@ -46,8 +46,19 @@ const InputFields: FC<InputFieldsProps> = ({
           size="small"
           type={field.type}
           name={field.name}
-          value={formik.values[field.name]}
-          onChange={formik.handleChange}
+          value={formik.values[field.name] ?? ""}
+          onChange={(e) => {
+            const { value } = e.target;
+
+            if (field.type === "number" && Number(value) < 0) return;
+
+            formik.handleChange(e);
+          }}
+          onKeyDown={(e) => {
+            if (["e", "E", "+", "-"].includes(e.key)) {
+              e.preventDefault();
+            }
+          }}
           onBlur={formik.handleBlur}
           error={formik.touched[field.name] && Boolean(formik.errors[field.name])}
           helperText={formik.touched[field.name] && formik.errors[field.name]}
