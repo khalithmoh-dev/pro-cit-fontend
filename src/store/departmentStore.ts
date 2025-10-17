@@ -9,8 +9,9 @@ import {
   updateErrorMessage,
   updateSuccessMessage,
 } from '../utils/functions/toast-message';
+import { useTranslation } from 'react-i18next';
 import { SelectOptionIF } from '../interface/component.interface';
-
+const {showToast} = useToastStore.getState();
 export interface createDepartmentPayloadIF {
   name: string;
   departmentCode: string;
@@ -42,7 +43,6 @@ interface DepartmentState {
   updateDepartment: (payload: createDepartmentPayloadIF, id: string) => Promise<boolean>;
   getDepartments: (page?:number,limit?:number,searchTerm?:string) => Promise<object[] | boolean>;
   getDepartment: (id: string) => Promise<object | boolean>;
-  deleteDepartment: (id: string) => Promise<boolean>;
 }
 
 const useDepartmentStore = create<DepartmentState>((set, get) => ({
@@ -61,8 +61,7 @@ const useDepartmentStore = create<DepartmentState>((set, get) => ({
       await get().getDepartments(); // Refresh after creation
       return true;
     } catch (error) {
-      useToastStore.getState().showToast('error', createErrorMessage('Department'));
-      return false;
+      throw error;
     } finally {
       set({ loading: false });
     }
@@ -72,12 +71,10 @@ const useDepartmentStore = create<DepartmentState>((set, get) => ({
     set({ loading: true });
     try {
       await httpRequest('PATCH', `${import.meta.env.VITE_API_URL}/department/update/${id}`, payload);
-      useToastStore.getState().showToast('success', updateSuccessMessage('Department'));
       await get().getDepartments(); // Refresh after update
       return true;
     } catch (error) {
-      useToastStore.getState().showToast('error', updateErrorMessage('Department'));
-      return false;
+      throw error;
     } finally {
       set({ loading: false });
     }
@@ -89,6 +86,7 @@ const useDepartmentStore = create<DepartmentState>((set, get) => ({
       const res = await httpRequest('GET', `${import.meta.env.VITE_API_URL}/department/?page=${page}&limit=${limit}&search=${searchTerm}`);
       return res?.data;
     } catch (error) {
+      useToastStore.getState().showToast('error', "Unknown error occured");
       return false;
     } finally {
       set({ loading: false });
@@ -106,22 +104,7 @@ const useDepartmentStore = create<DepartmentState>((set, get) => ({
     } finally {
       set({ loading: false });
     }
-  },
-
-  deleteDepartment: async (id) => {
-    set({ deleting: id });
-    try {
-      await httpRequest('DELETE', `${import.meta.env.VITE_API_URL}/department/${id}`);
-      useToastStore.getState().showToast('success', deleteSuccessMessage('Department'));
-      await get().getDepartments(); // Refresh after deletion
-      return true;
-    } catch (error) {
-      useToastStore.getState().showToast('error', deleteErrorMessage('Department'));
-      return false;
-    } finally {
-      set({ deleting: '' });
-    }
-  },
+  }
 }));
 
 export default useDepartmentStore;

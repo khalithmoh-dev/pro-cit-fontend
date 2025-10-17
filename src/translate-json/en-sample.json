@@ -109,5 +109,8 @@
   "PROGRAM_ID_ALREADY_EXISTS": "Program code already exists under this degree.",
   "SECTION_UPDATED_SUCCESSFULLY": "Section updated successfully",
   "SECTION_CREATED_SUCCESSFULLY": "Section created successfully",
-  "SECTION_ID_ALREADY_EXISTS": "Section code already exists."
+  "SECTION_ID_ALREADY_EXISTS": "Section code already exists.",
+  "DEPARTMENT_ID_ALREADY_EXISTS": "Department code already exists.",
+  "DEPARTMENT_UPDATED_SUCCESSFULLY": "Department updated successfully",
+  "DEPARTMENT_CREATED_SUCCESSFULLY": "Department created successfully"
 }
