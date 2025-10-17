@@ -5,7 +5,6 @@ import useDegreeStore, { createDegreePayload } from "../../../store/degreeStore"
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useToastStore } from "../../../store/toastStore";
-import { use } from "i18next";
 
 export default function CreateDegree() {
   const navigate = useNavigate();
@@ -93,11 +92,11 @@ export default function CreateDegree() {
         navigate(-1)
       }
     } catch (err) {
-      console.log('err.message',err)
       if(err.message === "Duplicate_Found"){
         showToast('error', t("DEGREE_ID_ALREADY_EXISTS"));
+      }else{
+        showToast('error', t("UNKNOWN_ERROR_OCCURED"));
       }
-      console.error(err)
     }
   };
 

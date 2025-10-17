@@ -3,7 +3,7 @@ import httpRequest from '../utils/functions/http-request';
 
 export interface createProgramPayload{
   insId: string,
-  degId: string,
+  degId?: string,
   prgCd: String,
   prgNm: String,
   desc: String,
@@ -26,7 +26,7 @@ interface ProgramState {
     createProgram: (payload: createProgramPayload) => Promise<boolean>,
     getProgram: (id: string) => Promise<boolean>,
     getPrograms: () => Promise<[]>;
-    updateProgram: (payload: createProgramPayload) => Promise<boolean>
+    updateProgram: (payload: createProgramPayload,id: string) => Promise<boolean>
 }
 
 // Program Store to handle Program create update get functionalities
@@ -45,14 +45,14 @@ const useProgramStore = create<ProgramState>((set,get) => ({
             get().getProgram(data?._id);
             return true
         }catch(err){
-            return false
+            throw err;
         }
     },
     getProgram: async(id = '') => {
        try{
          return (await httpRequest('GET',`${import.meta.env.VITE_API_URL}/program/get-by-id/${id}`))?.data;
        }catch(err){
-        return false
+        throw err
        }
     },
     getPrograms: async() => {
@@ -68,13 +68,13 @@ const useProgramStore = create<ProgramState>((set,get) => ({
         prgNm: '',
         desc: '',
         deleted: false
-    }) => {
+    },id) => {
         try{
-            const {data} = await httpRequest('POST',`${import.meta.env.VITE_API_URL}/program/update`,oPayload);
+            const {data} = await httpRequest('POST',`${import.meta.env.VITE_API_URL}/program/update/${id}`,oPayload);
             get().getProgram(data?._id);
             return true
         }catch(err){
-            return false
+            throw err;
         }
     }
 }))

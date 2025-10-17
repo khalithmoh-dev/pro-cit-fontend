@@ -6,6 +6,7 @@ import useProgramStore, { createProgramPayload } from "../../../store/programSto
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import useBaseStore from './../../../store/baseStore';
+import { useToastStore } from "../../../store/toastStore";
 
 export default function CreateProgram() {
   const navigate = useNavigate();
@@ -13,11 +14,9 @@ export default function CreateProgram() {
   const { id } = useParams();
   const [editValues, setEditValues] = useState({});
   const { t } = useTranslation();
-
-  const { user, permissions } = useAuthStore();
-  const { createProgram } = useProgramStore();
   const baseStore = useBaseStore();
   const [baseData, setBaseData] = useState({ degree: [] });
+  const showToast = useToastStore((state) => state.showToast);
 
   //to get the initial base data eg: program data and degree data
   useEffect(() => {
@@ -30,7 +29,7 @@ export default function CreateProgram() {
         })();
       }
     } catch (err) {
-      console.error(err)
+      showToast('error', t("UNKNOWN_ERROR_OCCURED"));
     }
   }, [baseStore]);
 
@@ -53,6 +52,7 @@ export default function CreateProgram() {
           valueKey: "_id",
           validation: Yup.string().required(t("DEGREE_NAME_IS_REQUIRED")),
           isRequired: true,
+          isDisabled: Boolean(id),
           options: baseData?.degree ?? []
         },
         {
@@ -90,17 +90,20 @@ export default function CreateProgram() {
 
   //to get degree data by id for update
   useEffect(() => {
-    (async () => {
-      if (id) {
-        const oProgram = await programStore.getProgram(id)
-        setEditValues(oProgram);
-      }
-    })()
+    try {
+      (async () => {
+        if (id) {
+          const oProgram = await programStore.getProgram(id)
+          setEditValues(oProgram);
+        }
+      })()
+    } catch (err) {
+      showToast('error', t("UNKNOWN_ERROR_OCCURED"));
+    }
   }, [id])
 
   const handleProgramSubmit = async (values: createProgramPayload) => {
     try {
-      delete values.programId;
       if (!id) {
         await programStore.createProgram(values);
       } else {
@@ -108,11 +111,18 @@ export default function CreateProgram() {
           ...values,
           _id: id
         }
-        await programStore.updateProgram(oUpdtPayload);
+        await programStore.updateProgram(oUpdtPayload, id);
       }
+      console.log('consoling after completeionnnnnnnn')
+      showToast('success', id ? t("PROGRAM_UPDATED_SUCCESSFULLY") : t("PROGRAM_CREATED_SUCCESSFULLY"));
       navigate(-1)
     } catch (err) {
-      console.error(err)
+      console.log('err.message', err)
+      if (err.message === "Duplicate_Found") {
+        showToast('error', t("PROGRAM_ID_ALREADY_EXISTS"));
+      } else {
+        showToast('error', t("UNKNOWN_ERROR_OCCURED"));
+      }
     }
   };
 

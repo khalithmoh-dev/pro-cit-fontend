@@ -1,4 +1,5 @@
 {
+  "UNKNOWN_ERROR_OCCURED": "Unknown error occured",
   "INSTITUTION": "Institution",
   "CREATE": "Create",
   "COURSE": "Course",
@@ -102,5 +103,8 @@
   "SEMESTER_GROUP": "Semester Group",
   "DEGREE_UPDATED_SUCCESSFULLY": "Degree updated successfully",
   "DEGREE_CREATED_SUCCESSFULLY": "Degree created successfully",
-  "DEGREE_ID_ALREADY_EXISTS": "Degree ID already exists"
+  "DEGREE_ID_ALREADY_EXISTS": "Degree ID already exists",
+  "PROGRAM_UPDATED_SUCCESSFULLY": "Program updated successfully",
+  "PROGRAM_CREATED_SUCCESSFULLY": "Program created successfully",
+  "PROGRAM_ID_ALREADY_EXISTS": "Program code already exists under this degree."
 }

@@ -43,5 +43,12 @@
 }
 .css-1qcqxfl-MuiFormControl-root-MuiTextField-root .MuiOutlinedInput-root{
     align-items: center ;   
-    height: 38px; 
+    height: 38px;
+}
+
+.css-1tktgsa-MuiPaper-root-MuiPopover-paper-MuiMenu-paper{
+  border-radius: var(--input-radius, 10px) !important;
+}
+.css-1rju2q6-MuiButtonBase-root-MuiMenuItem-root{
+  min-height: 10px;
 }
