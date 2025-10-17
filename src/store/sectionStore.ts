@@ -44,21 +44,21 @@ const useSectionStore = create<SectionState>((set,get) => ({
             get().getSection(data?._id);
             return true
         }catch(err){
-            return false
+            throw err
         }
     },
     getSection: async(id = '') => {
        try{
          return (await httpRequest('GET',`${import.meta.env.VITE_API_URL}/section/get-by-id/${id}`))?.data;
        }catch(err){
-        return false
+        throw err
        }
     },
     getSections: async() => {
        try{
          return (await httpRequest('GET',`${import.meta.env.VITE_API_URL}/section/`))?.data;
        }catch(err){
-        return false
+        throw err
        }
     },
     updateSection: async(oPayload = {
@@ -74,7 +74,7 @@ const useSectionStore = create<SectionState>((set,get) => ({
             get().getSection(data?._id);
             return true
         }catch(err){
-            return false
+            throw err
         }
     }
 }))

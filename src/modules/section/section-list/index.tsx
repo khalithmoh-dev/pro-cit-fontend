@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import DataTable from '../../common/generic-table';
-import { Chip,Box } from '@mui/material';
-import { Eye } from 'lucide-react';
+import { Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import PageTitle from "../../../components/PageTitle";
 import useSectionStore from '../../../store/sectionStore';
 import { useTranslation } from 'react-i18next';
 import Icon from '../../../components/Icons';
- 
+import { useToastStore } from "../../../store/toastStore";
+
 const SectionList = () => {
   const navigate = useNavigate();
-  const { getSections,sections } = useSectionStore();
+  const { getSections } = useSectionStore();
   const [sectionsData, setSectionsData] = useState([]);
   const { t } = useTranslation();
-  
+  const showToast = useToastStore((state) => state.showToast);
+
+  // to get data for listing
   useEffect(() => {
     if (getSections) {
       (async () => {
@@ -22,39 +23,33 @@ const SectionList = () => {
           if (Array.isArray(aSectionList) && aSectionList.length) {
             setSectionsData(aSectionList);
           }
+
         } catch (error) {
-          console.error("Failed to fetch sections:", error);
+          showToast("error", t("UNKNOWN_ERROR_OCCURRED"));
         }
       })();
     }
   }, [getSections]);
 
-
-  useEffect(() => {
-    if (sections.length > 0) {
-      setSectionsData(sections);
-    }
-  }, [sections]);
- 
   // Column configuration
   const columns = [
-    { 
-      field: 'insname', 
+    {
+      field: 'insname',
       headerName: t("INSTITUITION_NAME"),
       sortable: false
     },
-    { 
-      field: 'secCd', 
+    {
+      field: 'secCd',
       headerName: t("SECTION_CODE"),
-      sortable: true      
+      sortable: true
     },
-    { 
-      field: 'secNm', 
+    {
+      field: 'secNm',
       headerName: t("SECTION_NAME"),
       sortable: true,
     },
-    { 
-      field: 'desc', 
+    {
+      field: 'desc',
       headerName: t("DESCRIPTION"),
       sortable: true
     },
@@ -76,8 +71,8 @@ const SectionList = () => {
       <DataTable
         data={sectionsData}
         columns={columns}
-        addRoute = {'/section/form'}
-        title= {t("SECTION")}
+        addRoute={'/section/form'}
+        title={t("SECTION")}
         actions={actions}
       />
     </Box>

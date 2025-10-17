@@ -103,8 +103,11 @@
   "SEMESTER_GROUP": "Semester Group",
   "DEGREE_UPDATED_SUCCESSFULLY": "Degree updated successfully",
   "DEGREE_CREATED_SUCCESSFULLY": "Degree created successfully",
-  "DEGREE_ID_ALREADY_EXISTS": "Degree ID already exists",
+  "DEGREE_ID_ALREADY_EXISTS": "Degree ID already exists.",
   "PROGRAM_UPDATED_SUCCESSFULLY": "Program updated successfully",
   "PROGRAM_CREATED_SUCCESSFULLY": "Program created successfully",
-  "PROGRAM_ID_ALREADY_EXISTS": "Program code already exists under this degree."
+  "PROGRAM_ID_ALREADY_EXISTS": "Program code already exists under this degree.",
+  "SECTION_UPDATED_SUCCESSFULLY": "Section updated successfully",
+  "SECTION_CREATED_SUCCESSFULLY": "Section created successfully",
+  "SECTION_ID_ALREADY_EXISTS": "Section code already exists."
 }
