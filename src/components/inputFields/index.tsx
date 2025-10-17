@@ -352,7 +352,7 @@ const InputFields: FC<InputFieldsProps> = ({
               <Button
                 className={`btn-save btn-small`}
                 size={"medium"}
-                onClick={()=>{field.addOption(newOption)}}
+                onClick={() => { field.addOption(newOption) }}
                 type={'button'}
                 variantType={"primary"}
                 disabled={!newOption.trim() || (!editPerm || field.isDisabled)}
@@ -363,49 +363,49 @@ const InputFields: FC<InputFieldsProps> = ({
           ) : (
             <>
               <FormControl fullWidth size="small">
-          <Select
-            name={field.name}
-            multiple={field.isMulti}
-            value={formik.values[field.name] || (field.isMulti ? [] : "")}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            renderValue={(selected) => {
-              if (field.isMulti) {
-                return selected
-                  .map((val: any) => {
-                    const opt = field.options.find((o) => o[valueKey] === val);
-                    return opt ? opt[labelKey] : val;
-                  })
-                  .join(", ");
-              }
-              const selectedOption = field.options.find(
-                (opt) => opt[valueKey] === selected
-              );
-              return selectedOption ? selectedOption[labelKey] : "";
-            }}
-            disabled={!editPerm || field.isDisabled}
-          // sx={{
-          //   borderRadius: "var(--input-radius, 15px)",
-          // }}
-          >
-            {field.options.map((opt: any) => (
-              <MenuItem key={opt[valueKey]} value={opt[valueKey]}>
-                {field.isMulti && (
-                  <Checkbox
-                    checked={formik.values[field.name]?.includes(opt[valueKey])}
-                    disabled={!editPerm || field.isDisabled}
-                  />
+                <Select
+                  name={field.name}
+                  multiple={field.isMulti}
+                  value={formik.values[field.name] || (field.isMulti ? [] : "")}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  renderValue={(selected) => {
+                    if (field.isMulti) {
+                      return selected
+                        .map((val: any) => {
+                          const opt = field.options.find((o) => o[valueKey] === val);
+                          return opt ? opt[labelKey] : val;
+                        })
+                        .join(", ");
+                    }
+                    const selectedOption = field.options.find(
+                      (opt) => opt[valueKey] === selected
+                    );
+                    return selectedOption ? selectedOption[labelKey] : "";
+                  }}
+                  disabled={!editPerm || field.isDisabled}
+                // sx={{
+                //   borderRadius: "var(--input-radius, 15px)",
+                // }}
+                >
+                  {field.options.map((opt: any) => (
+                    <MenuItem key={opt[valueKey]} value={opt[valueKey]}>
+                      {field.isMulti && (
+                        <Checkbox
+                          checked={formik.values[field.name]?.includes(opt[valueKey])}
+                          disabled={!editPerm || field.isDisabled}
+                        />
+                      )}
+                      {opt[labelKey]}
+                    </MenuItem>
+                  ))}
+                </Select>
+                {formik.touched[field.name] && formik.errors[field.name] && (
+                  <Typography variant="caption" color="error">
+                    {formik.errors[field.name]}
+                  </Typography>
                 )}
-                {opt[labelKey]}
-              </MenuItem>
-            ))}
-          </Select>
-          {formik.touched[field.name] && formik.errors[field.name] && (
-            <Typography variant="caption" color="error">
-              {formik.errors[field.name]}
-            </Typography>
-          )}
-        </FormControl>
+              </FormControl>
               {editPerm && !field.isDisabled && (
                 <Button
                   className={`btn-primary btn-small`}

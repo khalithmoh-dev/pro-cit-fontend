@@ -9,7 +9,6 @@ import {
   TableHead,
   TableRow,
   TablePagination,
-  TableSortLabel,
   TextField,
   InputAdornment,
   IconButton,
@@ -18,9 +17,7 @@ import {
   Checkbox,
 } from '@mui/material';
 import {
-  Search,
-  ChevronDown,
-  ChevronUp
+  Search
 } from 'lucide-react';
 import { useLayout } from "../../../modules/layout/LayoutContext"
 import { useNavigate } from 'react-router-dom';
@@ -312,7 +309,11 @@ const DataTable = ({
                   hover
                   selected={selected.includes(row.id)}
                   onClick={() => handleSelect(row.id)}
-                  sx={{ cursor: selectable ? 'pointer' : 'default' }}
+                  sx={{
+                    cursor: selectable ? 'pointer' : 'default', '& .MuiTableCell-root': {
+                      textTransform: 'none',
+                    }
+                  }}
                 >
                   {selectable && (
                     <TableCell padding="checkbox">
