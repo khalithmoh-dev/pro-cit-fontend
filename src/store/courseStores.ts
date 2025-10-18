@@ -11,8 +11,8 @@ export interface createCoursePayload{
     crdt: number,
     tCrdt?: number,
     pCrdt?: number,
-    category: string,
-    subCat: string,
+    category?: string,
+    subCat?: string,
     isExamCrs: boolean,
     _id?: string
 }
@@ -26,8 +26,8 @@ interface CourseIF {
     crdt: number,
     tCrdt: number,
     pCrdt: number,
-    category: string,
-    subCat: string,
+    category?: string,
+    subCat?: string,
     isExamCrs: boolean,
 }
 
@@ -86,7 +86,7 @@ const useCourseStore = create<CourseState>((set,get) => ({
         try{
             const id = oPayload._id;
             delete oPayload._id
-            await httpRequest('PATCH',`${import.meta.env.VITE_API_URL}/course/update/${id}`, oPayload);
+            await httpRequest('POST',`${import.meta.env.VITE_API_URL}/course/update/${id}`, oPayload);
             return true;
         }catch {
             return false;

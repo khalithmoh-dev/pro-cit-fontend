@@ -31,7 +31,6 @@
 
 .css-trm6af-MuiNativeSelect-root-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled{
   border-radius: var(--input-radius, 15px) !important;
-  height: 38px;
   display: flex !important;
   align-items: center !important;
   text-transform: none !important;

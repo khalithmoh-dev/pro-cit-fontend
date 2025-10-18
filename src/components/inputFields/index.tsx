@@ -265,6 +265,11 @@ const InputFields: FC<InputFieldsProps> = ({
             {field.data?.map((option, idx) => (
               <FormControlLabel
                 key={idx}
+                sx={{
+                  "& .css-rizt0-MuiTypography-root": {
+                    height: "21px"
+                  },
+                }}
                 control={
                   <Checkbox
                     name={field.name}
@@ -289,6 +294,11 @@ const InputFields: FC<InputFieldsProps> = ({
       } else {
         return (
           <FormControlLabel
+            sx={{
+              "& .css-rizt0-MuiTypography-root": {
+                height: "21px"
+              },
+            }}
             control={
               <Checkbox
                 name={field.name}

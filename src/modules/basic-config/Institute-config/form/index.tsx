@@ -5,6 +5,8 @@ import useInstituteStore from "../../../../store/instituteStore";
 import useBaseStore from '../../../../store/baseStore';
 import useAuthStore from '../../../../store/authStore'
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { useToastStore } from "../../../../store/toastStore";
 
 export default function InstiteConfig() {
   const { updateInstitute, getInstitute } = useInstituteStore();
@@ -12,6 +14,8 @@ export default function InstiteConfig() {
   const { parseFormDataAndUpload } = useBaseStore()
   const [instDtls, setInstDtls] = useState({});
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const showToast = useToastStore((state) => state.showToast);
   
   //form schema
   const schema = {
@@ -241,9 +245,13 @@ export default function InstiteConfig() {
   useEffect(()=>{
     if(user && getInstitute){
       (async()=>{
-        const oInstituteDtls = await getInstitute(user?.user?.insId);
-        if(oInstituteDtls && Object.keys(oInstituteDtls).length){
-          setInstDtls(oInstituteDtls);
+        try {
+          const oInstituteDtls = await getInstitute(user?.user?.insId);
+          if (oInstituteDtls && Object.keys(oInstituteDtls).length) {
+            setInstDtls(oInstituteDtls);
+          }
+        } catch (err) {
+          showToast('error', `${t("FAILED_TO_FETCH")} ${t('INSTITUTION')} ${t('DETAILS')}`);
         }
       })();
     }
@@ -253,15 +261,20 @@ export default function InstiteConfig() {
   const handleFormSubmit = async(values) => {
     try{
       const deepValues =  {...structuredClone(values),_id: instDtls?._id};
-      if(values?.insLogo?.length){
-        const instLogo = await parseFormDataAndUpload(values?.insLogo);
-        if(instLogo?.url){
-          deepValues.insLogo = [instLogo.url];
+      if(values?.insLogo?.length && values.insLogo[0] !== instDtls?.insLogo[0]){
+        try{
+          const instLogo = await parseFormDataAndUpload(values?.insLogo);
+          if(instLogo?.url){
+            deepValues.insLogo = [instLogo.url];
+          }
+        }catch(err){
+          showToast('error', `${t("FAILED_TO_UPLOAD")} ${t('INSTITUTE_LOGO')}`);
         }
       }
       await updateInstitute(deepValues);
+      showToast('success', `${t('INSTITUTION')} ${t('DETAILS')} ${t("UPDATED_SUCCESSFULLY")}`);
     }catch(err){
-      console.error('error while update',err)
+       showToast('error', `${t("FAILED_TO_UPDATE")} ${t('INSTITUTION')} ${t('DETAILS')}`);
     }
   }
   

@@ -158,26 +158,35 @@ export default function CreateSemester() {
 
   //To handle submission of semester for both create and update
   const handleSemesterSubmit = async (values: createSemesterPayload) => {
-    console.log('values', values )
-    return
-    try {
-      delete values.prgCd; //--------------TEMP: HAVE TO REMOVE ONCE PROGRAM IS DONE--------------------------
-      if (!id) {
+    delete values.prgCd; //--------------TEMP: HAVE TO REMOVE ONCE PROGRAM IS DONE--------------------------
+    if (!id) {
+      try {
         await semesterStore.createSemester(values);
         showToast('success', t('SEMESTER_CREATED_SUCCESSFULLY'));
-      } else {
+      } catch (err) {
+        if (err.message === "Duplicate_Found") {
+          showToast('error', `${t('SEMESTER_ID')} ${t("ALREADY_EXISTS")}`);
+        } else {
+          showToast('error', t('FAILED_TO_CREATE_SEMESTER'));
+        }
+      }
+    } else {
+      try {
         const oUpdtPayload = {
           ...values,
           _id: id
         }
         await semesterStore.updateSemester(oUpdtPayload);
         showToast('success', t('SEMESTER_UPDATED_SUCCESSFULLY'));
+      } catch (err) {
+        if (err.message === "Duplicate_Found") {
+          showToast('error', `${t('SEMESTER_ID')} ${t("ALREADY_EXISTS")}`);
+        } else {
+          showToast('error', t('FAILED_TO_UPDATE_SEMESTER'));
+        }
       }
-      navigate(-1)
-    } catch (err) {
-      showToast('error', id ? t('FAILED_TO_UPDATE_SEMESTER') : t('FAILED_TO_CREATE_SEMESTER'));
-      console.error(err)
     }
+    navigate(-1);
   };
 
   return (

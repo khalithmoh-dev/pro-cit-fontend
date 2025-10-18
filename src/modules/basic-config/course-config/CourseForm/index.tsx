@@ -8,6 +8,7 @@ import useCourseStore, { createCoursePayload } from "../../../../store/courseSto
 import Popup from '../../../../components/modal';
 import SmartField from '../../../../components/SmartField';
 import { sanitizePayload } from '../../../../utils';
+import { useToastStore } from "../../../../store/toastStore";
 
 const CourseForm: React.FC = () => {
   const { t } = useTranslation();
@@ -22,6 +23,7 @@ const CourseForm: React.FC = () => {
   const [isSubCatPopOpen, setIsSubCatPopOpen] = useState(false);
   const [oCourseSubCat, setOCourseSubCat] = useState({ catId: '', subCatId: '', subCatNm: '', _id: '' });
   const [subCatList, setSubCatList] = useState([]);
+  const showToast = useToastStore((state) => state.showToast);
   // const oInitialValues: object = {
   //   crsId: '',
   //   crsNm: '',
@@ -160,37 +162,37 @@ console.log('baseData?.departments',baseData?.departments)
             value: ["PRAC","THEORY"],
           },
         },
-        {
-          name: 'category',
-          label: t('CATEGORY'),
-          type: 'select',
-          labelKey: 'catNm',
-          valueKey: '_id',
-          options: baseData?.courseCat ?? [],
-          showAdd: true,
-          onChange: (fieldname, val, formik) => handleCatChange(val, formik),
-          addClick: (values) => handleAddEditCatClick(values.category, false),
-          addDisabled: false,
-          showEdit: true,
-          editClick: (values) => handleAddEditCatClick(values.category, true),
-          editDisabled: (values) => values.category ? false : true
-        },
-        {
-          name: 'subCat',
-          label: t('SUB_CATEGORY'),
-          type: 'select',
-          labelKey: 'subCatNm',
-          valueKey: '_id',
-          options: subCatList ?? [],
-          showAdd: true,
-          addClick: (values) => handleAddEditSubCatClick(values, false),
-          addDisabled: (values) => values.category ? false : true,
-          showEdit: true,
-          editClick: (values) => handleAddEditSubCatClick(values, true),
-          editDisabled: (values) => {
-            return ((values.category ? false : true) || (values.subCat ? false : true))
-          }
-        },
+        // {
+        //   name: 'category',
+        //   label: t('CATEGORY'),
+        //   type: 'select',
+        //   labelKey: 'catNm',
+        //   valueKey: '_id',
+        //   options: baseData?.courseCat ?? [],
+        //   showAdd: true,
+        //   onChange: (fieldname, val, formik) => handleCatChange(val, formik),
+        //   addClick: (values) => handleAddEditCatClick(values.category, false),
+        //   addDisabled: false,
+        //   showEdit: true,
+        //   editClick: (values) => handleAddEditCatClick(values.category, true),
+        //   editDisabled: (values) => values.category ? false : true
+        // },
+        // {
+        //   name: 'subCat',
+        //   label: t('SUB_CATEGORY'),
+        //   type: 'select',
+        //   labelKey: 'subCatNm',
+        //   valueKey: '_id',
+        //   options: subCatList ?? [],
+        //   showAdd: true,
+        //   addClick: (values) => handleAddEditSubCatClick(values, false),
+        //   addDisabled: (values) => values.category ? false : true,
+        //   showEdit: true,
+        //   editClick: (values) => handleAddEditSubCatClick(values, true),
+        //   editDisabled: (values) => {
+        //     return ((values.category ? false : true) || (values.subCat ? false : true))
+        //   }
+        // },
         {
           name: 'isExamCrs',
           removeHeader: true,
@@ -235,13 +237,23 @@ console.log('baseData?.departments',baseData?.departments)
   // Function for submit course form
   const handleFormSubmit = async (values: createCoursePayload): Promise<void> => {
     if (!id) {
-      await courseStore.createCourse(sanitizePayload(values));
-    } else {
-      const oUpdtPayload = {
-        ...values,
-        _id: id
+      try {
+        await courseStore.createCourse(sanitizePayload(values));
+        showToast('success', `${t('COURSE')} ${t("CREATED_SUCCESSFULLY")}`);
+      } catch (err) {
+        showToast('error', `${t("FAILED_TO_CREATE")} ${t('COURSE')}`);
       }
-      await courseStore.updateCourse(sanitizePayload(oUpdtPayload));
+    } else {
+      try {
+        const oUpdtPayload = {
+          ...values,
+          _id: id
+        }
+        await courseStore.updateCourse(sanitizePayload(oUpdtPayload));
+        showToast('success', `${t('COURSE')} ${t("UPDATED_SUCCESSFULLY")}`);
+      } catch (err) {
+        showToast('error', `${t("FAILED_TO_UPDATE")} ${t('COURSE')}`);
+      }
     }
     navigate(-1)
   };
@@ -257,7 +269,7 @@ console.log('baseData?.departments',baseData?.departments)
         })();
       }
     } catch (err) {
-      console.error(err)
+      showToast('error', `${t("FAILED_TO_FETCH")} ${t('ENTERPRISE')} ${t('DETAILS')}`);
     }
   }, [baseStore]);
 
@@ -265,8 +277,12 @@ console.log('baseData?.departments',baseData?.departments)
   useEffect(() => {
     (async () => {
       if (id) {
-        const oCourse = await courseStore.getCourseById(id)
-        setEditValues(oCourse);
+        try{
+          const oCourse = await courseStore.getCourseById(id)
+          setEditValues(oCourse);
+        }catch(err){
+          showToast('error', `${t("FAILED_TO_FETCH")} ${t('COURSE')} ${t('DETAILS')}`);
+        }
       }
     })()
   }, [id])

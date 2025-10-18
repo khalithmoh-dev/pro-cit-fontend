@@ -113,5 +113,15 @@
   "DEPARTMENT_ID_ALREADY_EXISTS": "Department code already exists.",
   "DEPARTMENT_UPDATED_SUCCESSFULLY": "Department updated successfully",
   "DEPARTMENT_CREATED_SUCCESSFULLY": "Department created successfully",
-  "VIEW_FILE": "View File"
+  "VIEW_FILE": "View File",
+  "FAILED_TO_FETCH": "Failed to fetch",
+  "FAILED_TO_UPDATE": "Failed to update",
+  "FAILED_TO_CREATE": "Failed to create",
+  "FAILED_TO_UPLOAD": "Failed to upload",
+  "DETAILS": "Details",
+  "CREATED_SUCCESSFULLY": "Created successfully",
+  "UPDATED_SUCCESSFULLY": "Updated successfully",
+  "INSTITUTE_LOGO": "Institute logo",
+  "ENTERPRISE": "Enterprise",
+  "ALREADY_EXISTS": "already exists"
 }

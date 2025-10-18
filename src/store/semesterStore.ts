@@ -50,7 +50,7 @@ const useDegreeStore = create<SemesterState>((set,get) => ({
             get().getSemester();
             return true
         }catch(err){
-            return false
+            throw err;
         }
     },
     getSemesterById: async(id = '') => {
@@ -84,7 +84,7 @@ const useDegreeStore = create<SemesterState>((set,get) => ({
             get().getSemester(data?._id);
             return true
         }catch(err){
-            return false
+            throw err;
         }
     },
     createSemesterGroup: async(oPayload) => {
