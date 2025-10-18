@@ -112,5 +112,6 @@
   "SECTION_ID_ALREADY_EXISTS": "Section code already exists.",
   "DEPARTMENT_ID_ALREADY_EXISTS": "Department code already exists.",
   "DEPARTMENT_UPDATED_SUCCESSFULLY": "Department updated successfully",
-  "DEPARTMENT_CREATED_SUCCESSFULLY": "Department created successfully"
+  "DEPARTMENT_CREATED_SUCCESSFULLY": "Department created successfully",
+  "VIEW_FILE": "View File"
 }

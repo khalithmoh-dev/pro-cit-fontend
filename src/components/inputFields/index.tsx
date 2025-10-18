@@ -55,7 +55,7 @@ const InputFields: FC<InputFieldsProps> = ({
             formik.handleChange(e);
           }}
           onKeyDown={(e) => {
-            if (["e", "E", "+", "-"].includes(e.key)) {
+            if (field.type === "number" && ["e", "E", "+", "-"].includes(e.key)) {
               e.preventDefault();
             }
           }}
@@ -254,6 +254,7 @@ const InputFields: FC<InputFieldsProps> = ({
             formik.setFieldValue(field.name, newValue);
           }}
           disabled={!editPerm || field.isDisabled}
+          defaultFiles = {[...formik.values[field.name]]}
         />
       );
 

@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 export default function InstiteConfig() {
   const { updateInstitute, getInstitute } = useInstituteStore();
   const { user, permissions } = useAuthStore();
-  const { parseFormDataAndUpload, upldedRec } = useBaseStore()
+  const { parseFormDataAndUpload } = useBaseStore()
   const [instDtls, setInstDtls] = useState({});
   const navigate = useNavigate();
   
@@ -41,7 +41,7 @@ export default function InstiteConfig() {
             label: "Instiution description",
             type: "Textarea",
           },
-          { name: "insLogo", label: "Institute Logo", type: "file", size: '' ,format: 'image', isMulti: true }
+          { name: "insLogo", label: "Institute Logo", type: "file", size: '' ,format: 'image' }
     ],
     "Institution contact": [
           {
@@ -254,8 +254,9 @@ export default function InstiteConfig() {
     try{
       const deepValues =  {...structuredClone(values),_id: instDtls?._id};
       if(values?.insLogo?.length){
-        if(await parseFormDataAndUpload(values?.insLogo)){
-          deepValues.insLogo = upldedRec.url;
+        const instLogo = await parseFormDataAndUpload(values?.insLogo);
+        if(instLogo?.url){
+          deepValues.insLogo = [instLogo.url];
         }
       }
       await updateInstitute(deepValues);

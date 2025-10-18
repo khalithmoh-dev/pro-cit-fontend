@@ -4,7 +4,7 @@ import useAuthStore from './authStore';
 interface createInstitutePayload{
     insname: string,
     insCode: string,
-    insLogo?: string,
+    insLogo?: [],
     acrtdBy?: string,
     insDesc?: string,
     addr1?: string,

@@ -42,10 +42,10 @@ const useBaseStore = create<BaseState>((set, get) => ({
             formData.append("files", eachFile); 
         }
 
-        await get().handleCloudUpload(formData);
-        return true;
+        const upldData = await get().handleCloudUpload(formData);
+        return upldData;
     } catch (err) {
-        return false;
+        throw err;
     }
   },
   handleCloudUpload: async (formData) => {
@@ -55,10 +55,9 @@ const useBaseStore = create<BaseState>((set, get) => ({
         `${import.meta.env.VITE_API_URL}/form/upload`,
         formData
       );
-      set({ upldedRec: uploadedDtl.data });
-      return true;
+      return uploadedDtl.data;
     } catch (err) {
-      return false;
+      throw err;
     }
   }
 }));
