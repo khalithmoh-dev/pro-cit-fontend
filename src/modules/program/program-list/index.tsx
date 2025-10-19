@@ -5,10 +5,12 @@ import { useNavigate } from 'react-router-dom';
 import useProgramStore from '../../../store/programStore';
 import { useTranslation } from 'react-i18next';
 import Icon from '../../../components/Icons';
+import useAuthStore from '../../../store/authStore';
 
 // Example usage
 const ProgramList = () => {
   const navigate = useNavigate();
+  const authStore = useAuthStore();
   const { getPrograms } = useProgramStore();
   const [programsData, setProgramsData] = useState([]);
   const { t } = useTranslation();
@@ -51,13 +53,13 @@ const ProgramList = () => {
 
   // Action buttons
   const actions = [
-    {
+    ...(authStore?.permissions?.["/program/list"]?.update ? [{
       label: 'View Details',
       icon: <Icon size={18} name="Eye" />,
       onClick: (row) => {
         navigate(`/program/form/${row._id}`)
       }
-    }
+    }] : [])
   ];
 
   return (

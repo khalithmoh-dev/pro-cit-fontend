@@ -102,7 +102,11 @@ const useAuthStore = create<AuthState>()(
           });
 
           if (!response.ok) {
-            throw new Error('Invalid credentials');
+            if (response?.status === 429) {
+              throw new Error('Too many login attempts. Please try again after 15 minutes.');
+            } else {
+              throw new Error('Invalid credentials');
+            }
           }
 
           const data: any = await response.json();

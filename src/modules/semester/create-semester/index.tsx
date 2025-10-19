@@ -87,27 +87,27 @@ export default function CreateSemester() {
             valueKey: '_id'
           },
           {
-            name: "prgNm",
+            name: "prgId",
             label: t("PROGRAM"),
             type: "select",
             options: (baseData?.program ?? []),
             labelKey: "prgNm",
-            valueKey: '_id'
-            // validation: Yup.string().required("Program Name is required"),
-            // isRequired: true,
+            valueKey: '_id',
+            validation: Yup.string().required(t("PROGRAM_IS_REQUIRED")),
+            isRequired: true,
           },
           {
             name: "semId",
             label: t("SEMESTER_ID"),
             type: "text",
-            validation: Yup.string().required("SEMESTER_ID_IS_REQUIRED"),
+            validation: Yup.string().required(t("SEMESTER_ID_IS_REQUIRED")),
             isRequired: true
           },
           {
             name: "semNm",
             label: t("SEMESTER_NAME"),
             type: "text",
-            validation: Yup.string().required("SEMESTER_NAME_IS_REQUIRED"),
+            validation: Yup.string().required(t("SEMESTER_NAME_IS_REQUIRED")),
             isRequired: true
           },
           {
@@ -158,7 +158,6 @@ export default function CreateSemester() {
 
   //To handle submission of semester for both create and update
   const handleSemesterSubmit = async (values: createSemesterPayload) => {
-    delete values.prgCd; //--------------TEMP: HAVE TO REMOVE ONCE PROGRAM IS DONE--------------------------
     if (!id) {
       try {
         await semesterStore.createSemester(values);

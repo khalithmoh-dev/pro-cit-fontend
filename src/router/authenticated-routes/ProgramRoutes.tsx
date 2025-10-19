@@ -11,14 +11,14 @@ const ProgramRoutes = () => {
     <Suspense fallback={<PageLoader />}>
       <Routes>
         <Route path="/list" element={
-          // <ProtectedRoute permissionType="view">
+          <ProtectedRoute permissionType="view">
             <ProgramListPage />
-          // </ProtectedRoute>
+          </ProtectedRoute>
         } />
         <Route path="/form/:id?" element={
-          // <ProtectedRoute permissionType="update">
+          <ProtectedRoute permissionType="update" routeName="/program/list">
             <CreateProgramPage />
-          // </ProtectedRoute>
+          </ProtectedRoute>
         } />
       </Routes>
     </Suspense>

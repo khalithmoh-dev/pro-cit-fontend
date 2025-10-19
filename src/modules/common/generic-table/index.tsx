@@ -23,6 +23,7 @@ import { useLayout } from "../../../modules/layout/LayoutContext"
 import { useNavigate } from 'react-router-dom';
 import Button from '../../../components/Button';
 import { useTranslation } from 'react-i18next';
+import useAuthStore from '../../../store/authStore';
 
 interface DataTableI {
   data?: object[]
@@ -63,6 +64,7 @@ const DataTable = ({
   const { setRouteNm, setActionFields } = useLayout();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const authStore = useAuthStore();
 
   useEffect(() => {
     if (location.pathname) {
@@ -86,16 +88,18 @@ const DataTable = ({
         ));
 
       // Add the "Add New" button if addRoute is defined
-      aHeaderBtns.push(
-        <Button
-          className={`btn-primary btn-small`}
-          key="add-new"
-          variantType="submit"
-          onClick={() => navigate(addRoute)}
-        >
-          {t("ADD_NEW")}
-        </Button>
-      );
+      if (authStore?.permissions?.[location.pathname]?.create) {
+        aHeaderBtns.push(
+          <Button
+            className={`btn-primary btn-small`}
+            key="add-new"
+            variantType="submit"
+            onClick={() => navigate(addRoute)}
+          >
+            {t("ADD_NEW")}
+          </Button>
+        );
+      }
 
       setActionFields(aHeaderBtns);
     } else {
