@@ -187,6 +187,7 @@ html, body, #root {
 
 .generic-master-card .field-wrapper {
   min-width: 200px;
+  align-self: center;
 }
 
 
