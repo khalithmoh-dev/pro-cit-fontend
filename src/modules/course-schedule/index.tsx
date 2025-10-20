@@ -8,7 +8,8 @@ import { useTranslation } from "react-i18next";
 import useBaseStore from '../../store/baseStore';
 import { Box } from '@mui/material';
 import Button from '../../components/Button';
-
+import { useLayout } from '../../modules/layout/LayoutContext'
+import Switch from '../../components/switch';
 
 const CourseSchedulePage: React.FC = () => {
   const navigate = useNavigate();
@@ -20,15 +21,17 @@ const CourseSchedulePage: React.FC = () => {
     degId: '',
     prgId: '',
     deptId: '',
-    semId: '', manditoryCourses: [], electiveCourses: []
+    semId: '', mandatoryCourses: [], electiveCourses: []
   });
-  const [manditoryCourses, setManditoryCourses] = useState([]);
+  const [mandatoryCourses, setMandatoryCourses] = useState([]);
   const [electiveCourses, setElectiveCourses] = useState([]);
   const { searchCourseSchedule, createCourseSchedule, updateCourseSchedule } = useCourseScheduleStore();
   const [baseData, setBaseData] = useState({ degree: [], program: [], department: [], semester: [] });
   const [isDataFetched, setIsDataFetched] = useState(false);
   const [update, setUpdate] = useState(false);
-  const [isEditPerm, setIsEditPerm] = useState(true);
+  const { setRouteNm, setActionFields } = useLayout();
+  const [editPerm, setEditPerm] = useState(true);
+
   //to get the initial base data eg: program data and degree data
   useEffect(() => {
     try {
@@ -44,6 +47,17 @@ const CourseSchedulePage: React.FC = () => {
     }
   }, [baseStore]);
 
+  useEffect(() => {
+    if (location.pathname) {
+      setRouteNm(location.pathname);
+      setActionFields([<Switch checked={editPerm} onChange={() => {
+        setEditPerm(prevEditPerm => {
+          return !prevEditPerm;
+        });
+      }} label="Edit mode" />])
+    }
+  }, [location.pathname]);
+
   const handleReset = () => {
     setIsDataFetched(false);
     setEditValues({
@@ -52,9 +66,9 @@ const CourseSchedulePage: React.FC = () => {
       degId: '',
       prgId: '',
       deptId: '',
-      semId: '', manditoryCourses: [], electiveCourses: []
+      semId: '', mandatoryCourses: [], electiveCourses: []
     });
-    setManditoryCourses([]);
+    setMandatoryCourses([]);
     setElectiveCourses([]);
     setUpdate(false);
   }
@@ -128,7 +142,7 @@ const CourseSchedulePage: React.FC = () => {
       if (Array.isArray(res) && res.length) {
         setUpdate(true);
         setEditValues(res[0]);
-        setManditoryCourses(res[0]?.mandatoryCrs ?? []);
+        setMandatoryCourses(res[0]?.mandatoryCrs ?? []);
         setElectiveCourses(res[0]?.electiveCrs ?? []);
       } else {
         setUpdate(false);
@@ -143,7 +157,7 @@ const CourseSchedulePage: React.FC = () => {
     try {
       const payload = {
         ...editValues,
-        mandatoryCrs: manditoryCourses?.map(crs => ({ crsId: crs._id, capacity: crs?.capacity, isDeleted: crs?.isDeleted })) ?? [],
+        mandatoryCrs: mandatoryCourses?.map(crs => ({ crsId: crs._id, capacity: crs?.capacity, isDeleted: crs?.isDeleted })) ?? [],
         electiveCrs: electiveCourses?.map(crs => ({ crsId: crs._id, capacity: crs?.capacity, isDeleted: crs?.isDeleted })) ?? []
       };
       const res = update ? await updateCourseSchedule(payload, editValues?._id) : await createCourseSchedule(payload);
@@ -158,34 +172,32 @@ const CourseSchedulePage: React.FC = () => {
       <EnterpriseFilterForm
         schema={schema}
         onSubmit={handleCrsSchlSrch}
-        isEditPerm={true}
         isSmartField={false}
-        setIsEditPerm={setIsEditPerm}
       />
       {isDataFetched &&
         <>
           <ElectiveGroup
             title={t("MANDATORY")}
-            coursesList={manditoryCourses?.length ? manditoryCourses : []}
-            setCoursesList={setManditoryCourses}
+            coursesList={mandatoryCourses?.length ? mandatoryCourses : []}
+            setCoursesList={setMandatoryCourses}
             checkDuplicate={electiveCourses?.length ? electiveCourses : []}
-            isEditPerm={isEditPerm}
+            isEditPerm={editPerm}
           />
           <ElectiveGroup
             title={t("ELECTIVE")}
             coursesList={electiveCourses?.length ? electiveCourses : []}
             setCoursesList={setElectiveCourses}
-            checkDuplicate={manditoryCourses?.length ? manditoryCourses : []}
-            isEditPerm={isEditPerm}
+            checkDuplicate={mandatoryCourses?.length ? mandatoryCourses : []}
+            isEditPerm={editPerm}
           />
           <Box display="flex" justifyContent="flex-end" gap={2} mt={4} mr={4}>
             <Button
-              color='primary'
+              color='secondary'
               size="medium"
               onClick={() => navigate(-1)}
               type='button'
-              disabled={!isEditPerm}
-              variantType='reset | add'
+              disabled={false}
+              variantType='cancel'
             >
               {t("CANCEL")}
             </Button>
@@ -194,11 +206,16 @@ const CourseSchedulePage: React.FC = () => {
               size="medium"
               onClick={handleSaveCrsSchl}
               type='button'
-              disabled={!isEditPerm}
-              variantType="submit"
+              disabled={
+                !editPerm ||
+                (mandatoryCourses.filter(c => !c.isDeleted).length === 0 &&
+                electiveCourses.filter(c => !c.isDeleted).length === 0)
+              }
+              variantType="primary"
             >
               {update ? t('UPDATE') : t("SAVE")}
             </Button>
+            {console.log('mandatoryCourses',mandatoryCourses,electiveCourses)}
           </Box>
         </>
       }

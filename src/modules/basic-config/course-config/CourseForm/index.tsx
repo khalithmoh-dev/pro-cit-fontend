@@ -83,7 +83,7 @@ console.log('baseData?.departments',baseData?.departments)
           isDisabled: true
         },
         {
-          name: 'crsId',
+          name: 'crsCd',
           label: t('COURSE_ID'),
           type: 'text',
           validation: Yup.string().required(t("COURSE_ID_IS_REQUIRED")),

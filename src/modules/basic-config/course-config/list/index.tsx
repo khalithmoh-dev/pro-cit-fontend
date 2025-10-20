@@ -17,7 +17,7 @@ const CourseList: React.FC = () => {
     // Column configuration
     const columns = [
         {
-            field: 'crsId',
+            field: 'crsCd',
             headerName: t("COURSE_ID"),
             sortable: true
         },

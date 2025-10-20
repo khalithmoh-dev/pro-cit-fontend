@@ -1,23 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useMemo, useRef, useCallback } from "react";
 import {
     Box,
     Card,
     Typography,
     Button,
     IconButton,
-    Chip,
-    TextField,
-    Autocomplete
+    Chip
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import useCourseScheduleStore from '../../../store/course-scheduleStore';
 import { useToastStore } from '../../../store/toastStore';
 import { useTranslation } from "react-i18next";
+import * as Yup from "yup";
+import InputFields from "../../../components/inputFields";
+import DynamicForm from "../../../components/generic-form";
 
 interface Course {
     _id: string;
-    crsId: string;
-    crsNm: string;
+    crsCd: string; // Course code
+    crsNm: string; // Course name
     capacity: number;
     isDeleted: boolean;
 }
@@ -26,11 +27,16 @@ interface ElectiveGroupProps {
     title: string;
     coursesList: Course[];
     setCoursesList: React.Dispatch<React.SetStateAction<Course[]>>;
-    checkDuplicate: Course[];
-    isEditPerm: boolean;
+    checkDuplicate: Course[]; // Courses to check for duplicates against
+    isEditPerm: boolean; // Edit permission flag
 }
 
-
+/**
+ * ElectiveGroup Component
+ * 
+ * Displays a group of elective courses with ability to add/remove courses
+ * Handles course selection with search and capacity input
+ */
 const ElectiveGroup: React.FC<ElectiveGroupProps> = ({
     title,
     coursesList,
@@ -38,197 +44,301 @@ const ElectiveGroup: React.FC<ElectiveGroupProps> = ({
     checkDuplicate,
     isEditPerm
 }) => {
-    const [showInput, setShowInput] = useState(false);
-    const [selectedCourse, setSelectedCourse] = useState(null);
+    // State for showing/hiding the course input form
+    const [showInputForm, setShowInputForm] = useState(false);
+    // State for currently selected course in the form
+    const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
+    // Loading state for course search
     const [isLoading, setIsLoading] = useState(false);
-    const [capacity, setCapacity] = useState("");
-    const [errors, setErrors] = useState({ course: false, capacity: false });
-    const [crsOptions, setCrsOptions] = useState([]);
+    // State for search input value
+    const [searchInputValue, setSearchInputValue] = useState('');
+    // State for available course options from search
+    const [courseOptions, setCourseOptions] = useState<Course[]>([]);
+    
+    // Hooks and refs
     const { searchCoursesByName } = useCourseScheduleStore();
     const { t } = useTranslation();
+    const searchTimeoutRef = useRef<NodeJS.Timeout>();
 
-    const handlAddCourses = () => {
-        setShowInput(true);
+    /**
+     * Handles showing the course input form
+     */
+    const handleAddCourses = () => {
+        setShowInputForm(true);
     };
 
-    const saveAddedCourse = () => {
-        const newErrors = {
-            course: !selectedCourse,
-            capacity: !capacity || Number(capacity) <= 0,
-        };
-        setErrors(newErrors);
-        if (selectedCourse && capacity) {
-            setCoursesList(prev => [...prev, { ...selectedCourse, capacity: parseInt(capacity) }]);
+    // Initial values for the dynamic form
+    const initialFormValues = {
+        selectedCourse: '',
+        capacity: '',
+    }
+
+    /**
+     * Saves the newly added course to the courses list
+     * @param values - Form values containing capacity
+     */
+    const saveAddedCourse = (values: { capacity: string }) => {
+        if (selectedCourse && values.capacity) {
+            // Add new course with parsed capacity to the list
+            setCoursesList(prev => [...prev, { 
+                ...selectedCourse, 
+                capacity: parseInt(values.capacity) 
+            }]);
+            // Reset form state
             setSelectedCourse(null);
-            setCapacity("");
-            setShowInput(false);
+            setSearchInputValue('');
+            setCourseOptions([]);
+            setShowInputForm(false);
         }
     }
 
+    /**
+     * Removes a course from the list by marking it as deleted
+     * @param index - Index of the course to remove
+     */
     const removeCourse = (index: number) => {
-        const updatedCourses = coursesList?.filter(crs => !crs?.isDeleted).map((crs, idx) => idx === index ? { ...crs, isDeleted: true } : crs);
+        const updatedCourses = coursesList
+            ?.filter(course => !course?.isDeleted)
+            .map((course, idx) => 
+                idx === index ? { ...course, isDeleted: true } : course
+            );
         setCoursesList(updatedCourses);
     }
 
-    const fetchCourses = async (newInputValue: string) => {
+    /**
+     * Fetches courses based on search input with debouncing
+     * @param searchQuery - The search string to find courses
+     */
+    const fetchCourses = async (searchQuery: string) => {
         try {
-            if (newInputValue?.length > 2) {
+            if (searchQuery?.length > 2) {
                 setIsLoading(true);
-                const courses = await searchCoursesByName(newInputValue);
-                setCrsOptions(courses as any);
+                const courses = await searchCoursesByName(searchQuery);
+                setCourseOptions(courses as Course[]);
             } else {
-                setCrsOptions([]);
+                setCourseOptions([]);
             }
         } catch (err) {
-            console.error(err);
+            console.error("Error fetching courses:", err);
         } finally {
             setIsLoading(false);
         }
     }
 
-    const handleOnSelectCourse = (newValue: any) => {
-        if (newValue) {
-            if (coursesList.find(crs => !crs?.isDeleted && crs._id === newValue._id) || checkDuplicate.find(crs => !crs?.isDeleted && crs._id === newValue._id)) {
+    /**
+     * Handles search input changes with debouncing
+     * @param newInputValue - The new search input value
+     * @param rawVal - Raw value object (unused)
+     */
+    const handleSearchFieldChange = useCallback((newInputValue: string, rawVal: object) => {
+        setSearchInputValue(newInputValue);
+    
+        // Clear existing timeout to implement debouncing
+        if (searchTimeoutRef.current) {
+            clearTimeout(searchTimeoutRef.current);
+        }
+    
+        // Only search if input is longer than 2 characters
+        if (newInputValue.length > 2) {
+            searchTimeoutRef.current = setTimeout(() => {
+                fetchCourses(newInputValue);
+            }, 500); // 500ms debounce delay
+        }
+    }, []);
+
+    /**
+     * Handles course selection from dropdown
+     * @param selectedValue - The selected course object
+     */
+    const handleCourseSelection = (selectedValue: Course | null,formik) => {
+        if (selectedValue) {
+            // Check if course already exists in current list or duplicate check list
+            const isDuplicate = (coursesList ?? []).find(course => 
+                !course?.isDeleted && course._id === selectedValue._id
+            ) || (checkDuplicate ?? []).find(course => 
+                !course?.isDeleted && course._id === selectedValue._id
+            );
+            
+            if (isDuplicate) {
                 useToastStore.getState().showToast('error', t("COURSE_ALREADY_ADDED"));
                 setSelectedCourse(null);
+                setSearchInputValue('');
+                setCourseOptions([]);
+                formik.handleReset();
                 return;
             } else {
-                setSelectedCourse(newValue);
+                setSelectedCourse(selectedValue);
             }
         }
     }
 
+    /**
+     * Dynamic form schema configuration
+     * Defines form fields and buttons for course addition
+     */
+    const formSchema = useMemo(() => {
+        return {
+            fields: {
+                "": [
+                    {
+                        name: "selectedCourse",
+                        label: t("COURSE"),
+                        type: "select",
+                        labelKey: "parsedData",
+                        valueKey: "_id",
+                        isApi: true, // Flag for API-based search
+                        inputValue: searchInputValue,
+                        setInputValue: handleSearchFieldChange,
+                        onChange: handleCourseSelection,
+                        options: courseOptions ?? [],
+                        isLoading: isLoading
+                    },
+                    {
+                        name: "capacity",
+                        label: t("CAPACITY"),
+                        type: "number",
+                    }
+                ]
+            },
+            buttons: [
+                {
+                    name: t("CANCEL"), 
+                    variant: "outlined", 
+                    nature: "secondary", 
+                    onClick: ({_, handleReset}) => {
+                        setShowInputForm(false); 
+                        handleReset();
+                    }
+                },
+                {
+                    name: `${t("ADD")} ${t(title)}`, 
+                    variant: "contained", 
+                    nature: "primary", 
+                    type: "button", 
+                    onClick: ({ values, handleReset }) => { 
+                        saveAddedCourse(values); 
+                        handleReset();
+                    }
+                }
+            ]
+        }
+    }, [t, searchInputValue, courseOptions, showInputForm, isLoading]);
 
     return (
-        <Card variant="outlined" sx={{ borderRadius: 3, p: 2 }} className="generic-master-card mb-4">
-            <Box
-                display="flex"
-                justifyContent="space-between"
-                alignItems="center"
-                mb={2}
-            >
-                <Typography variant="h6" fontWeight="bold">
-                    {title}
-                </Typography>
-
-                <Box display="flex" alignItems="center" gap={1}>
-                    <Chip
-                        label={`${coursesList?.filter(crs => !crs?.isDeleted).length} courses`}
-                        color="primary"
-                        variant="outlined"
-                        size="small"
-                        sx={{
-                            borderRadius: "12px",
-                            height: 32,
-                            "& .MuiChip-label": {
-                                paddingLeft: 1.5,
-                                paddingRight: 1.5,
-                            },
-                        }}
-                    />
-                    {!showInput && <Button
-                        variant="contained"
-                        size="small"
-                        sx={{
-                            borderRadius: "12px",
-                            height: 32,
-                            textTransform: "none",
-                            paddingLeft: 1.5,
-                            paddingRight: 1.5,
-                        }}
-                        onClick={handlAddCourses}
-                        disabled={!isEditPerm}
-                    >
-                        Add
-                    </Button>}
-                </Box>
-            </Box>
-
-            {coursesList?.filter(crs => !crs?.isDeleted).map((course, idx) => (
-                <Card
-                    key={idx}
-                    variant="outlined"
-                    sx={{
-                        mb: 1,
-                        borderRadius: 2,
-                        backgroundColor: "#f9f9f9",
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        p: 2
-                    }}
+        <>
+            <Card variant="outlined" sx={{ borderRadius: 3, p: 2 }} className="generic-master-card mb-4">
+                {/* Header Section */}
+                <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    mb={2}
                 >
-                    <Box>
-                        <Typography variant="subtitle1" fontWeight="bold">
-                            {course.crsId}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                            {course.crsNm}
-                        </Typography>
-                    </Box>
-                    <Box display="flex" alignItems="center" gap={2}>
-                        <Typography variant="body2">
-                            Capacity <strong>{course.capacity}</strong>
-                        </Typography>
-                        <IconButton size="small" onClick={() => removeCourse(idx)}>
-                            <CloseIcon fontSize="small" />
-                        </IconButton>
-                    </Box>
-                </Card>
-            ))}
-            {showInput && (
-                <Box mt={1} display="flex" gap={1}>
-                    <Autocomplete
-                        options={crsOptions.length ? crsOptions : []}
-                        getOptionLabel={(option) => option.crsId ? `${option.crsId} - ${option.crsNm}` : ""}
-                        value={selectedCourse}
-                        onChange={(event, newValue) => handleOnSelectCourse(newValue)}
-                        onInputChange={(_, newInputValue) => {
-                            fetchCourses(newInputValue);
-                        }}
-                        loading={isLoading}
-                        renderInput={(params) => (
-                            <TextField
-                                {...params}
-                                label="Course"
+                    <Typography variant="h6" fontWeight="bold">
+                        {title}
+                    </Typography>
+
+                    <Box display="flex" alignItems="center" gap={1}>
+                        {/* Course count chip */}
+                        <Chip
+                            label={`${coursesList?.filter(course => !course?.isDeleted).length} courses`}
+                            color="primary"
+                            variant="outlined"
+                            size="small"
+                            sx={{
+                                borderRadius: "12px",
+                                height: 32,
+                                "& .MuiChip-label": {
+                                    paddingLeft: 1.5,
+                                    paddingRight: 1.5,
+                                },
+                            }}
+                        />
+                        {/* Add button - only show when form is not visible */}
+                        {!showInputForm && (
+                            <Button
+                                variant="contained"
                                 size="small"
-                                error={errors.course}
-                                helperText={errors.course ? "Course is required" : ""}
-                            />
+                                sx={{
+                                    borderRadius: "12px",
+                                    height: 32,
+                                    textTransform: "none",
+                                    paddingLeft: 1.5,
+                                    paddingRight: 1.5,
+                                }}
+                                onClick={handleAddCourses}
+                                disabled={!isEditPerm}
+                            >
+                                Add
+                            </Button>
                         )}
-                        sx={{ flex: 1 }}
-                    />
-                    <TextField
-                        label="Capacity"
-                        type="number"
-                        size="small"
-                        value={capacity}
-                        onChange={(e) => setCapacity(e.target.value)}
-                        sx={{ flex: 1 }}
-                        error={errors.capacity}
-                        helperText={errors.capacity ? "Capacity is required" : ""}
-                    />
-                    <Button
+                    </Box>
+                </Box>
+
+                {/* Courses List */}
+                {coursesList?.filter(course => !course?.isDeleted).map((course, index) => (
+                    <Card
+                        key={index}
                         variant="outlined"
-                        size="small"
-                        color="secondary"
-                        sx={{ height: 40, borderRadius: 2 }}
-                        onClick={() => {
-                            setShowInput(false);
-                            setSelectedCourse(null);
-                            setCapacity("");
-                            setErrors({ course: false, capacity: false });
+                        sx={{
+                            mb: 1,
+                            borderRadius: 2,
+                            backgroundColor: "#f9f9f9",
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "center",
+                            p: 2
                         }}
                     >
-                        Cancel
-                    </Button>
-                    <Button variant="contained" size="small" onClick={saveAddedCourse} sx={{ height: 40, borderRadius: 2 }}>
-                        Save
-                    </Button>
-                </Box>
+                        <Box>
+                            <Typography variant="subtitle1" fontWeight="bold">
+                                {course.crsCd}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                                {course.crsNm}
+                            </Typography>
+                        </Box>
+                        <Box display="flex" alignItems="center" gap={2}>
+                            <Typography variant="body2">
+                                Capacity <strong>{course.capacity}</strong>
+                            </Typography>
+                            {/* Remove button */}
+                            <IconButton 
+                                size="small" 
+                                onClick={() => removeCourse(index)}
+                                disabled={!isEditPerm}
+                            >
+                                <CloseIcon fontSize="small" />
+                            </IconButton>
+                        </Box>
+                    </Card>
+                ))}
+                {showInputForm && (
+                <DynamicForm
+                    schema={formSchema}
+                    pageTitle={t("CREATE_PROGRAM")}
+                    onSubmit={saveAddedCourse}
+                    isEditPerm={true}
+                    isNotMainForm={true}
+                    isEditDisableDflt={false}
+                    initialValues={initialFormValues}
+                />
             )}
+            </Card>
 
-        </Card>
+            {/* Dynamic Form for Adding New Course */}
+            {/* {showInputForm && (
+                <DynamicForm
+                    schema={formSchema}
+                    pageTitle={t("CREATE_PROGRAM")}
+                    onSubmit={saveAddedCourse}
+                    isEditPerm={true}
+                    isNotMainForm={true}
+                    isEditDisableDflt={false}
+                    initialValues={initialFormValues}
+                />
+            )} */}
+        </>
     );
 };
 

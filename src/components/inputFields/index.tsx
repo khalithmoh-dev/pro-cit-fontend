@@ -11,19 +11,23 @@ import {
   FormHelperText,
 } from "@mui/material";
 import { Autocomplete } from "@mui/material";
-import Textarea from "@mui/joy/Textarea"; // adjust import as needed
-import FileUpload from "../fileupload"; // adjust import as needed
+import Textarea from "@mui/joy/Textarea";
+import FileUpload from "../fileupload";
 import Button from "../Button";
 import "./index.css"
 import { useTranslation } from "react-i18next";
+
 interface InputFieldsProps {
   field: any;
-  formik: any;
+  formik?: any; // Make formik optional
   editPerm: boolean;
   aMultiSelectVal?: any[];
   setAMultiSelectVal?: React.Dispatch<React.SetStateAction<any[]>>;
   oInitialValues?: any;
   instDtls?: any;
+  // Simple props for non-formik usage
+  value?: any;
+  onChange?: (name: string, value: any) => void;
 }
 
 const InputFields: FC<InputFieldsProps> = ({
@@ -34,9 +38,47 @@ const InputFields: FC<InputFieldsProps> = ({
   setAMultiSelectVal,
   oInitialValues,
   instDtls,
+  // Simple non-formik props
+  value,
+  onChange,
 }) => {
   const { t } = useTranslation();
 
+  // Helper functions to handle formik vs non-formik scenarios
+  const getValue = (fieldName: string) => {
+    if (formik) {
+      return formik.values[fieldName] ?? "";
+    }
+    return value !== undefined ? value : "";
+  };
+
+  const handleChange = (fieldName: string, newValue: any) => {
+    if (formik) {
+      formik.setFieldValue(fieldName, newValue);
+    } else if (onChange) {
+      onChange(fieldName, newValue);
+    }
+  };
+
+  const handleEventChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value, type, checked } = e.target;
+
+    if (formik) {
+      formik.handleChange(e);
+    } else if (onChange) {
+      const finalValue = type === 'checkbox' ? checked : value;
+      onChange(name, finalValue);
+    }
+  };
+
+  // For formik, use formik's error handling. For non-formik, no error handling.
+  const getFormikError = (fieldName: string) => {
+    return formik ? formik.touched[fieldName] && formik.errors[fieldName] : null;
+  };
+
+  const isFormikTouched = (fieldName: string) => {
+    return formik ? formik.touched[fieldName] : false;
+  };
   switch (field.type) {
     case "text":
     case "number":
@@ -46,22 +88,16 @@ const InputFields: FC<InputFieldsProps> = ({
           size="small"
           type={field.type}
           name={field.name}
-          value={formik.values[field.name] ?? ""}
-          onChange={(e) => {
-            const { value } = e.target;
-
-            if (field.type === "number" && Number(value) < 0) return;
-
-            formik.handleChange(e);
-          }}
+          value={getValue(field.name)}
+          onChange={handleEventChange}
           onKeyDown={(e) => {
             if (field.type === "number" && ["e", "E", "+", "-"].includes(e.key)) {
               e.preventDefault();
             }
           }}
-          onBlur={formik.handleBlur}
-          error={formik.touched[field.name] && Boolean(formik.errors[field.name])}
-          helperText={formik.touched[field.name] && formik.errors[field.name]}
+          onBlur={formik?.handleBlur} // Only for formik
+          error={isFormikTouched(field.name) && Boolean(getFormikError(field.name))}
+          helperText={isFormikTouched(field.name) && getFormikError(field.name)}
           disabled={!editPerm || field.isDisabled}
         />
       );
@@ -90,15 +126,15 @@ const InputFields: FC<InputFieldsProps> = ({
             <Autocomplete
               multiple={isMulti}
               disableCloseOnSelect={isMulti}
-              options={options}
+              options={field?.aOptions || options}
               getOptionLabel={(opt) => opt[labelKey] || ""}
               value={
                 isMulti
                   ? options.filter((opt) =>
-                    (formik.values[field.name] || []).includes(opt[valueKey])
+                    (getValue(field.name) || []).includes(opt[valueKey])
                   )
                   : options.find(
-                    (opt) => opt[valueKey] === formik.values[field.name]
+                    (opt) => opt[valueKey] === getValue(field.name)
                   ) || null
               }
               onChange={(_, newValue) => {
@@ -107,9 +143,9 @@ const InputFields: FC<InputFieldsProps> = ({
                   if (field.setInputValue) field.setInputValue("");
                 } else if (field.setInputValue) {
                   field.setInputValue(newValue ? newValue[labelKey] : "");
+                  field.onChange && field.onChange(newValue, formik);
                 }
-
-                formik.setFieldValue(
+                handleChange(
                   field.name,
                   isMulti
                     ? newValue.map((opt) => opt[valueKey])
@@ -120,6 +156,10 @@ const InputFields: FC<InputFieldsProps> = ({
               }}
               inputValue={field?.inputValue || ""}
               onInputChange={(_, newInputValue, reason) => {
+                if (field?.handleInpChange) {
+                  field.handleInpChange(_, newInputValue);
+                  return
+                }
                 if (
                   field?.isMulti &&
                   oInitialValues?.[field.name] &&
@@ -135,19 +175,22 @@ const InputFields: FC<InputFieldsProps> = ({
                 }
               }}
               loading={field.isLoading}
-              renderInput={(params) => (
-                <TextField
+              renderInput={(params) => {
+                // if (field.handleRenderInput) {
+                //   return field.handleRenderInput(params);
+                // }
+                return <TextField
                   {...params}
                   size="small"
                   variant="outlined"
-                  onBlur={formik.handleBlur}
+                  onBlur={formik?.handleBlur} // Only for formik
                   error={
-                    formik.touched[field.name] &&
-                    Boolean(formik.errors[field.name])
+                    isFormikTouched(field.name) &&
+                    Boolean(getFormikError(field.name))
                   }
                   helperText={
-                    formik.touched[field.name] && formik.errors[field.name]
-                      ? formik.errors[field.name]
+                    isFormikTouched(field.name) && getFormikError(field.name)
+                      ? getFormikError(field.name)
                       : ""
                   }
                   sx={{
@@ -164,7 +207,7 @@ const InputFields: FC<InputFieldsProps> = ({
                     }
                   }}
                 />
-              )}
+              }}
               renderOption={(props, option, { selected }) => (
                 <li {...props} key={option[valueKey]}>
                   {isMulti && (
@@ -178,11 +221,10 @@ const InputFields: FC<InputFieldsProps> = ({
                 </li>
               )}
               disabled={!editPerm || field.isDisabled}
-
             />
-            {formik.touched[field.name] && formik.errors[field.name] && (
+            {formik && isFormikTouched(field.name) && getFormikError(field.name) && (
               <Typography variant="caption" color="error">
-                {formik.errors[field.name]}
+                {getFormikError(field.name)}
               </Typography>
             )}
           </FormControl>
@@ -194,9 +236,9 @@ const InputFields: FC<InputFieldsProps> = ({
           <Select
             name={field.name}
             multiple={field.isMulti}
-            value={formik.values[field.name] || (field.isMulti ? [] : "")}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
+            value={getValue(field.name) || (field.isMulti ? [] : "")}
+            onChange={handleEventChange}
+            onBlur={formik?.handleBlur} // Only for formik
             renderValue={(selected) => {
               if (field.isMulti) {
                 return selected
@@ -212,15 +254,12 @@ const InputFields: FC<InputFieldsProps> = ({
               return selectedOption ? selectedOption[labelKey] : "";
             }}
             disabled={!editPerm || field.isDisabled}
-          // sx={{
-          //   borderRadius: "var(--input-radius, 15px)",
-          // }}
           >
             {options.map((opt: any) => (
               <MenuItem key={opt[valueKey]} value={opt[valueKey]}>
                 {field.isMulti && (
                   <Checkbox
-                    checked={formik.values[field.name]?.includes(opt[valueKey])}
+                    checked={getValue(field.name)?.includes(opt[valueKey])}
                     disabled={!editPerm || field.isDisabled}
                   />
                 )}
@@ -228,9 +267,9 @@ const InputFields: FC<InputFieldsProps> = ({
               </MenuItem>
             ))}
           </Select>
-          {formik.touched[field.name] && formik.errors[field.name] && (
+          {formik && isFormikTouched(field.name) && getFormikError(field.name) && (
             <Typography variant="caption" color="error">
-              {formik.errors[field.name]}
+              {getFormikError(field.name)}
             </Typography>
           )}
         </FormControl>
@@ -244,17 +283,19 @@ const InputFields: FC<InputFieldsProps> = ({
           multiple={field.isMulti}
           accept={field?.format ? field.format + "/*" : "*"}
           onFileSelect={([File] = []) => {
-            const newValue = [...formik.values[field.name]];
+            const currentValue = getValue(field.name);
+            const newValue = Array.isArray(currentValue) ? [...currentValue] : [];
             newValue.push(File);
-            formik.setFieldValue(field.name, newValue);
+            handleChange(field.name, newValue);
           }}
           onFileRemove={(index) => {
-            const newValue = [...formik.values[field.name]];
+            const currentValue = getValue(field.name);
+            const newValue = Array.isArray(currentValue) ? [...currentValue] : [];
             newValue.splice(index, 1);
-            formik.setFieldValue(field.name, newValue);
+            handleChange(field.name, newValue);
           }}
           disabled={!editPerm || field.isDisabled}
-          defaultFiles = {[...formik.values[field.name]]}
+          defaultFiles={Array.isArray(getValue(field.name)) ? [...getValue(field.name)] : []}
         />
       );
 
@@ -273,15 +314,16 @@ const InputFields: FC<InputFieldsProps> = ({
                 control={
                   <Checkbox
                     name={field.name}
-                    checked={formik.values[field.name]?.includes(option.value)}
+                    checked={getValue(field.name)?.includes(option.value)}
                     onChange={(e) => {
-                      const newValue = [...formik.values[field.name]];
+                      const currentValue = getValue(field.name) || [];
+                      const newValue = [...currentValue];
                       if (e.target.checked) newValue.push(option.value);
                       else {
                         const index = newValue.indexOf(option.value);
                         if (index > -1) newValue.splice(index, 1);
                       }
-                      formik.setFieldValue(field.name, newValue);
+                      handleChange(field.name, newValue);
                     }}
                     disabled={!editPerm || field.isDisabled}
                   />
@@ -302,8 +344,8 @@ const InputFields: FC<InputFieldsProps> = ({
             control={
               <Checkbox
                 name={field.name}
-                checked={formik.values[field.name]}
-                onChange={formik.handleChange}
+                checked={getValue(field.name)}
+                onChange={handleEventChange}
                 disabled={!editPerm || field.isDisabled}
               />
             }
@@ -317,20 +359,19 @@ const InputFields: FC<InputFieldsProps> = ({
         <>
           <Textarea
             name={field.name}
-            value={formik.values[field.name]}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
+            value={getValue(field.name)}
+            onChange={handleEventChange}
+            onBlur={formik?.handleBlur} // Only for formik
             minRows={2}
             size="lg"
             variant="outlined"
             disabled={!editPerm || field.isDisabled}
           />
-          {formik.touched[field.name] && formik.errors[field.name] && (
+          {formik && isFormikTouched(field.name) && getFormikError(field.name) && (
             <FormHelperText className="error-text">
-              {formik.errors[field.name]}
+              {getFormikError(field.name)}
             </FormHelperText>
           )}
-
         </>
       );
 
@@ -339,7 +380,6 @@ const InputFields: FC<InputFieldsProps> = ({
       const valueKey = field.valueKey || "value";
       const [adding, setAdding] = React.useState(false);
       const [newOption, setNewOption] = React.useState("");
-      // const [options, setOptions] = React.useState(field.options || []);
 
       const handleAdd = () => {
         setAdding(true);
@@ -374,7 +414,11 @@ const InputFields: FC<InputFieldsProps> = ({
               <Button
                 className={`btn-save btn-small`}
                 size={"medium"}
-                onClick={() => { field.addOption(newOption) }}
+                onClick={() => {
+                  field.addOption(newOption);
+                  setNewOption("");
+                  setAdding(false);
+                }}
                 type={'button'}
                 variantType={"primary"}
                 disabled={!newOption.trim() || (!editPerm || field.isDisabled)}
@@ -388,9 +432,9 @@ const InputFields: FC<InputFieldsProps> = ({
                 <Select
                   name={field.name}
                   multiple={field.isMulti}
-                  value={formik.values[field.name] || (field.isMulti ? [] : "")}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
+                  value={getValue(field.name) || (field.isMulti ? [] : "")}
+                  onChange={handleEventChange}
+                  onBlur={formik?.handleBlur} // Only for formik
                   renderValue={(selected) => {
                     if (field.isMulti) {
                       return selected
@@ -406,15 +450,12 @@ const InputFields: FC<InputFieldsProps> = ({
                     return selectedOption ? selectedOption[labelKey] : "";
                   }}
                   disabled={!editPerm || field.isDisabled}
-                // sx={{
-                //   borderRadius: "var(--input-radius, 15px)",
-                // }}
                 >
                   {field.options.map((opt: any) => (
                     <MenuItem key={opt[valueKey]} value={opt[valueKey]}>
                       {field.isMulti && (
                         <Checkbox
-                          checked={formik.values[field.name]?.includes(opt[valueKey])}
+                          checked={getValue(field.name)?.includes(opt[valueKey])}
                           disabled={!editPerm || field.isDisabled}
                         />
                       )}
@@ -422,9 +463,9 @@ const InputFields: FC<InputFieldsProps> = ({
                     </MenuItem>
                   ))}
                 </Select>
-                {formik.touched[field.name] && formik.errors[field.name] && (
+                {formik && isFormikTouched(field.name) && getFormikError(field.name) && (
                   <Typography variant="caption" color="error">
-                    {formik.errors[field.name]}
+                    {getFormikError(field.name)}
                   </Typography>
                 )}
               </FormControl>
@@ -445,7 +486,6 @@ const InputFields: FC<InputFieldsProps> = ({
         </div>
       );
     }
-
 
     default:
       return null;

@@ -26,7 +26,7 @@ import useCheckPermission from "../../hooks/useCheckPermission";
       - onSubmit: onSubmit function
 */
 
-const GenericMaster = ({ pageTitle, schema, onSubmit, isEditPerm = false, isEditDisableDflt = false, oInitialValues, isSmartField }) => {
+const GenericMaster = ({ pageTitle, schema, onSubmit, isEditPerm = false, isEditDisableDflt = false, oInitialValues, isSmartField, isNotMainForm =false }) => {
   const [editPerm, setEditPerm] = useState(!isEditDisableDflt);
   const [instDtls, setInstDtls] = useState({ _id: '', insname: '' });
   const [aMultiSelectVal, setAMultiSelectVal] = useState([]);
@@ -107,7 +107,7 @@ const GenericMaster = ({ pageTitle, schema, onSubmit, isEditPerm = false, isEdit
           <Box key={sectionName} mb={4}>
             {/* Section Heading */}
             <div className="generic-master-card">
-              <SectionHeader sectionName={sectionName} />
+              {sectionName && <SectionHeader sectionName={sectionName} />}
               <div className="fields-row">
                 {fields.map((field, index) => {
                   const shouldShow =
@@ -144,7 +144,6 @@ const GenericMaster = ({ pageTitle, schema, onSubmit, isEditPerm = false, isEdit
           </Box>
         ))}
 
-
           {/* Buttons */}
           <div className="generic-form-footer">
             <Box display="flex" justifyContent="flex-end" gap={2} >
@@ -154,7 +153,7 @@ const GenericMaster = ({ pageTitle, schema, onSubmit, isEditPerm = false, isEdit
                   key={idx}
                   className={`btn-${btn?.nature?.toLowerCase()} btn-small`}
                   size={btn.size || "medium"}
-                  onClick={btn.name === "Reset" ? formik.handleReset : btn.onClick}
+                  onClick={btn.name === "Reset" ? formik.handleReset : ()=>{btn.onClick && btn.onClick(formik)}}
                   type={btn.type ?? 'button'}
                   disabled={btn.isDisabled || (btn.name !== "Cancel" && (!editPerm || btn.isDisabled))}
                   variantType={
