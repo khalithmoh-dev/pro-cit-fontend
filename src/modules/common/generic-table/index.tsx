@@ -8,7 +8,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  TablePagination,
   TextField,
   InputAdornment,
   IconButton,
@@ -16,121 +15,137 @@ import {
   Tooltip,
   Checkbox,
 } from '@mui/material';
-import {
-  Search
-} from 'lucide-react';
-import { useLayout } from "../../../modules/layout/LayoutContext"
+import { Search } from 'lucide-react';
+import { useLayout } from '../../../modules/layout/LayoutContext';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../../components/Button';
 import { useTranslation } from 'react-i18next';
 import useAuthStore from '../../../store/authStore';
+import CustomPagination from './customPagination';
 
-interface DataTableI {
-  data?: object[]
-  columns?: object[]
-  selectable?: Boolean
-  onSelect?: Function
-  pagination?: Boolean
-  searchable?: Boolean
-  title?: string
-  actions?: object[]
-  apiService?: string[];
-  serverSide?: boolean;
-}
+/**
+ * DataTable Component
+ * ----------------------------------
+ * A reusable, feature-rich table with optional:
+ *  - Pagination
+ *  - Search
+ *  - Sorting
+ *  - Row selection
+ *  - Server-side data fetching
+ *  - Custom actions and header buttons
+ *
+ * Props:
+ * - data: array of data objects (for client-side)
+ * - columns: column definition array [{ field, headerName, renderCell? }]
+ * - selectable: enable row selection
+ * - onSelect: callback for selected rows
+ * - pagination: enable pagination
+ * - searchable: enable search bar
+ * - title: table title
+ * - actions: per-row action buttons [{ label, icon, color, onClick }]
+ * - headerAction: additional header buttons
+ * - addRoute: route path for “Add New” button
+ * - apiService: async fetch function for server-side data
+ * - serverSide: enable server-side data mode
+ */
+
 const DataTable = ({
-  data,
-  columns,
+  data = [],
+  columns = [],
   selectable = false,
   onSelect = () => { },
   pagination = true,
   searchable = true,
-  title = "Data Table",
+  title = 'Data Table',
   actions = [],
-  headerAction = [{ actionName: "", onClick: () => { } }],
+  headerAction = [{ actionName: '', onClick: () => { } }],
   addRoute = '',
-  apiService = (page?: number, rowsPerPage?: number, searchTerm?: string) => { },
-  serverSide = false
+  apiService = (page, rowsPerPage, searchTerm) => { },
+  serverSide = false,
 }) => {
+  // === State variables ===
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
-  const [selected, setSelected] = useState([]);
+  const [selectedRows, setSelectedRows] = useState([]);
   const [filters, setFilters] = useState({});
-  const [tableData, setTableData] = useState<any[]>(serverSide ? [] : data);
-  const [filteredData, setFilteredData] = useState<any[]>(tableData);
-  const [paginatedData, setPaginatedData] = useState<any[]>(tableData);
-  const [total, setTotal] = useState(0);
+  const [tableData, setTableData] = useState(serverSide ? [] : data);
+  const [filteredData, setFilteredData] = useState(tableData);
+  const [paginatedData, setPaginatedData] = useState(tableData);
+  const [totalRecords, setTotalRecords] = useState(0);
+
+  // === Hooks ===
   const { setRouteNm, setActionFields } = useLayout();
   const navigate = useNavigate();
   const { t } = useTranslation();
   const authStore = useAuthStore();
 
+  // === Sync route name in layout ===
   useEffect(() => {
-    if (location.pathname) {
-      setRouteNm(location.pathname);
-    }
+    if (location.pathname) setRouteNm(location.pathname);
   }, [location.pathname]);
 
+  // === Build header actions and "Add New" button ===
   useEffect(() => {
-    if (addRoute) {
-      const aHeaderBtns = (headerAction ?? [])
-        .filter(action => action.actionName) // only keep actions with a name
-        .map(action => (
-          <Button
-            key={action.actionName} // always add a key in lists
-            variantType="upload"
-            size="md"
-            onClick={action.onClick}
-          >
-            {action.actionName}
-          </Button>
-        ));
-
-      // Add the "Add New" button if addRoute is defined
-      if (authStore?.permissions?.[location.pathname]?.create) {
-        aHeaderBtns.push(
-          <Button
-            className={`btn-primary btn-small`}
-            key="add-new"
-            variantType="submit"
-            onClick={() => navigate(addRoute)}
-          >
-            {t("ADD_NEW")}
-          </Button>
-        );
-      }
-
-      setActionFields(aHeaderBtns);
-    } else {
+    if (!addRoute) {
       setActionFields([]);
+      return;
     }
-  }, [addRoute, navigate, t]);
 
+    const headerButtons = (headerAction ?? [])
+      .filter((action) => action.actionName)
+      .map((action) => (
+        <Button
+          key={action.actionName}
+          variantType="upload"
+          size="md"
+          onClick={action.onClick}
+        >
+          {action.actionName}
+        </Button>
+      ));
+
+    // Add “Add New” button if user has permission
+    if (authStore?.permissions?.[location.pathname]?.create) {
+      headerButtons.push(
+        <Button
+          className="btn-primary btn-small"
+          key="add-new"
+          variantType="submit"
+          onClick={() => navigate(addRoute)}
+        >
+          {t('ADD_NEW')}
+        </Button>
+      );
+    }
+
+    setActionFields(headerButtons);
+  }, [addRoute, navigate, t, authStore?.permissions]);
+
+  // === Fetch or set table data ===
   useEffect(() => {
     if (serverSide && apiService) {
-      const fetchData = async () => {
+      const fetchServerData = async () => {
         try {
-
-          const tblData = await apiService(page, rowsPerPage, searchTerm);
-
-          setTableData(tblData?.data || []);
-          setTotal(tblData?.total || 0);
+          const response = await apiService(page, rowsPerPage, searchTerm);
+          setTableData(response?.data || []);
+          setTotalRecords(response?.total || 0);
         } catch (err) {
           console.error('Error fetching data:', err);
         }
       };
 
-      const delayDebounce = setTimeout(fetchData, 400); // debounce search
-      return () => clearTimeout(delayDebounce);
+      const debounceFetch = setTimeout(fetchServerData, 400); // debounce search
+      return () => clearTimeout(debounceFetch);
     } else {
-      // fallback for static data
+      // Client-side mode
       setTableData(data);
-      setTotal(data.length);
+      setTotalRecords(data.length);
     }
   }, [page, rowsPerPage, searchTerm, apiService, serverSide, data?.length]);
 
-  // Handle sorting
+  // === Sorting handler ===
   const handleSort = (key) => {
     let direction = 'asc';
     if (sortConfig.key === key && sortConfig.direction === 'asc') {
@@ -139,41 +154,43 @@ const DataTable = ({
     setSortConfig({ key, direction });
   };
 
-  // Handle row selection
-  const handleSelect = (id) => {
-    if (selectable) {
-      let newSelected = [...selected];
-      if (newSelected.includes(id)) {
-        newSelected = newSelected.filter(item => item !== id);
-      } else {
-        newSelected.push(id);
-      }
-      setSelected(newSelected);
-      if (onSelect) onSelect(newSelected);
+  // === Single row selection handler ===
+  const handleSelectRow = (id) => {
+    if (!selectable) return;
+    let updatedSelection = [...selectedRows];
+
+    if (updatedSelection.includes(id)) {
+      updatedSelection = updatedSelection.filter((item) => item !== id);
+    } else {
+      updatedSelection.push(id);
+    }
+
+    setSelectedRows(updatedSelection);
+    onSelect(updatedSelection);
+  };
+
+  // === Select all rows handler ===
+  const handleSelectAllRows = () => {
+    if (!selectable) return;
+
+    if (selectedRows.length === filteredData.length) {
+      setSelectedRows([]);
+      onSelect([]);
+    } else {
+      const allIds = filteredData.map((item) => item.id);
+      setSelectedRows(allIds);
+      onSelect(allIds);
     }
   };
 
-  // Handle select all
-  const handleSelectAll = () => {
-    if (selectable) {
-      if (selected.length === filteredData.length) {
-        setSelected([]);
-        if (onSelect) onSelect([]);
-      } else {
-        const allIds = filteredData.map(item => item.id);
-        setSelected(allIds);
-        if (onSelect) onSelect(allIds);
-      }
-    }
-  };
-
+  // === Filter, search & sort data (client-side only) ===
   useEffect(() => {
-    let data = [...tableData];
+    let updatedData = [...tableData];
 
     // Apply search
     if (searchTerm) {
-      data = data.filter(item =>
-        Object.values(item).some(value =>
+      updatedData = updatedData.filter((item) =>
+        Object.values(item).some((value) =>
           String(value).toLowerCase().includes(searchTerm.toLowerCase())
         )
       );
@@ -182,13 +199,13 @@ const DataTable = ({
     // Apply filters
     for (const [key, value] of Object.entries(filters)) {
       if (value) {
-        data = data.filter(item => item[key] === value);
+        updatedData = updatedData.filter((item) => item[key] === value);
       }
     }
 
     // Apply sorting
     if (sortConfig.key) {
-      data.sort((a, b) => {
+      updatedData.sort((a, b) => {
         const aValue = a[sortConfig.key];
         const bValue = b[sortConfig.key];
         if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
@@ -197,52 +214,67 @@ const DataTable = ({
       });
     }
 
-    setFilteredData(data);
+    setFilteredData(updatedData);
   }, [tableData, searchTerm, filters, sortConfig]);
 
-
-  // Pagination
+  // === Pagination logic (client-side only) ===
   useEffect(() => {
     if (pagination && !serverSide) {
-      const start = page * rowsPerPage;
-      const end = start + rowsPerPage;
-      setPaginatedData(filteredData.slice(start, end));
+      const startIdx = page * rowsPerPage;
+      const endIdx = startIdx + rowsPerPage;
+      setPaginatedData(filteredData.slice(startIdx, endIdx));
     } else {
       setPaginatedData(filteredData);
     }
   }, [filteredData, page, rowsPerPage, pagination]);
 
-  // Handle page change
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  // Handle rows per page change
+  // === Pagination controls ===
+  const handleChangePage = (event, newPage) => setPage(newPage);
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
-  // Handle filter change
+  // === Filters ===
   const handleFilterChange = (key, value) => {
-    setFilters(prev => ({ ...prev, [key]: value }));
+    setFilters((prev) => ({ ...prev, [key]: value }));
     setPage(0);
   };
-
-  // Clear all filters
   const clearFilters = () => {
     setFilters({});
     setSearchTerm('');
   };
 
+  // === Render ===
   return (
-    <Box sx={{ width: '100%', mt: 2, mb: 2, px: 2, border: '1px solid rgba(224, 224, 224, 1)', borderRadius: 3 }}>
-      {/* Header with title and search */}
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: 'fit-content', backgroundColor: "white", borderBottom: '1px solid rgba(224, 224, 224, 1)', borderRadius: "16px 16px 0 0" }}>
-        <div className='mt-3 mx-2'>
-          <p className='fw-semibold fsd-0'>{title}</p>
-          <p style={{ color: 'slategrey' }}>{`Showing ${paginatedData?.length} of ${total}`}</p>
+    <Box
+      sx={{
+        width: '100%',
+        mt: 2,
+        mb: 2,
+        px: 2,
+        border: '1px solid rgba(224, 224, 224, 1)',
+        borderRadius: 3,
+      }}
+    >
+      {/* ==== Header Section ==== */}
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          backgroundColor: 'white',
+          borderBottom: '1px solid rgba(224, 224, 224, 1)',
+          borderRadius: '16px 16px 0 0',
+        }}
+      >
+        <div className="mt-3 mx-2">
+          <p className="fw-semibold fsd-0">{title}</p>
+          <p style={{ color: 'slategrey' }}>
+            {`Showing ${paginatedData?.length} of ${totalRecords}`}
+          </p>
         </div>
+
         {searchable && (
           <TextField
             placeholder="Search..."
@@ -258,74 +290,83 @@ const DataTable = ({
                 </InputAdornment>
               ),
             }}
-            sx={{ width: 300, marginRight: "12px" }}
+            sx={{ width: 300, marginRight: '12px' }}
             size="small"
           />
         )}
       </Box>
-      {/* Table */}
 
-      <TableContainer component={Paper} elevation={0} sx={{ overflow: 'auto', border: '1px solid rgba(224, 224, 224, 1)', mt: 2, borderRadius: 4 }}>
-        <Table sx={{ minWidth: 650, borderCollapse: 'collapse', }} aria-label="data table">
-          <TableHead style={{ background: 'aliceblue' }} sx={{ '& .MuiTableCell-root': { py: 1.5, px: 1.5 } }}>
+      {/* ==== Table ==== */}
+      <TableContainer
+        component={Paper}
+        elevation={0}
+        sx={{
+          overflow: 'auto',
+          border: '1px solid rgba(224, 224, 224, 1)',
+          mt: 2,
+          borderRadius: 4,
+        }}
+      >
+        <Table sx={{ minWidth: 650, borderCollapse: 'collapse' }}>
+          {/* ==== Table Header ==== */}
+          <TableHead
+            style={{ background: 'aliceblue' }}
+            sx={{ '& .MuiTableCell-root': { py: 1.5, px: 1.5 } }}
+          >
             <TableRow>
               {selectable && (
                 <TableCell padding="checkbox">
                   <Checkbox
-                    indeterminate={selected.length > 0 && selected.length < filteredData.length}
-                    checked={selected.length === filteredData.length && filteredData.length > 0}
-                    onChange={handleSelectAll}
+                    indeterminate={
+                      selectedRows.length > 0 &&
+                      selectedRows.length < filteredData.length
+                    }
+                    checked={
+                      selectedRows.length === filteredData.length &&
+                      filteredData.length > 0
+                    }
+                    onChange={handleSelectAllRows}
                   />
                 </TableCell>
               )}
 
-              {columns.map(col => (
-                <TableCell key={col.field} className='fwd-1'>
-                  {/* {col.sortable ? (
-                    <TableSortLabel
-                      active={sortConfig.key === col.field}
-                      direction={sortConfig.key === col.field ? sortConfig.direction : 'asc'}
-                      onClick={() => handleSort(col.field)}
-                      IconComponent={sortConfig.key === col.field ? 
-                        (sortConfig.direction === 'asc' ? ChevronUp : ChevronDown) : 
-                        undefined
-                      }
-                    >
-                      {col.headerName}
-                    </TableSortLabel>
-                  ) : (
-                    col.headerName
-                  )} */}
+              {columns.map((col) => (
+                <TableCell key={col.field} className="fwd-1">
                   {col.headerName}
                 </TableCell>
               ))}
 
               {actions.length > 0 && (
-                <TableCell align="center" className='fwd-1'>Actions</TableCell>
+                <TableCell align="center" className="fwd-1">
+                  Actions
+                </TableCell>
               )}
             </TableRow>
           </TableHead>
+
+          {/* ==== Table Body ==== */}
           <TableBody>
             {paginatedData.length > 0 ? (
               paginatedData.map((row, index) => (
                 <TableRow
                   key={index}
                   hover
-                  selected={selected.includes(row.id)}
-                  onClick={() => handleSelect(row.id)}
+                  selected={selectedRows.includes(row.id)}
+                  onClick={() => handleSelectRow(row.id)}
                   sx={{
-                    cursor: selectable ? 'pointer' : 'default', '& .MuiTableCell-root': {
+                    cursor: selectable ? 'pointer' : 'default',
+                    '& .MuiTableCell-root': {
                       textTransform: 'none',
-                    }
+                    },
                   }}
                 >
                   {selectable && (
                     <TableCell padding="checkbox">
-                      <Checkbox checked={selected.includes(row.id)} />
+                      <Checkbox checked={selectedRows.includes(row.id)} />
                     </TableCell>
                   )}
 
-                  {columns.map(col => (
+                  {columns.map((col) => (
                     <TableCell key={col.field}>
                       {col.renderCell ? col.renderCell(row) : row[col.field]}
                     </TableCell>
@@ -333,8 +374,14 @@ const DataTable = ({
 
                   {actions.length > 0 && (
                     <TableCell align="center">
-                      <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1 }}>
-                        {actions.map(action => (
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          justifyContent: 'center',
+                          gap: 1,
+                        }}
+                      >
+                        {actions.map((action) => (
                           <Tooltip key={action.label} title={action.label}>
                             <IconButton
                               size="small"
@@ -355,7 +402,14 @@ const DataTable = ({
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length + (selectable ? 1 : 0) + (actions.length > 0 ? 1 : 0)} align="center">
+                <TableCell
+                  colSpan={
+                    columns.length +
+                    (selectable ? 1 : 0) +
+                    (actions.length > 0 ? 1 : 0)
+                  }
+                  align="center"
+                >
                   <Box sx={{ py: 4 }}>
                     <Typography variant="body2" color="textSecondary">
                       No data found
@@ -368,13 +422,21 @@ const DataTable = ({
         </Table>
       </TableContainer>
 
-      {/* Pagination */}
-      <div className='d-flex justify-content-center align-items-center bg-white' style={{ borderRadius: "0 0 10px 10px" }}>
-        {pagination && (
+      {/* ==== Pagination ==== */}
+      {/* {pagination && (
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            py: 1, // vertical padding
+            px: 2, // horizontal padding
+          }}
+        >
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={total}
+            count={totalRecords}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
@@ -384,19 +446,59 @@ const DataTable = ({
                 padding: 0,
                 minHeight: 'auto',
               },
-              '.MuiTablePagination-spacer': {
-                display: 'none',
-              },
               '.MuiTablePagination-selectLabel': {
                 margin: 0,
+                fontWeight: 500,
               },
               '.MuiTablePagination-displayedRows': {
                 margin: 0,
+                fontSize: '0.875rem',
+                color: '#555',
+              },
+              '.MuiTablePagination-actions': {
+                '& button': {
+                  color: '#1976d2', // theme primary color for arrows
+                },
+              },
+              '.MuiTablePagination-select': {
+                '& select': {
+                  padding: '4px 8px',
+                  borderRadius: '4px',
+                  border: '1px solid #ccc',
+                },
               },
             }}
           />
-        )}
-      </div>
+        </Box>
+      )} */}
+
+      {pagination && (
+        <Box
+          sx={{
+            
+            bottom: 0,
+            backgroundColor: '#fff',
+            zIndex: 10,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            py: 1,
+          }}
+
+        >
+          <CustomPagination
+            page={page + 1} // 1-based
+            totalPages={Math.ceil(totalRecords / rowsPerPage)}
+            rowsPerPage={rowsPerPage}
+            onPageChange={(newPage) => setPage(newPage - 1)} // convert to 0-based
+            onRowsPerPageChange={(newRows) => {
+              setRowsPerPage(newRows);
+              setPage(0); // reset to first page
+            }}
+          />
+        </Box>
+      )}
+
     </Box>
   );
 };
