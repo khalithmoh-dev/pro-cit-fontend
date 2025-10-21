@@ -184,7 +184,7 @@ const ElectiveGroup: React.FC<ElectiveGroupProps> = ({
                         name: "selectedCourse",
                         label: t("COURSE"),
                         type: "select",
-                        labelKey: "parsedData",
+                        labelKey: "crsNm",
                         valueKey: "_id",
                         isApi: true, // Flag for API-based search
                         inputValue: searchInputValue,
