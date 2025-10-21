@@ -1,27 +1,28 @@
-/* Import Fonts */
+/* ==========================
+   Fonts & Imports
+========================== */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap');
 @import 'bootstrap/dist/css/bootstrap.min.css';
 
-/* * {
-  font-family: "Inter", "Arial", sans-serif !important;
-  font-weight: 400 !important;
-} */
-
+/* ==========================
+   Global Styles
+========================== */
 html, body, #root {
   margin: 0;
   padding: 0;
   height: 100%;
-  background-color: var(--bg-color); /* Global page background */
+  background-color: var(--bg-color);
   font-family: 'Roboto', sans-serif;
-  text-transform: capitalize
+  text-transform: capitalize;
 }
 
-/* Common Variables */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+
+  /* Colors */
   --primary: #0465ac;
   --primary-dark: #1a81c1;
   --primary-shade: #3d91cd66;
@@ -35,46 +36,9 @@ html, body, #root {
   --error: #ff3838;
 }
 
-/* #region theme styles*/
-/* Light Theme */
-/* [data-theme='light'] { */
-  /* --bg-color: #e0e0e0;        Light grey background for the whole page */
-  /* --sidebar-bg: #d6d6d6;      Sidebar slightly darker grey */
-  /* --sidebar-text: #222222; */
-  /* --main-text: #000000; */
-  /* --header-color: #000000; */
-  /* --logout-button: #ec407a; */
-  /* --logout-text: #ffffff; */
-  /* --sidebar-hover-bg: rgba(0, 0, 0, 0.05); */
-  /* --sidebar-selected-bg: #4c6b5a; */
-  /* --sidebar-selected-text: #ffffff; */
-/* } */
-
-/* Dark Theme */
-/* [data-theme='dark'] {
-  --bg-color: #fcf4fc;        /* Dark grey page background */
-  /* --sidebar-bg: #f5f2ff;      /* Darker sidebar */
-  /* --sidebar-text: #000000; */
-  /* --main-text: #000000; */
-  /* --logo-color: #ffffff; */
-  /* --form-bg: #ffffff; */
-  /* --header-color: #f5f5f5; */
-  /* --logout-button: #756AB6; */
-  /* --logout-text: #ffffff; */
-  /* --sidebar-hover-bg: rgba(255, 255, 255, 0.1); */
-  /* --sidebar-selected-bg: #4c6b5a; */
-  /* --sidebar-selected-text: #ffffff; */
-  /* --font-family-1: "SF Pro Display,SF Pro Icons,Helvetica Neue,Helvetica,Arial,sans-serif" */ 
-/* } */
-/* #endregion */
-
-/* Headers */
-.page-header {
-  color: var(--header-color);
-  line-height: 1.334;
-}
-
-/* Scrollbar */
+/* ==========================
+   Scrollbar
+========================== */
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -92,407 +56,28 @@ html, body, #root {
   background: #555;
 }
 
-/* Sidebar Styles */
-/* .sidebar {
-  background-color: var(--sidebar-bg);
-  color: var(--sidebar-text);
-  transition: width 0.3s ease-in-out;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px;
-  border-radius: 10px;
+/* ==========================
+   Headers
+========================== */
+.page-header {
+  color: var(--header-color);
+  line-height: 1.334;
 }
 
-.sidebar a {
-  color: var(--sidebar-text);
-  text-decoration: none;
-  transition: background-color 0.2s;
-}
-
-.sidebar a:hover {
-  background-color: var(--sidebar-hover-bg);
-  border-radius: 6px;
-}
-
-.sidebar a.active {
-  background-color: var(--sidebar-selected-bg);
-  color: var(--sidebar-selected-text);
-  border-radius: 6px;
-}
-
-/* Profile Circle */
-.profile-text {
-  background-color: var(--logout-button);
-  color: var(--logout-text);
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  text-transform: uppercase;
-} */
-
-/* Error Text */
-.error-text {
-  color: var(--error);
-}
-
-.default
-/* #region mui styles*/
-
-.generic-form-footer > .MuiBox-root.css-ku0b5b {
-  margin-top: 0 !important;
-}
-
-
-
-/* .css-11qxch-MuiButtonBase-root-MuiButton-root.Mui-disabled{
-  color: #fff5f5 !important;
-  background-color: rgba(0, 0, 0, 0.38);
-}
-
-.css-1orzuox-MuiTableCell-root{
-  font-family: var(--font-family-1) !important;
-  font-weight: 600;
-}
-
-.css-1dc80h3-MuiTableCell-root{
-  font-family: var(--font-family-1) !important;
-}
-
-.css-7oysng{
-  border-radius: 15px;
-} */
-/* #endregion */
-
-/* GenericMaster Card */
-.generic-master-card {
-  background-color: var(--card-bg, #fff); /* Similar to bg-card */
-  color: var(--card-foreground, #000);    /* Similar to text-card-foreground */
-  display: flex;                         /* flex */
-  flex-direction: column;                /* flex-col */
-  gap: 1rem;                           /* gap-6 => 1.5rem*/
-  border-radius: 0.75rem;                /* rounded-xl => 12px */
-  border: 1px solid var(--border-color, #e5e7eb); /* border */
-  padding: 3rem;
-  margin-left: 30px;
-  margin-right: 10px;
-  box-shadow: 13px 13px 15px rgba(0, 0, 0, 0.15);
-}
-.generic-master-card .fields-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); /* 250px minimum */
-  gap: 16px;
-}
-
-.generic-master-card .field-wrapper {
-  min-width: 200px;
-  align-self: center;
-}
-
-
-.generic-form-footer {
-  background-color: var(--card-bg, #fff); /* Similar to bg-card */
-  color: var(--card-foreground, #000);    /* Similar to text-card-foreground */
-  display: flex;                         /* flex */
-  flex-direction: column;                /* flex-col */
-  gap: 1rem;                           /* gap-6 => 1.5rem*/
-  border-radius: 0.75rem;                /* rounded-xl => 12px */
-  border: 1px solid var(--border-color, #e5e7eb); /* border */
-  padding: 1.5rem;
-  margin-left: 30px;
-  margin-right: 10px;
-
-}
-
-/* #region react-select global styles */
-
-/* Control (input box) */
-div[class*="-control"] {
-  border-radius: var(--input-radius, 15px) !important;
-  min-height: 40px;
-  font-family: var(--font-family-1) !important;
-}
-
-/* Control - disabled */
-div[class*="-control--is-disabled"] {
-  background-color: #e2e8f0;
-  border-radius: var(--input-radius, 15px) !important;
-  color: #000 !important;
-  cursor: not-allowed !important;
-}
-
-/* Placeholder text */
-div[class*="-placeholder"] {
-  font-family: var(--font-family-1) !important;
-  color: #666;
-}
-
-/* Single value text */
-div[class*="-singleValue"] {
-  font-family: var(--font-family-1) !important;
-  font-weight: 500;
-}
-
-/* Dropdown menu */
-div[class*="-menu"] {
-  border-radius: var(--input-radius, 15px) !important;
-  font-family: var(--font-family-1) !important;
-  z-index: 9999; /* keep it on top of dialogs/tables */
-}
-
-/* Options inside menu */
-div[class*="-option"] {
-  font-family: var(--font-family-1) !important;
-  padding: 8px 12px;
-  border-radius: 10px;
-  cursor: pointer;
-}
-
-div[class*="-option"]:hover {
-  background-color: #f5f5f5;
-}
-
-/* Multi-value (chips) */
-div[class*="-multiValue"] {
-  border-radius: var(--input-radius, 15px) !important;
-  background-color: #e2e8f0;
-  font-family: var(--font-family-1) !important;
-}
-
-/* Multi-value remove (x button) */
-div[class*="-multiValue__remove"] {
-  cursor: pointer;
-}
-
-div[class*="-control--is-disabled"] div[class*="-multiValue"] {
-  background-color: #e2e8f0 !important; /* slightly darker grey */
-  color: #000 !important;
-}
-
-.icon-btn:enabled {
-  color: #0d6efd !important; /* Bootstrap blue */
-}
-
-.icon-btn-enabled:hover {
-  color: #084298 !important; /* Darker blue */
-}
-
-.icon-btn:disabled {
-  color: #94a3b8 !important; /* Gray */
-  cursor: not-allowed !important;
-}
-
-
-@custom-variant dark (&:is(.dark *));
-
-:root {
-  --font-size: 16px;
-  --background: #ffffff;
-  --foreground: oklch(0.145 0 0);
-  --card: #ffffff;
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: #030213;
-  --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.95 0.0058 264.53);
-  --secondary-foreground: #030213;
-  --muted: #ececf0;
-  --muted-foreground: #717182;
-  --accent: #e9ebef;
-  --accent-foreground: #030213;
-  --destructive: #d4183d;
-  --destructive-foreground: #ffffff;
-  --border: rgba(0, 0, 0, 0.1);
-  --input: transparent;
-  --input-background: #f3f3f5;
-  --switch-background: #cbced4;
-  --font-weight-medium: 500;
-  --font-weight-normal: 400;
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: #030213;
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-}
-
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.145 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.145 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.985 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.396 0.141 25.723);
-  --destructive-foreground: oklch(0.637 0.237 25.331);
-  --border: oklch(0.269 0 0);
-  --input: oklch(0.269 0 0);
-  --ring: oklch(0.439 0 0);
-  --font-weight-medium: 500;
-  --font-weight-normal: 400;
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(0.269 0 0);
-  --sidebar-ring: oklch(0.439 0 0);
-}
-
-/* @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-input-background: var(--input-background);
-  --color-switch-background: var(--switch-background);
-  --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
-} */
-
-/* @layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-
-  body {
-    @apply bg-background text-foreground;
-  }
-} */
-
-/**
- * Base typography. This is not applied to elements which have an ancestor with a Tailwind text class.
- */
-/* @layer base {
-  :where(:not(:has([class*=" text-"]), :not(:has([class^="text-"])))) {
-    h1 {
-      font-size: var(--text-2xl);
-      font-weight: var(--font-weight-medium);
-      line-height: 1.5;
-    }
-
-    h2 {
-      font-size: var(--text-xl);
-      font-weight: var(--font-weight-medium);
-      line-height: 1.5;
-    }
-
-    h3 {
-      font-size: var(--text-lg);
-      font-weight: var(--font-weight-medium);
-      line-height: 1.5;
-    }
-
-    h4 {
-      font-size: var(--text-base);
-      font-weight: var(--font-weight-medium);
-      line-height: 1.5;
-    }
-
-    p {
-      font-size: var(--text-base);
-      font-weight: var(--font-weight-normal);
-      line-height: 1.5;
-    }
-
-    label {
-      font-size: var(--text-base);
-      font-weight: var(--font-weight-medium);
-      line-height: 1.5;
-    }
-
-    button {
-      font-size: var(--text-base);
-      font-weight: var(--font-weight-medium);
-      line-height: 1.5;
-    }
-
-    input {
-      font-size: var(--text-base);
-      font-weight: var(--font-weight-normal);
-      line-height: 1.5;
-    }
-  }
-} */
-
-/* html {
-  font-size: var(--font-size);
-} */
-
-
-/* Custom Design System - Bootstrap + Material UI Integration */
-
-:root {
-  --sidebar-bg: #f8f9fa;
-  --sidebar-border: #dee2e6;
-  --sidebar-text: #495057;
-  --sidebar-hover: #e9ecef;
-  --sidebar-active: #007bff;
-  --sidebar-active-text: #ffffff;
-}
-
-/* Custom Sidebar Styles */
+/* ==========================
+   Sidebar
+========================== */
+/* ==========================
+   Sidebar Styles
+========================== */
 .sidebar {
   transition: all 0.5s ease;
   background: var(--sidebar-bg);
   border-right: 1px solid var(--sidebar-border);
+  overflow: hidden;
 }
 
+/* Sidebar Width States */
 .sidebar-collapsed {
   width: 7rem !important;
   display: flex;
@@ -505,6 +90,7 @@ div[class*="-control--is-disabled"] div[class*="-multiValue"] {
   width: 17rem !important;
 }
 
+/* Sidebar Items */
 .sidebar-item {
   transition: all 0.2s ease;
   border-radius: 6px;
@@ -514,7 +100,8 @@ div[class*="-control--is-disabled"] div[class*="-multiValue"] {
   align-items: center;
   gap: 12px;
   text-decoration: none;
-  color: black;
+  color: var(--sidebar-text);
+  cursor: pointer;
 }
 
 .sidebar-item:hover {
@@ -528,6 +115,7 @@ div[class*="-control--is-disabled"] div[class*="-multiValue"] {
   color: var(--sidebar-active-text);
 }
 
+/* Sidebar Trigger Button */
 .sidebar-trigger {
   background: none;
   border: none;
@@ -538,9 +126,10 @@ div[class*="-control--is-disabled"] div[class*="-multiValue"] {
 }
 
 .sidebar-trigger:hover {
-  background: #e9ecef;
+  background: var(--sidebar-hover);
 }
 
+/* Nested Children Wrapper */
 .sidebar-children-wrapper {
   position: relative;
   margin-left: 1.2rem;
@@ -558,252 +147,190 @@ div[class*="-control--is-disabled"] div[class*="-multiValue"] {
   background: #ccc;
 }
 
-.sidebar-text-content{
+/* Sidebar Text Visibility */
+.sidebar-text-content {
   opacity: 1;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
 .sidebar-collapsed .sidebar-text {
   opacity: 0;
   visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* ==========================
+   Sidebar Utility Variables
+========================== */
+:root {
+  --sidebar-bg: #f8f9fa;
+  --sidebar-border: #dee2e6;
+  --sidebar-text: #495057;
+  --sidebar-hover: #e9ecef;
+  --sidebar-active: #007bff;
+  --sidebar-active-text: #ffffff;
 }
 
 
-.profileText {
+/* ==========================
+   Profile Circle
+========================== */
+.profileText, .profile-text {
   display: flex;
   background-color: rgb(94, 94, 94);
   color: white;
-  border-radius: 40%;
+  border-radius: 50%;
   height: 40px;
   width: 40px;
   align-items: center;
   justify-content: center;
   text-transform: uppercase;
-}
-
-/* Color for Buttons */
-
-/* .btn-primary {
-  background-color: #007bff;
-  color: white;
-}
-
-.btn-primary:hover {
-  background-color: #1d4ed8;
-}
-
-
-.btn-secondary {
-  background-color: #6c757d;
-  color: white;
-}
-
-.btn-danger {
-  background-color: #dc3545;
-  color: white;
-}
-
-.btn-warning {
-  background-color: #f0ad4e;
-  color: white;
-}
-
-.btn-small {
-  width: 70px !important;
-  height: 40px !important;
-  cursor: pointer;
-}
-
-/* Cancel Button (destructive action) */
-/* .btn-cancel {
-  background-color: #ef4444;
-  color: #ffffff;
-  border: none;
-  border-radius: 0.5rem;
   font-weight: 600;
-  text-transform: none;
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
-  cursor: pointer;
-  transition:
-    background-color 0.2s ease-in-out,
-    box-shadow 0.2s ease-in-out,
-    transform 0.1s ease-in-out;
-} */
+}
 
-/* Hover state */
-/* .btn-cancel:hover {
-  background-color: #dc2626;
-} */
-
-/* Active (pressed) state */
-/* .btn-cancel:active {
-  background-color: #b91c1c;
-  transform: scale(0.98);
-} */
-
-/* Focus (keyboard navigation) state */
-/* .btn-cancel:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.3);
-} */
-
-/* Disabled state */
-/* .btn-cancel:disabled {
-  background-color: #fca5a5;
-  cursor: not-allowed;
-  opacity: 0.7;
-}  */
-
-/* Button Base Styles */
+/* ==========================
+   Buttons
+========================== */
 .btn-base {
-  border-radius: 0.5rem;
-  font-weight: 600;
-  text-transform: none;
+  border-radius: 0.65rem !important;
+  font-weight: 600 !important;
+  text-transform: capitalize !important;
+  transition: all 0.2s ease-in-out;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid;
+  height: 38px;
+}
+
+.btn-sm { padding: 6px 16px !important; font-size: 0.875rem !important; min-height: 36px !important; }
+.btn-md { padding: 8px 18px !important; font-size: 0.875rem !important; min-height: 40px !important; }
+.btn-lg { padding: 10px 22px !important; font-size: 1rem !important; min-height: 44px !important; }
+
+/* Primary Buttons */
+.btn-primary {
+  background-color: #2563eb !important;
+  color: #ffffff !important;
+  border-color: #2563eb !important;
+}
+.btn-primary:hover { background-color: #1d4ed8 !important; border-color: #1d4ed8 !important; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); }
+.btn-primary:active { background-color: #1e40af !important; transform: translateY(0); }
+
+/* Cancel Button */
+.btn-cancel {
+  background-color: #6b7280 !important;
+  color: #ffffff !important;
+  border-color: #6b7280 !important;
+}
+.btn-cancel:hover { background-color: #4b5563 !important; border-color: #4b5563 !important; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3); }
+.btn-cancel:active { background-color: #374151 !important; transform: translateY(0); }
+
+/* Reset Button */
+.btn-reset {
+  background-color: #f59e0b !important;
+  color: #ffffff !important;
+  border-color: #f59e0b !important;
+}
+.btn-reset:hover { background-color: #d97706 !important; border-color: #d97706 !important; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3); }
+.btn-reset:active { background-color: #b45309 !important; transform: translateY(0); }
+
+/* Add Button */
+.btn-add {
+  background-color: #059669 !important;
+  color: #ffffff !important;
+  border-color: #059669 !important;
+}
+.btn-add:hover { background-color: #047857 !important; border-color: #047857 !important; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3); }
+.btn-add:active { background-color: #065f46 !important; transform: translateY(0); }
+
+/* Disabled State */
+.btn-base:disabled { background-color: #d1d5db !important; color: #9ca3af !important; border-color: #d1d5db !important; cursor: not-allowed; transform: none; box-shadow: none; }
+
+/* Focus State */
+.btn-base:focus { outline: 2px solid #3b82f6 !important; outline-offset: 2px !important; }
+
+/* ==========================
+   Card & Form Styles
+========================== */
+.generic-master-card, .generic-form-footer {
+  background-color: var(--card-bg, #fff);
+  color: var(--card-foreground, #000);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--border-color, #e5e7eb);
+  padding: 1.5rem;
+  margin-left: 30px;
+  margin-right: 10px;
+  box-shadow: 13px 13px 15px rgba(0, 0, 0, 0.15);
   transition: all 0.2s ease-in-out;
   position: relative;
   overflow: hidden;
 }
 
-/* Button Sizes */
-.btn-sm {
-  padding: 6px 16px;
-  font-size: 0.875rem;
-  min-height: 36px;
+.generic-master-card:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(3, 8, 19, 0.3); }
+
+.generic-master-card .fields-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+  gap: 16px;
 }
 
-.btn-md {
-  padding: 8px 18px;
-  font-size: 0.875rem;
+.generic-master-card .field-wrapper {
+  min-width: 200px;
+  align-self: center;
+}
+
+/* ==========================
+   Error Text
+========================== */
+.error-text {
+  color: var(--error);
+}
+
+/* ==========================
+   Font Sizes (Utilities)
+========================== */
+.fsd-3 { font-size: 12px; }
+.fsd-2 { font-size: 14px; }
+.fsd-1 { font-size: 16px; }
+.fsd-0 { font-size: 20px; }
+
+/* ==========================
+   Font Weights (Utilities)
+========================== */
+.fwd-1 { font-weight: 600 !important; }
+.fwd-2 { font-weight: 500 !important; }
+
+/* ==========================
+   Colors (Utilities)
+========================== */
+.color-primary_text { color: #000000; }
+
+/* ==========================
+   React Select Overrides
+========================== */
+div[class*="-control"] {
+  border-radius: var(--input-radius, 15px) !important;
   min-height: 40px;
+  font-family: var(--font-family-1) !important;
 }
 
-.btn-lg {
-  padding: 10px 22px;
-  font-size: 1rem;
-  min-height: 44px;
+div[class*="-control--is-disabled"] { background-color: #e2e8f0; border-radius: 15px !important; color: #000 !important; cursor: not-allowed !important; }
+
+div[class*="-placeholder"], div[class*="-singleValue"], div[class*="-menu"], div[class*="-option"], div[class*="-multiValue"] {
+  font-family: var(--font-family-1) !important;
 }
 
-/* Primary/Submit Button */
-.btn-primary {
-  background-color: #2563eb; /* Professional blue */
-  color: #ffffff;
-  border: 1px solid #2563eb;
-}
+div[class*="-option"]:hover { background-color: #f5f5f5; }
 
-.btn-primary:hover {
-  background-color: #1d4ed8; /* Darker blue */
-  border-color: #1d4ed8;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-}
+div[class*="-multiValue__remove"] { cursor: pointer; }
 
-.btn-primary:active {
-  background-color: #1e40af;
-  transform: translateY(0);
-}
+div[class*="-control--is-disabled"] div[class*="-multiValue"] { background-color: #e2e8f0 !important; color: #000 !important; }
 
-/* Cancel Button */
-.btn-cancel {
-  background-color: #6b7280; /* Professional gray */
-  color: #ffffff;
-  border: 1px solid #6b7280;
-}
-
-.btn-cancel:hover {
-  background-color: #4b5563; /* Darker gray */
-  border-color: #4b5563;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(107, 114, 128, 0.3);
-}
-
-.btn-cancel:active {
-  background-color: #374151;
-  transform: translateY(0);
-}
-
-/* Reset Button */
-/* .btn-reset {
-  background-color: #f59e0b;
-  color: #ffffff;
-  border: 1px solid #f59e0b;
-} */
-
-/* .btn-reset:hover {
-  background-color: #d97706;
-  border-color: #d97706;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
-} */
-
-/* .btn-reset:active {
-  background-color: #b45309;
-  transform: translateY(0);
-} */
-
-/* Add Button */
-/* .btn-add {
-  background-color: #059669;
-  color: #ffffff;
-  border: 1px solid #059669;
-} */
-
-/* .btn-add:hover {
-  background-color: #047857;
-  border-color: #047857;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
-} */
-
-/* .btn-add:active {
-  background-color: #065f46;
-  transform: translateY(0);
-} */
-
-/* Disabled State */
-/* .btn-base:disabled {
-  background-color: #d1d5db;
-  color: #9ca3af;
-  border-color: #d1d5db;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-} */
-
-/* Focus State for Accessibility */
-/* .btn-base:focus {
-  outline: 2px solid #3b82f6;
-  outline-offset: 2px;
-} */
-
-
-
-/* DONT MAKE ANY CHANGES BELOW (HIGH IMPACT) */
-
-/* #region font sizes*/
-.fsd-3{
-  font-size: 12px;
-}
-.fsd-2{
-  font-size: 14px;
-}
-
-.fsd-1{
-  font-size: 16px;
-}
-
-.fsd-0{
-  font-size: 20px;
-}
-/* endregion */
-
-.fwd-1{
-  font-weight: 600 !important;
-}
-.fwd-2{
-  font-weight: 500 !important;
-}
-
-/* colors */
-.color-primary_text{
-  color: #000000;
-}
+/* ==========================
+   Icon Button Overrides
+========================== */
+.icon-btn:enabled { color: #0d6efd !important; }
+.icon-btn-enabled:hover { color: #084298 !important; }
+.icon-btn:disabled { color: #94a3b8 !important; cursor: not-allowed !important; }
