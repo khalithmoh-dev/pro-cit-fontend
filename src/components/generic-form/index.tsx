@@ -43,7 +43,7 @@ const GenericMaster = ({
   isNotMainForm = false
 }) => {
   // === Local States ===
-  const [isEditEnabled, setIsEditEnabled] = useState(!isEditDisableDflt);
+  const [isEditEnabled, setIsEditEnabled] = useState(isEditDisableDflt ? false : true);
   const [instituteDetails, setInstituteDetails] = useState({ _id: "", insname: "" });
   const [multiSelectValues, setMultiSelectValues] = useState([]);
 

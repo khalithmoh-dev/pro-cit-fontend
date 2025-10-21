@@ -78,9 +78,9 @@ const CreateDepartmentPage: React.FC<PropsIF> = ({ update }) => {
           General: [
             {
               name: "insId",
-              label: t("INSTITUITION_NAME"),
+              label: t("INSTITUTION_NAME"),
               type: "select",
-              validation: Yup.string().required(t("INSTITUITION_NAME_IS_REQUIRED")),
+              validation: Yup.string().required(t("INSTITUTION_NAME_IS_REQUIRED")),
               isRequired: true,
               isDisabled: true
             },

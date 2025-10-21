@@ -48,7 +48,7 @@ interface EnterpriseFilterProps {
 }
 
 const EnterpriseFilter: React.FC<EnterpriseFilterProps> = ({ schema, onSubmit, isEditPerm = false, isEditDisableDflt = false, oInitialValues, isSmartField, setIsEditPerm }) => {
-  const [editPerm, setEditPerm] = useState(!isEditDisableDflt);
+  const [editPerm, setEditPerm] = useState(isEditDisableDflt ? false : true);
   const [instDtls, setInstDtls] = useState({ _id: '', insname: '' });
   const [aMultiSelectVal, setAMultiSelectVal] = useState([]);
   const instituteStore = useInstituteStore();

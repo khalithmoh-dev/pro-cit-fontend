@@ -23,9 +23,9 @@ export default function InstiteConfig() {
       "GENERAL": [
         {
           name: "insname",
-          label: t('INSTITUITION_NAME'),
+          label: t('INSTITUTION_NAME'),
           type: "text",
-          validation: Yup.string().required(t('INSTITUITION_NAME_REQUIRED')),
+          validation: Yup.string().required(t('INSTITUTION_NAME_REQUIRED')),
           isRequired: true,
         },
         {

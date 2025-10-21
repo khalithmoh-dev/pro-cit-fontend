@@ -26,7 +26,7 @@ const ProgramList = () => {
   const columns = [
     { 
       field: 'insname', 
-      headerName: t("INSTITUITION_NAME"), 
+      headerName: t("INSTITUTION_NAME"), 
       sortable: false
     },
     {
