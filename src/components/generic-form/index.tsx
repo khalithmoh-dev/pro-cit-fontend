@@ -1,180 +1,229 @@
 // src/screens/CreateDegree/GenericMaster.jsx
 import React, { useState, useEffect } from "react";
-import {
-  Box,
-} from "@mui/material";
-import SectionHeader from '../SectionHeader';
-import Label from '../Label';
-import Switch from '../switch'
-import Button from '../../components/Button';
+import { Box } from "@mui/material";
+import SectionHeader from "../SectionHeader";
+import Label from "../Label";
+import Switch from "../switch";
+import Button from "../../components/Button";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import useInstituteStore from "../../store/instituteStore";
-import useAuthStore from '../../store/authStore'
+import useAuthStore from "../../store/authStore";
 import SmartField from "../SmartField";
 import { useLocation } from "react-router-dom";
-import { useLayout } from '../../modules/layout/LayoutContext'
+import { useLayout } from "../../modules/layout/LayoutContext";
 import InputFields from "../inputFields";
 import useCheckPermission from "../../hooks/useCheckPermission";
 
-/** The generic form component to generate form dynamically using a JSON
-    The working json can be referred from institute config
-    Yup validaion type etc can be handled from sample json
-    props defnation:
-      - pageTitle?: title of the page
-      - schema: Json schema with inputs
-      - onSubmit: onSubmit function
-*/
+/**
+ * GenericMaster Component
+ * --------------------------------
+ * A dynamic form builder that generates forms from a JSON schema.
+ * It supports Formik + Yup validation and smart fields for dynamic form creation.
+ *
+ * Props:
+ * - pageTitle: Optional form title
+ * - schema: JSON schema defining form fields and buttons
+ * - onSubmit: Submit handler
+ * - isEditPerm: Whether editing is permitted
+ * - isEditDisableDflt: Whether to disable edit mode by default
+ * - oInitialValues: Default values for fields
+ * - isSmartField: Enable SmartField rendering
+ * - isNotMainForm: Whether it’s a nested form
+ */
 
-const GenericMaster = ({ pageTitle, schema, onSubmit, isEditPerm = false, isEditDisableDflt = false, oInitialValues, isSmartField, isNotMainForm =false }) => {
-  const [editPerm, setEditPerm] = useState(!isEditDisableDflt);
-  const [instDtls, setInstDtls] = useState({ _id: '', insname: '' });
-  const [aMultiSelectVal, setAMultiSelectVal] = useState([]);
+const GenericMaster = ({
+  pageTitle,
+  schema,
+  onSubmit,
+  isEditPerm = false,
+  isEditDisableDflt = false,
+  oInitialValues,
+  isSmartField,
+  isNotMainForm = false
+}) => {
+  // === Local States ===
+  const [isEditEnabled, setIsEditEnabled] = useState(!isEditDisableDflt);
+  const [instituteDetails, setInstituteDetails] = useState({ _id: "", insname: "" });
+  const [multiSelectValues, setMultiSelectValues] = useState([]);
+
+  // === Store Hooks ===
   const instituteStore = useInstituteStore();
-  const { setRouteNm,setActionFields } = useLayout();
   const authStore = useAuthStore();
+  const { setRouteNm, setActionFields } = useLayout();
   const location = useLocation();
+
+  // === Load logged-in institute details ===
   useEffect(() => {
     if (authStore?.user && instituteStore.getInstitute) {
       (async () => {
-        const oInstituteDtls = await instituteStore.getLogInIns();
-        if (oInstituteDtls && Object.keys(oInstituteDtls).length) {
-          setInstDtls(oInstituteDtls);
+        const loggedInstitute = await instituteStore.getLogInIns();
+        if (loggedInstitute && Object.keys(loggedInstitute).length) {
+          setInstituteDetails(loggedInstitute);
         }
       })();
     }
   }, [authStore, instituteStore]);
 
+  // === Setup layout route name & edit mode switch ===
   useEffect(() => {
     if (location.pathname) {
       setRouteNm(location.pathname);
-      setActionFields([<Switch checked={editPerm} onChange={() => {
-        setEditPerm(prevEditPerm => {
-          return !prevEditPerm;
-        });
-      }} label="Edit mode" />])
+      setActionFields([
+        <Switch
+          key="editSwitch"
+          checked={isEditEnabled}
+          onChange={() => setIsEditEnabled((prev) => !prev)}
+          label="Edit mode"
+        />
+      ]);
     }
   }, [location.pathname]);
 
-  // Build validation schema
+  // === Build Yup validation schema dynamically from JSON ===
   const validationSchema = Yup.object(
-    Object.values(schema.fields).flat().reduce((acc, field) => {
-      if (field.isNullable) {
-          acc[field.name] = field.validation.nullable();
-      } else if (field.name && field.validation) {
-        acc[field.name] = field.validation;
-      }
-      return acc;
-    }, {})
+    Object.values(schema.fields)
+      .flat()
+      .reduce((acc, field) => {
+        if (field.name && field.validation) {
+          acc[field.name] = field.isNullable
+            ? field.validation.nullable()
+            : field.validation;
+        }
+        return acc;
+      }, {})
   );
+
+  // === Setup Formik instance ===
   const formik = useFormik({
     initialValues: Object.values(schema.fields)
       .flat()
       .reduce((acc, field) => {
-        if (field.name === "insId" && instDtls?._id && instDtls?.insname) {
-          acc[field.name] = instDtls?._id;
-        } else if (oInitialValues && oInitialValues.hasOwnProperty(field.name)) {
-          // Use value from oInitialValues if available
-          acc[field.name] = oInitialValues[field.name];
+        const name = field.name;
+        if (name === "insId" && instituteDetails?._id) {
+          acc[name] = instituteDetails._id;
+        } else if (oInitialValues?.hasOwnProperty(name)) {
+          acc[name] = oInitialValues[name];
         } else if (field.isNullable) {
-          acc[field.name] = null;
-        } else if (field.isMulti || field.type === 'file') {
-          acc[field.name] = [];
+          acc[name] = null;
+        } else if (field.isMulti || field.type === "file") {
+          acc[name] = [];
         } else if (field.type === "checkbox") {
-          acc[field.name] = false;
+          acc[name] = false;
         } else if (field.type === "number") {
-          acc[field.name] = null;
+          acc[name] = null;
         } else {
-          acc[field.name] = "";
+          acc[name] = "";
         }
         return acc;
       }, {}),
     enableReinitialize: true,
-    onSubmit: (values) => {
-      onSubmit(values);
-    },
+    validateOnMount: true,
     validationSchema,
+    onSubmit: (values) => onSubmit(values)
   });
+
+  console.log("formik", formik);
 
   return (
     <div>
-      {/* White Card Wrapper */}
-      <form
-        onSubmit={formik.handleSubmit}
-        onReset={formik.handleReset}
-      >
+      <form onSubmit={formik.handleSubmit} onReset={formik.handleReset}>
+        {/* === Render Each Schema Section === */}
         {Object.entries(schema.fields).map(([sectionName, fields]) => (
           <Box key={sectionName} mb={4}>
-            {/* Section Heading */}
             <div className="generic-master-card">
               {sectionName && <SectionHeader sectionName={sectionName} />}
+
               <div className="fields-row">
                 {fields.map((field, index) => {
+                  // Conditional field rendering logic
                   const shouldShow =
                     !field.showWhen ||
-                    (field.showWhen && Array.isArray(field.showWhen.value)
-                      ? // if showWhen.value is an array, check membership
-                      field.showWhen.value.includes(formik.values[field.showWhen.field])
-                      : // otherwise, check equality
-                      formik.values[field.showWhen.field] === field.showWhen.value
-                    );
+                    (Array.isArray(field.showWhen?.value)
+                      ? field.showWhen.value.includes(
+                          formik.values[field.showWhen.field]
+                        )
+                      : formik.values[field.showWhen.field] ===
+                        field.showWhen?.value);
+
                   if (!shouldShow) return null;
+
                   return (
                     <div className="field-wrapper" key={index}>
+                      {/* Label */}
                       {!field.removeHeader && !isSmartField && (
                         <Label labelName={field.label} required={field.isRequired} />
                       )}
-                      {isSmartField ? <SmartField field={field} formik={formik} editPerm={editPerm} /> : (
-                      <InputFields
-                        field={field}
-                        formik={formik}
-                        editPerm={editPerm}
-                        aMultiSelectVal={aMultiSelectVal}
-                        setAMultiSelectVal={setAMultiSelectVal}
-                        oInitialValues={oInitialValues}
-                        instDtls={instDtls}
-                      />
-                    )}
+
+                      {/* Field Renderer */}
+                      {isSmartField ? (
+                        <SmartField
+                          field={field}
+                          formik={formik}
+                          editPerm={isEditEnabled}
+                        />
+                      ) : (
+                        <InputFields
+                          field={field}
+                          formik={formik}
+                          editPerm={isEditEnabled}
+                          aMultiSelectVal={multiSelectValues}
+                          setAMultiSelectVal={setMultiSelectValues}
+                          oInitialValues={oInitialValues}
+                          instDtls={instituteDetails}
+                        />
+                      )}
                     </div>
                   );
                 })}
               </div>
             </div>
-
           </Box>
         ))}
 
-          {/* Buttons */}
-          <div className="generic-form-footer">
-            <Box display="flex" justifyContent="flex-end" gap={2} >
-              {schema.buttons.map((btn, idx) => {
-                return (
+        {/* === Form Buttons === */}
+        <div className="generic-form-footer">
+          <Box display="flex" justifyContent="flex-end" gap={2}>
+            {schema.buttons.map((button, idx) => {
+              const isSubmitButton = button.type === "submit";
+              const isCancelButton = button.name === "Cancel";
+              const isResetButton = button.name === "Reset";
+
+              return (
                 <Button
                   key={idx}
-                  className={`btn-${btn?.nature?.toLowerCase()} btn-small`}
-                  size={btn.size || "medium"}
-                  onClick={btn.name === "Reset" ? formik.handleReset : ()=>{btn.onClick && btn.onClick(formik)}}
-                  type={btn.type ?? 'button'}
-                  disabled={btn.isDisabled || (btn.name !== "Cancel" && (!editPerm || btn.isDisabled))}
+                  className={`btn-${button?.nature?.toLowerCase()} btn-small`}
+                  size={button.size || "medium"}
+                  type={button.type ?? "button"}
                   variantType={
-                    btn.type === "submit"
+                    isSubmitButton
                       ? "submit"
-                      : btn.name === "Reset"
-                        ? "reset"
-                        : btn.name === "Cancel"
-                          ? "cancel"
-                          : "button"
+                      : isResetButton
+                      ? "reset"
+                      : isCancelButton
+                      ? "cancel"
+                      : "button"
+                  }
+                  onClick={
+                    isResetButton
+                      ? formik.handleReset
+                      : () => button.onClick && button.onClick(formik)
+                  }
+                  disabled={
+                    button.isDisabled ||
+                    (!isCancelButton &&
+                      (!isEditEnabled || !formik.isValid))
                   }
                 >
-                  {btn.name}
+                  {button.name}
                 </Button>
-              )})}
-            </Box>
+              );
+            })}
+          </Box>
         </div>
       </form>
-    </div >
+    </div>
   );
 };
-
 
 export default GenericMaster;
