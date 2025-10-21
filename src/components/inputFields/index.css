@@ -61,3 +61,7 @@
   min-height: 10px;
   text-transform: none !important;
 }
+
+.error-text{
+  color: red !important;
+}
