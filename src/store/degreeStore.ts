@@ -6,8 +6,8 @@ export interface createDegreePayload {
   degCd: String,
   degNm: String,
   desc: String,
-  _id?: '',
-  deleted: boolean;
+  _id?: string,
+  deleted?: boolean;
 }
 
 export interface DegreeIF {

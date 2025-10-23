@@ -12,7 +12,6 @@ import useCourseScheduleStore from '../../../store/course-scheduleStore';
 import { useToastStore } from '../../../store/toastStore';
 import { useTranslation } from "react-i18next";
 import * as Yup from "yup";
-import InputFields from "../../../components/inputFields";
 import DynamicForm from "../../../components/generic-form";
 
 interface Course {
@@ -321,7 +320,7 @@ const ElectiveGroup: React.FC<ElectiveGroupProps> = ({
                     isEditPerm={true}
                     isNotMainForm={true}
                     isEditDisableDflt={false}
-                    initialValues={initialFormValues}
+                    oInitialValues={initialFormValues}
                 />
             )}
             </Card>

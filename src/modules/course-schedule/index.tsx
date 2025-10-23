@@ -5,7 +5,7 @@ import ElectiveGroup from './GroupComponent';
 import * as Yup from "yup";
 import { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
-import useBaseStore from '../../store/baseStore';
+import useBaseStore, { BaseData } from '../../store/baseStore';
 import { Box } from '@mui/material';
 import Button from '../../components/Button';
 import { useLayout } from '../../modules/layout/LayoutContext'
@@ -15,8 +15,7 @@ const CourseSchedulePage: React.FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const baseStore = useBaseStore();
-  const [editValues, setEditValues] = useState({
-    _id: '',
+  const [editValues, setEditValues] = useState<srchCrsSchdlPyldIF>({
     insId: '',
     degId: '',
     prgId: '',
@@ -26,7 +25,7 @@ const CourseSchedulePage: React.FC = () => {
   const [mandatoryCourses, setMandatoryCourses] = useState([]);
   const [electiveCourses, setElectiveCourses] = useState([]);
   const { searchCourseSchedule, createCourseSchedule, updateCourseSchedule } = useCourseScheduleStore();
-  const [baseData, setBaseData] = useState({ degree: [], program: [], department: [], semester: [] });
+  const [baseData, setBaseData] = useState<BaseData>({ degree: [], program: [], department: [], semester: [] });
   const [isDataFetched, setIsDataFetched] = useState(false);
   const [update, setUpdate] = useState(false);
   const { setRouteNm, setActionFields } = useLayout();
@@ -61,7 +60,6 @@ const CourseSchedulePage: React.FC = () => {
   const handleReset = () => {
     setIsDataFetched(false);
     setEditValues({
-      _id: '',
       insId: '',
       degId: '',
       prgId: '',
@@ -75,11 +73,11 @@ const CourseSchedulePage: React.FC = () => {
 
   const schema = {
     fields: {
-      COURSE_SCHEDULE: [
+      "COURSE_SCHEDULE": [
         {
           name: "insId",
           label: t("INSTITUTION_NAME"),
-          type: "select",
+          type: 'select',
           validation: Yup.string().required(t("INSTITUTION_NAME_IS_REQUIRED")),
           isRequired: true,
           isDisabled: true
@@ -214,7 +212,6 @@ const CourseSchedulePage: React.FC = () => {
             >
               {update ? t('UPDATE') : t("SAVE")}
             </Button>
-            {console.log('mandatoryCourses',mandatoryCourses,electiveCourses)}
           </Box>
         </>
       }

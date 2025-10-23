@@ -31,6 +31,15 @@ export interface DepartmentIF {
   hod: string | null;
   totalSemesters: number;
 }
+export interface DepartmentI {
+  hod: string
+}
+
+interface GetDepartmentI {
+  data: any[];
+  total: number;
+  [key: string]: any;  
+}
 
 interface DepartmentState {
   departments: DepartmentIF[];
@@ -41,8 +50,8 @@ interface DepartmentState {
   initialLoading: boolean;
   createDepartment: (payload: createDepartmentPayloadIF) => Promise<boolean>;
   updateDepartment: (payload: createDepartmentPayloadIF, id: string) => Promise<boolean>;
-  getDepartments: (page?:number,limit?:number,searchTerm?:string) => Promise<object[] | boolean>;
-  getDepartment: (id: string) => Promise<object | boolean>;
+  getDepartments: (page?:number,limit?:number,searchTerm?:string) => Promise<GetDepartmentI>;
+  getDepartment: (id: string) => Promise<DepartmentI>;
 }
 
 const useDepartmentStore = create<DepartmentState>((set, get) => ({

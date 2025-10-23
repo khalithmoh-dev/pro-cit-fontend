@@ -26,7 +26,8 @@ const CreateDepartmentPage: React.FC<PropsIF> = ({ update }) => {
 
   useEffect(() => {
     if (!id) return;
-    (async () => {
+   try{
+     (async () => {
       if (id) {
         const oDepartment = await getDepartment(id);
         if (oDepartment) setEditValues(oDepartment);
@@ -37,6 +38,9 @@ const CreateDepartmentPage: React.FC<PropsIF> = ({ update }) => {
         }
       }
     })()
+   }catch(err){
+    showToast('error', t('UNKNOWN_ERROR_OCCURRED'));
+   }
   }, [id]);
 
   // Fixed searchStaff function

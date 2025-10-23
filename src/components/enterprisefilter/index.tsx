@@ -29,6 +29,7 @@ import { useLayout } from '../../modules/layout/LayoutContext'
 import { useTranslation } from "react-i18next";
 import Variant from '../Button'
 import { Size } from '../Button'
+import { Schema } from 'yup';
 
 /** The generic form component to generate form dynamically using a JSON
     The working json can be referred from institute config
@@ -38,57 +39,51 @@ import { Size } from '../Button'
       - schema: Json schema with inputs
       - onSubmit: onSubmit function
 */
-export interface FormField {
+
+
+
+interface FormFieldAny {
   name: string;
-  type: 'text' | 'email' | 'select' | 'checkbox' 
+  type: any;               // loosened
   label: string;
   removeHeader?: boolean;
   isRequired?: boolean;
-  options?: Array<{ value: string; label: string }>;
-  showWhen?: ShowWhen
-}
-
-interface ShowWhen {
-  field: string,
-  value: string
-}
-interface ButtonI {
-  name?: string;
-  variant?: string;
-  nature?: string;
-  onClick?: Function;
-  type?: typeof Variant;
-  size?: Size;
+  options?: any[];
+  showWhen?: { field: string; value: any };
+  validation: Yup.Schema<any>;
   isDisabled?: boolean;
+  labelKey?: string;
+  valueKey?: string;
+  placeholder?: string;
+  helperText?: string;
+  [key: string]: any;       // allow extra fields
 }
 
-export interface FormSchema {
-  fields: {
-    [sectionName: string]: FormField[];
-  };
-  buttons: ButtonI[]
-}
-
-interface EnterpriseFilterProps {
-  schema: FormSchema; 
-  onSubmit: (values: Record<string, any>) => void; 
-  isEditPerm?: boolean; 
-  isEditDisableDflt?: boolean; 
-  oInitialValues?: Record<string, any>; 
-  setIsEditPerm?: React.Dispatch<React.SetStateAction<boolean>>; 
-}
-
-interface Field {
+interface ButtonAny {
   name: string;
-  type: string;
-  isNullable?: boolean;
-  isMulti?: boolean;
-  isDisabled?: boolean;
-  validation?: Yup.AnySchema;
+  variant: any;
+  nature: any;
+  type?: any;
+  onClick?: () => void;
+  disabled?: boolean;
   [key: string]: any;
 }
 
-const EnterpriseFilter: React.FC<EnterpriseFilterProps> = ({ schema, onSubmit, isEditPerm = false, isEditDisableDflt = false, oInitialValues, setIsEditPerm }) => {
+export interface FormSchemaAny {
+  fields: { [sectionName: string]: FormFieldAny[] };
+  buttons: ButtonAny[];
+}
+
+interface EnterpriseFilterPropsAny {
+  schema: FormSchemaAny;
+  onSubmit: (values: Record<string, any>) => void;
+  isEditPerm?: boolean;
+  isEditDisableDflt?: boolean;
+  oInitialValues?: Record<string, any>;
+  setIsEditPerm?: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const EnterpriseFilter: React.FC<EnterpriseFilterPropsAny> = ({ schema, onSubmit, isEditPerm = false, isEditDisableDflt = false, oInitialValues, setIsEditPerm }) => {
   const [editPerm, setEditPerm] = useState(!isEditDisableDflt);
   const [instDtls, setInstDtls] = useState({ _id: '', insname: '' });
   const [aMultiSelectVal, setAMultiSelectVal] = useState([]);

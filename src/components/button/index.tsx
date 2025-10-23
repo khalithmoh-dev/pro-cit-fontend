@@ -1,3 +1,4 @@
+import React from "react";
 import { ButtonPropsIF } from '../../interface/component.interface';
 import style from './button.module.css';
 
@@ -30,17 +31,17 @@ const Button: React.FC<ButtonPropsIF> = ({
     e.stopPropagation();
     onClick && onClick();
   };
-  console.log("disbaled", disabled)
+
   return (
     <button
       type={submit ? 'submit' : 'button'}
-      style={{ marginTop: mt ? mt : 0 }}
+      style={{ marginTop: mt ?? 0 }}
       onClick={clickHandler}
       disabled={disabled}
       className={classNames}
     >
       {startIcon && <span className={style.icon}>{startIcon}</span>}
-      {children && children}
+      {children}
       {endIcon && <span className={style.icon}>{endIcon}</span>}
     </button>
   );

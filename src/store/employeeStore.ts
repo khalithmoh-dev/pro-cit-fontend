@@ -127,8 +127,8 @@ interface EmployeeState {
   getAvailableTeachers: (query?: any) => Promise<boolean>;
   getAllTeacherList: (query?: any) => Promise<boolean>;
   clearEmployee: () => void;
-  getStfsForSrch: (req:string)=> Promise<object[] | boolean>;
-  getStfsByIds: (req:string)=> Promise<object[] | boolean>;
+  getStfsForSrch: (req:string)=> Promise<employeeIF[]>;
+  getStfsByIds: (req:string)=> Promise<employeeIF[]>;
 }
 
 const useEmployeeStore = create<EmployeeState>((set, get) => ({
@@ -300,7 +300,7 @@ const useEmployeeStore = create<EmployeeState>((set, get) => ({
       );
       return res?.data;
     }catch(err){
-      return false;
+      throw err
     }
   }
 }));

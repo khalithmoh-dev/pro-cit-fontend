@@ -8,9 +8,11 @@ interface UploadedFile {
   url: string;
 }
 
-interface BaseData {
+export interface BaseData {
   degree: string[];
   program: string[];
+  department?: string[];
+  semester?: string[];
 }
 
 interface BaseState {

@@ -14,6 +14,7 @@ import { useLocation } from "react-router-dom";
 import { useLayout } from "../../modules/layout/LayoutContext";
 import InputFields from "../inputFields";
 import useCheckPermission from "../../hooks/useCheckPermission";
+import Field from '../enterprisefilter'
 
 /**
  * GenericMaster Component
@@ -37,7 +38,7 @@ const GenericMaster = ({
   pageTitle="",
   isEditPerm=false,
   isEditDisableDflt = false,
-  oInitialValues,
+  oInitialValues = {},
   isNotMainForm = false
 }) => {
   // === Local States ===
@@ -79,19 +80,14 @@ const GenericMaster = ({
   }, [location.pathname]);
 
   // === Build Yup validation schema dynamically from JSON ===
-  const validationSchema = Yup.object(
-    Object.values(schema.fields)
-      .flat()
-      .reduce((acc, field) => {
-        if (field.name && field.validation) {
-          acc[field.name] = field.isNullable
-            ? field.validation.nullable()
-            : field.validation;
-        }
-        return acc;
-      }, {})
-  );
-
+ const validationSchema = Yup.object(
+     (Object.values(schema.fields).flat() as Field[]).reduce((acc, field) => {
+       if (!field.isNullable && field.name && field.validation) {
+         acc[field.name] = field.validation;
+       }
+       return acc;
+     }, {} as Record<string, Yup.AnySchema>)
+   );
   // === Setup Formik instance ===
   const formik = useFormik({
     initialValues: Object.values(schema.fields)

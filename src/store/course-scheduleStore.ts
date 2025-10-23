@@ -11,13 +11,17 @@ import {
 } from '../utils/functions/toast-message';
 
 export interface srchCrsSchdlPyldIF {
+  _id?: string;
   insId: String;
   degId: String;
   prgId: String;
   deptId: String;
   semId: String;
+  mandatoryCourses?: [];
+  electiveCourses?: [];
 }
 export interface saveCrsSchdlPyldIF {
+  _id?: string;
   insId: String;
   degId: String;
   prgId: String;

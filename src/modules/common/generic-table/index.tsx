@@ -49,18 +49,24 @@ import CustomPagination from './customPagination';
  * - serverSide: enable server-side data mode
  */
 
+interface ApiServiceI {
+  data?: any[]
+  total?: number
+  [key: string]: any
+}
+
 const DataTable = ({
   data = [],
   columns = [],
   selectable = false,
-  onSelect = () => { },
+  onSelect = (any) => { },
   pagination = true,
   searchable = true,
   title = 'Data Table',
   actions = [],
   headerAction = [{ actionName: '', onClick: () => { } }],
   addRoute = '',
-  apiService = (page, rowsPerPage, searchTerm) => { },
+  apiService = (page =0 , limit = 0, searchTerm = ''):ApiServiceI => { return {data: [],total: 0}},
   serverSide = false,
 }) => {
   // === State variables ===
@@ -98,8 +104,8 @@ const DataTable = ({
       .map((action) => (
         <Button
           key={action.actionName}
-          variantType="upload"
-          size="md"
+          variantType="primary"
+          size="medium"
           onClick={action.onClick}
         >
           {action.actionName}
