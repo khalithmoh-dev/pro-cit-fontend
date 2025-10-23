@@ -471,23 +471,23 @@ const EnterpriseFilter: React.FC<EnterpriseFilterProps> = ({ schema, onSubmit, i
                     <Button
                       key={idx}
                       className={`btn-${btn?.nature?.toLowerCase()} btn-small`}
-                      size={btn.size || "md"}
+                      sizeType={btn.size || "md"}
                       onClick={(e) => {
                         if (btn.name === "Reset") {
                           formik.handleReset(e);
                         }
                         if (btn.onClick) { btn.onClick() }
                       }}
-                      type={btn.type ?? 'button'}
+                      type={typeof btn.type === "string" ? btn.type : "button"}
                       disabled={btn.isDisabled || (btn.name !== "Cancel" && (!editPerm || btn.isDisabled))}
                       variantType={
-                        btn.type === "submit"
+                        typeof btn.type === "string" ? btn.type === "submit"
                           ? "submit"
                           : btn.name === "Reset"
                             ? "reset"
                             : btn.name === "Cancel"
                               ? "cancel"
-                              : "button"
+                              : "button" : "button"
                       }
                     >
                       {btn.name}

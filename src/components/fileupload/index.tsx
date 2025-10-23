@@ -17,7 +17,7 @@ export interface FileUploadProps {
 }
 
 interface UploadedFile {
-  file: File;
+  file: File | string; // can be a File object or a URL string for default files
   id: string;
   status: "uploading" | "success" | "error";
   progress: number;
@@ -61,7 +61,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
   if (defaultFiles?.length) {
     const formattedDefaults = defaultFiles.map((url, i) => ({
       id: `default-${i}`,
-      status: "success",
+      status: "success" as "success",
       progress: 100,
       file: url
     }));

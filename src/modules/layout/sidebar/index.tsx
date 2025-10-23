@@ -95,7 +95,7 @@ export const AppSidebar: React.FC = () => {
         </div>
       </div>
 
-      <SidebarContent style={{ padding: '0.5rem', flex: 1 }}>
+      <SidebarContent >
         {Object.entries(oNavBar).map(([groupName, group]) => {
           return (
             <SidebarGroup 

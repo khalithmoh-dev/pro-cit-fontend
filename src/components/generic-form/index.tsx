@@ -152,7 +152,6 @@ const GenericMaster = ({
                       )}
 
                       {/* Field Renderer */}
-                      (
                         <InputFields
                           field={field}
                           formik={formik}
@@ -162,7 +161,6 @@ const GenericMaster = ({
                           oInitialValues={oInitialValues}
                           instDtls={instituteDetails}
                         />
-                      )
                     </div>
                   );
                 })}
