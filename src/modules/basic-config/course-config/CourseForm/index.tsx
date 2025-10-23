@@ -236,7 +236,7 @@ const CourseForm: React.FC = () => {
   const handleFormSubmit = async (values: createCoursePayload): Promise<void> => {
     if (!id) {
       try {
-        await courseStore.createCourse(sanitizePayload(values));
+        await courseStore.createCourse(sanitizePayload(values) as createCoursePayload);
         showToast('success', `${t('COURSE')} ${t("CREATED_SUCCESSFULLY")}`);
       } catch (err) {
         showToast('error', `${t("FAILED_TO_CREATE")} ${t('COURSE')}`);
@@ -247,7 +247,7 @@ const CourseForm: React.FC = () => {
           ...values,
           _id: id
         }
-        await courseStore.updateCourse(sanitizePayload(oUpdtPayload));
+        await courseStore.updateCourse(sanitizePayload(oUpdtPayload) as createCoursePayload);
         showToast('success', `${t('COURSE')} ${t("UPDATED_SUCCESSFULLY")}`);
       } catch (err) {
         showToast('error', `${t("FAILED_TO_UPDATE")} ${t('COURSE')}`);
