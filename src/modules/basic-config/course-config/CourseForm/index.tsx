@@ -7,20 +7,20 @@ import useBaseStore from '../../../../store/baseStore';
 import useCourseStore, { createCoursePayload } from "../../../../store/courseStores";
 import { sanitizePayload } from '../../../../utils';
 import { useToastStore } from "../../../../store/toastStore";
-
+import { BaseData } from '../../../../store/baseStore';
 const CourseForm: React.FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const baseStore = useBaseStore();
   const courseStore = useCourseStore();
-  const [baseData, setBaseData] = useState({ departments: [], courseCat: [], courseSubCat: [] });
+  const [baseData, setBaseData] = useState<{ department?: any[] }>({});
   const { id } = useParams<{ id: string }>();
   const [editValues, setEditValues] = useState({});
-  const [isCatPopOpen, setIsCatPopOpen] = useState(false);
+  // const [isCatPopOpen, setIsCatPopOpen] = useState(false);
   const [oCourseCat, setOCourseCat] = useState({ catId: '', catNm: '', _id: '' });
-  const [isSubCatPopOpen, setIsSubCatPopOpen] = useState(false);
-  const [oCourseSubCat, setOCourseSubCat] = useState({ catId: '', subCatId: '', subCatNm: '', _id: '' });
-  const [subCatList, setSubCatList] = useState([]);
+  // const [isSubCatPopOpen, setIsSubCatPopOpen] = useState(false);
+  // const [oCourseSubCat, setOCourseSubCat] = useState({ catId: '', subCatId: '', subCatNm: '', _id: '' });
+  // const [subCatList, setSubCatList] = useState([]);
   const showToast = useToastStore((state) => state.showToast);
   // const oInitialValues: object = {
   //   crsId: '',
@@ -37,36 +37,36 @@ const CourseForm: React.FC = () => {
   // };
 
   // Open popup for add/edit course category
-  const handleAddEditCatClick = async (cat, isEdit) => {
-    if (isEdit) {
-      const catData = baseData?.courseCat?.find(c => c._id === cat);
-      setOCourseCat(catData);
-    } else {
-      setOCourseCat({ catId: '', catNm: '', _id: '' });
-    }
-    setIsCatPopOpen(true);
-  };
+  // const handleAddEditCatClick = async (cat, isEdit) => {
+  //   if (isEdit) {
+  //     const catData = baseData?.courseCat?.find(c => c._id === cat);
+  //     setOCourseCat(catData);
+  //   } else {
+  //     setOCourseCat({ catId: '', catNm: '', _id: '' });
+  //   }
+  //   setIsCatPopOpen(true);
+  // };
 
-  // Open popup for add/edit course sub-category
-  const handleAddEditSubCatClick = async (values, isEdit) => {
-    if (isEdit) {
-      const subCatData = baseData?.courseSubCat?.find(c => c._id === values?.subCat);
-      setOCourseSubCat(subCatData);
-    } else {
-      setOCourseSubCat({ catId: values?.category, subCatId: '', subCatNm: '', _id: '' });
-    }
-    setIsSubCatPopOpen(true);
-  };
+  // // Open popup for add/edit course sub-category
+  // const handleAddEditSubCatClick = async (values, isEdit) => {
+  //   if (isEdit) {
+  //     const subCatData = baseData?.courseSubCat?.find(c => c._id === values?.subCat);
+  //     setOCourseSubCat(subCatData);
+  //   } else {
+  //     setOCourseSubCat({ catId: values?.category, subCatId: '', subCatNm: '', _id: '' });
+  //   }
+  //   setIsSubCatPopOpen(true);
+  // };
 
-  // Handle function for category change
-  const handleCatChange = (cat) => {
-    if(cat){
-      const subCatDataList = baseData?.courseSubCat?.filter(c => c.catId === cat + "");
-      setSubCatList(subCatDataList || []);
-    }else{
-      setSubCatList([]);
-    }
-  }
+  // // Handle function for category change
+  // const handleCatChange = (cat) => {
+  //   if(cat){
+  //     const subCatDataList = baseData?.courseSubCat?.filter(c => c.catId === cat + "");
+  //     setSubCatList(subCatDataList || []);
+  //   }else{
+  //     setSubCatList([]);
+  //   }
+  // }
 
   // Course form schema design
   const schema = {
@@ -98,7 +98,7 @@ const CourseForm: React.FC = () => {
           name: 'offDept',
           label: t('OFFERING_DEPARTMENT'),
           type: 'select',
-          options: baseData?.departments ?? [],
+          options: baseData?.department ?? [],
           labelKey: "deptNm",
           valueKey: "_id"
         },
@@ -219,18 +219,18 @@ const CourseForm: React.FC = () => {
   };
 
   // Popup actions for course category model
-  const popupActions = [
-    {
-      label: oCourseCat?._id ? t("UPDATE") : t('CREATE'),
-      onClick: () => handleSubmitCat(),
-      disabled: !oCourseCat?.catId || !oCourseCat?.catNm
-    },
-    {
-      label: t("CANCEL"),
-      onClick: () => setIsCatPopOpen(false),
-      secondary: true
-    }
-  ]
+  // const popupActions = [
+  //   {
+  //     label: oCourseCat?._id ? t("UPDATE") : t('CREATE'),
+  //     onClick: () => handleSubmitCat(),
+  //     disabled: !oCourseCat?.catId || !oCourseCat?.catNm
+  //   },
+  //   {
+  //     label: t("CANCEL"),
+  //     onClick: () => setIsCatPopOpen(false),
+  //     secondary: true
+  //   }
+  // ]
 
   // Function for submit course form
   const handleFormSubmit = async (values: createCoursePayload): Promise<void> => {
@@ -261,7 +261,7 @@ const CourseForm: React.FC = () => {
     try {
       if (baseStore) {
         (async () => {
-          const aReq = ['departments', 'courseCat', 'courseSubCat'];
+          const aReq = ['department'];
           const oBaseData = await baseStore.getBaseData(aReq);
           setBaseData(oBaseData);
         })();
@@ -286,23 +286,23 @@ const CourseForm: React.FC = () => {
   }, [id])
 
   // Function for submit course category form
-  const handleSubmitCat = async () => {
-    try {
-      if (!oCourseCat?._id) {
-        const ONewCrsObj = { ...oCourseCat };
-        delete ONewCrsObj['_id'];
-        await courseStore.createCourseCat(ONewCrsObj);
-      } else {
-        await courseStore.updateCourseCat(oCourseCat);
-      }
-      const aReq = ['courseCat'];
-      const oBaseData = await baseStore.getBaseData(aReq);
-      setBaseData({ ...baseData, courseCat: oBaseData.courseCat });
-      setIsCatPopOpen(false);
-    } catch (error) {
-      console.error(error)
-    }
-  }
+  // const handleSubmitCat = async () => {
+  //   try {
+  //     if (!oCourseCat?._id) {
+  //       const ONewCrsObj = { ...oCourseCat };
+  //       delete ONewCrsObj['_id'];
+  //       await courseStore.createCourseCat(ONewCrsObj);
+  //     } else {
+  //       await courseStore.updateCourseCat(oCourseCat);
+  //     }
+  //     const aReq = ['courseCat'];
+  //     const oBaseData = await baseStore.getBaseData(aReq);
+  //     setBaseData({ ...baseData, courseCat: oBaseData.courseCat });
+  //     setIsCatPopOpen(false);
+  //   } catch (error) {
+  //     console.error(error)
+  //   }
+  // }
 
   // Popup action for course sub category model
   // const popupActionsSubCat = [
