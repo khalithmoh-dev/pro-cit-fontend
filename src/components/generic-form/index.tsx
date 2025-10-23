@@ -32,6 +32,20 @@ import Field from '../enterprisefilter'
  * - isNotMainForm: Whether it’s a nested form
  */
 
+interface SchemaField {
+  name: string;
+  validation: Yup.AnySchema;
+  isNullable?: boolean;
+}
+
+interface FormikSchemaField {
+  name: string;
+  type?: string;
+  isNullable?: boolean;
+  isMulti?: boolean;
+}
+
+
 const GenericMaster = ({
   schema,
   onSubmit,
@@ -80,18 +94,23 @@ const GenericMaster = ({
   }, [location.pathname]);
 
   // === Build Yup validation schema dynamically from JSON ===
- const validationSchema = Yup.object(
-     (Object.values(schema.fields).flat() as Field[]).reduce((acc, field) => {
-       if (!field.isNullable && field.name && field.validation) {
-         acc[field.name] = field.validation;
-       }
-       return acc;
-     }, {} as Record<string, Yup.AnySchema>)
-   );
+  const validationSchema = Yup.object(
+    (Object.values(schema.fields)
+      .flat() as SchemaField[])
+      .reduce<Record<string, Yup.AnySchema>>((acc, field) => {
+        if (field.name && field.validation) {
+          acc[field.name] = field.isNullable
+            ? field.validation.nullable()
+            : field.validation;
+        }
+        return acc;
+      }, {})
+  );
+
   // === Setup Formik instance ===
   const formik = useFormik({
-    initialValues: Object.values(schema.fields)
-      .flat()
+    initialValues: (Object.values(schema.fields)
+      .flat() as FormikSchemaField[])
       .reduce((acc, field) => {
         const name = field.name;
         if (name === "insId" && instituteDetails?._id) {
@@ -127,7 +146,7 @@ const GenericMaster = ({
               {sectionName && <SectionHeader sectionName={sectionName} />}
 
               <div className="fields-row">
-                {(fields ?? []).map((field, index) => {
+                {(fields as any[] ?? []).map((field, index) => {
                   // Conditional field rendering logic
                   const shouldShow =
                     !field.showWhen ||

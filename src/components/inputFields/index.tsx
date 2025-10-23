@@ -61,12 +61,17 @@ const InputFields: FC<InputFieldsProps> = ({
   };
 
   const handleEventChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type } = e.target;
+
+    let finalValue: any = value;
+
+    if (type === 'checkbox' && e.target instanceof HTMLInputElement) {
+      finalValue = e.target.checked;
+    }
 
     if (formik) {
       formik.handleChange(e);
     } else if (onChange) {
-      const finalValue = type === 'checkbox' ? checked : value;
       onChange(name, finalValue);
     }
   };
