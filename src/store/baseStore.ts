@@ -8,12 +8,18 @@ interface UploadedFile {
   url: string;
 }
 
+interface BaseData {
+  degree: string[];
+  program: string[];
+}
+
 interface BaseState {
   handleCloudUpload: (formData: FormData) => Promise<boolean>;
   parseFormDataAndUpload: (files: File[]) => Promise<object | boolean>;
-  getBaseData: (arr: string[]) => Promise<object>;
+  getBaseData: (arr: string[]) => Promise<BaseData>;
   upldedRec: UploadedFile | UploadedFile[] | null;
 }
+
 
 const useBaseStore = create<BaseState>((set, get) => ({
   upldedRec: {url:'', fileName: ''},
@@ -29,7 +35,7 @@ const useBaseStore = create<BaseState>((set, get) => ({
         {aRqstdFlds: aReq}
       );
     }catch(err){
-      return {degree: []};
+      return {degree: [], program:[]};
     }
   },
   parseFormDataAndUpload: async (files) => {

@@ -33,8 +33,12 @@ export interface Modules {
   path: string;
 }
 
-// Define the types for the auth state
-interface User {
+interface Institute {
+  _id: string;
+  insname: string[];
+  insCode: string
+}
+export interface User {
   user: {
     _id: string;
     firstName: string;
@@ -52,6 +56,7 @@ interface User {
     };
     insId: string;
     modules: Modules[];
+    institutes: Institute,
   };
   role: {
     modules: ModuleIF[];

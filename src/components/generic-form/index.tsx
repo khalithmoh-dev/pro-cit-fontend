@@ -34,6 +34,8 @@ import useCheckPermission from "../../hooks/useCheckPermission";
 const GenericMaster = ({
   schema,
   onSubmit,
+  pageTitle="",
+  isEditPerm=false,
   isEditDisableDflt = false,
   oInitialValues,
   isNotMainForm = false

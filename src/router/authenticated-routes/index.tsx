@@ -15,7 +15,6 @@ const DesignationRoutes = lazy(() => import('./DesignationRoutes'));
 const EmployeeRoutes = lazy(() => import('./EmployeeRoutes'));
 const FeeHeadRoutes = lazy(() => import('./FeeHeadRoutes'));
 const FormbuilderRoutes = lazy(() => import('./FormbuilderRoutes'));
-const BaseConfigRoutes = lazy(() => import('./BaseConfigRoutes'));
 const GroupRoutes = lazy(() => import('./GroupRoutes'));
 const ModuleRoutes = lazy(() => import('./ModuleRoutes'));
 const RoleRoutes = lazy(() => import('./RoleRoutes'));
@@ -90,7 +89,6 @@ const AuthenticatedRoutes = () => {
           <Route path="quick-collect/*" element={<QuickCollectRoutes />} />
           <Route path="quicksettings/*" element={<QuickCollectSettingRoutes />} />
           <Route path="report/*" element={<ReportRoutes />} />
-          <Route path="configuration/*" element={<BaseConfigRoutes />} />
           <Route path='semester/*' element={<SemesterRoutes/>} />
           <Route path="course/*" element={<CourseRoutes /> } />
           <Route path="program/*" element={<ProgramRoutes />} />

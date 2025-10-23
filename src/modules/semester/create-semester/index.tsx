@@ -23,7 +23,8 @@ export default function CreateSemester() {
       if (baseStore) {
         (async () => {
           const aReq = ['degree', 'program'];
-          setBaseData(await baseStore.getBaseData(aReq));
+          const result = await baseStore.getBaseData(aReq)
+          setBaseData(result);
         })();
       }
     } catch (err) {
