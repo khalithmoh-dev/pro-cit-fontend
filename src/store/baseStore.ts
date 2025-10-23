@@ -17,7 +17,7 @@ export interface BaseData {
 
 interface BaseState {
   handleCloudUpload: (formData: FormData) => Promise<boolean>;
-  parseFormDataAndUpload: (files: File[]) => Promise<object | boolean>;
+  parseFormDataAndUpload: (files: File[]) => Promise<{url?: string}>;
   getBaseData: (arr: string[]) => Promise<BaseData>;
   upldedRec: UploadedFile | UploadedFile[] | null;
 }

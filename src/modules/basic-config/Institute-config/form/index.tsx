@@ -9,10 +9,17 @@ import { useTranslation } from "react-i18next";
 import { useToastStore } from "../../../../store/toastStore";
 
 export default function InstiteConfig() {
+
+  interface InstituteDetails {
+  _id?: string;
+  insLogo?: string[];
+  [key: string]: any; // optional, for dynamic form fields
+}
+
   const { updateInstitute, getInstitute } = useInstituteStore();
   const { user, permissions } = useAuthStore();
   const { parseFormDataAndUpload } = useBaseStore()
-  const [instDtls, setInstDtls] = useState({});
+  const [instDtls, setInstDtls] = useState<InstituteDetails>({});
   const navigate = useNavigate();
   const { t } = useTranslation();
   const showToast = useToastStore((state) => state.showToast);
@@ -261,7 +268,7 @@ export default function InstiteConfig() {
   const handleFormSubmit = async (values) => {
     try {
       const deepValues = { ...structuredClone(values), _id: instDtls?._id };
-      if (values?.insLogo?.length && values.insLogo[0] !== instDtls?.insLogo[0]) {
+      if (values?.insLogo?.length && values.insLogo[0] !== instDtls?.insLogo?.[0]) {
         try {
           const instLogo = await parseFormDataAndUpload(values?.insLogo);
           if (instLogo?.url) {

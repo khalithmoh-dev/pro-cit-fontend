@@ -4,6 +4,7 @@ import useAuthStore from './authStore';
 interface createInstitutePayload{
     insname: string,
     insCode: string,
+    _id?: string,
     insLogo?: [],
     acrtdBy?: string,
     insDesc?: string,
@@ -44,7 +45,7 @@ interface InstituteDetails {
 }
 interface InstituteState {
     insData: object,
-    getInstitute: (id: string) => Promise<boolean>,
+    getInstitute: (id: string) => Promise<createInstitutePayload>,
     updateInstitute: (payload: createInstitutePayload) => Promise<boolean>
     getLogInIns: () => InstituteDetails
 }
