@@ -2,7 +2,7 @@ import React from 'react';
 import MuiSwitch from '@mui/material/Switch';
 import Label from '../Label';
 
-const Switch: React.FC<SwitchPropsIF> = ({ checked, onChange, label="" }) => {
+const Switch = ({ checked, onChange, label="" }) => {
 
 
   return (

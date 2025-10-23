@@ -6,16 +6,16 @@ import useCourseStore from "../../../../store/courseStores";
 const CourseUploadModal = ({ isModalOpen, setIsModalOpen }) => {
     const { t } = useTranslation();
     const [uploadedFile, setUploadedFile] = useState({});
-    const { uploadCourses } = useCourseStore();
+    // const { uploadCourses } = useCourseStore();
 
-    // to save the uploaded file
-    const handleModalUpload = () => {
-        try {
-            uploadCourses(uploadedFile)
-        } catch (err) {
-            console.error(err)
-        }
-    }
+    // // to save the uploaded file
+    // const handleModalUpload = () => {
+    //     try {
+    //         uploadCourses(uploadedFile)
+    //     } catch (err) {
+    //         console.error(err)
+    //     }
+    // }
 
     // model file actions
     const popupActions = [
@@ -27,7 +27,8 @@ const CourseUploadModal = ({ isModalOpen, setIsModalOpen }) => {
         },
         {
             label: t('UPLOAD'),
-            onClick: handleModalUpload,
+            // onClick: handleModalUpload,
+            onClick:()=>{},
             variant: 'contained',
             color: 'primary',
         }

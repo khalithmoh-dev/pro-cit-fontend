@@ -83,11 +83,6 @@ const CourseList: React.FC = () => {
         <CourseUploadModal 
             setIsModalOpen={setIsUploadModalOpen}
             isModalOpen={isUploadModalOpen}
-            handleModalUpload={() => {
-                // Implement upload logic here
-                console.log('data uploaded successfully')
-            }}
-
         />
         </>
     );

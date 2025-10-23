@@ -1,6 +1,6 @@
 export const sanitizePayload = (
   oPayload: Record<string, any> = {},
-  aSanitizeKeys: string[] = []
+  aSanitizeKeys?: string[]
 ): Record<string, any> => {
   const sanitized: Record<string, any> = {};
 
@@ -9,8 +9,8 @@ export const sanitizePayload = (
 
     const value = oPayload[key];
 
-    // Skip (delete) if key is in sanitize list OR value is "" or undefined
-    if (aSanitizeKeys.includes(key) || value === "" || value === undefined) {
+    // Skip if aSanitizeKeys is defined and key is in it, or value is "" or undefined
+    if ((aSanitizeKeys?.includes(key)) || value === "" || value === undefined) {
       continue;
     }
 

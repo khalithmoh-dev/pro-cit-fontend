@@ -5,8 +5,6 @@ import { useTranslation } from "react-i18next";
 import { useParams, useNavigate } from 'react-router-dom';
 import useBaseStore from '../../../../store/baseStore';
 import useCourseStore, { createCoursePayload } from "../../../../store/courseStores";
-import Popup from '../../../../components/modal';
-import SmartField from '../../../../components/SmartField';
 import { sanitizePayload } from '../../../../utils';
 import { useToastStore } from "../../../../store/toastStore";
 
