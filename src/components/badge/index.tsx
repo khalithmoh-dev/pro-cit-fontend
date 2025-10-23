@@ -1,7 +1,7 @@
 import * as React from "react";
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
-  variant?: "default" | "secondary" | "destructive" | "outline";
+  variant?: "default" | "secondary" | "destructive" | "outline" | "success" | "danger";
 }
 
 export function Badge({ className = "", variant = "default", ...props }: BadgeProps) {

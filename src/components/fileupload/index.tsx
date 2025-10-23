@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
-import { Upload, File, X, Check, AlertCircle, Image, FileText, Music, Video } from "lucide-react";
+import { Upload, X, Check, AlertCircle, Image, FileText, Music, Video } from "lucide-react";
 import Button from "../Button";
 import { Badge } from "../badge";
 import { Progress } from "../progress";
@@ -142,7 +142,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
         setUploadedFiles(newFiles);
       }
 
-      const validFiles = newFiles.filter((f) => f.status !== "error").map((f) => f.file);
+      const validFiles = newFiles.filter((f) => f.status !== "error").map((f) => f.file as File);
       onFileSelect?.(validFiles);
     },
     [accept, maxSize, multiple, onFileSelect]
@@ -190,6 +190,10 @@ const FileUpload: React.FC<FileUploadProps> = ({
     if (!disabled) fileInputRef.current?.click();
   };
 
+  const getFileType = (file: File | string): string | undefined => {
+    return file instanceof File ? file.type : undefined;
+  };
+
   return (
     <div className={`w-100 ${className}`}>
       {/* Upload Area */}
@@ -223,12 +227,26 @@ const FileUpload: React.FC<FileUploadProps> = ({
           <h6>Uploaded Files ({uploadedFiles.length})</h6>
           <div className="list-group mt-2">
             {uploadedFiles.map((uploadedFile, index) => {
-              const IconComponent = getFileIcon(uploadedFile?.file?.type ? uploadedFile?.file : { type: "" } as File);
-              const fileUrl = uploadedFile?.file?.type
-                ? URL.createObjectURL(uploadedFile?.file)
-                : uploadedFile;
-              const fileType = uploadedFile?.file?.type;
+              let IconComponent;
+              let fileName;
+              if (uploadedFile.file instanceof File) {
+                IconComponent = getFileIcon(uploadedFile.file);
+                fileName = uploadedFile.file.name;
+              } else {
+                IconComponent = File; // generic file icon for URL string
+              }
+              const isFile = uploadedFile.file instanceof File;
+              let fileUrl: string;
 
+              if (uploadedFile?.file instanceof File) {
+                fileUrl = URL.createObjectURL(uploadedFile.file);
+              } else if (typeof uploadedFile?.file === "string") {
+                fileUrl = uploadedFile.file; // already a URL
+              } else {
+                fileUrl = ""; // fallback
+              }
+              const fileType = getFileType(uploadedFile.file);
+              const fileSize = isFile ? (uploadedFile.file as File).size : 0;
               const isImage = fileType?.startsWith("image/");
               const isPDF = fileType === "application/pdf";
 
@@ -243,7 +261,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
                       {isImage ? (
                         <img
                           src={fileUrl}
-                          alt={uploadedFile?.file?.name}
+                          alt={fileName}
                           className="rounded border"
                           style={{
                             width: "50px",
@@ -253,38 +271,34 @@ const FileUpload: React.FC<FileUploadProps> = ({
                         />
                       ) : isPDF ? (
                         <div className="text-danger">
-                          {uploadedFile?.file?.type && <IconComponent size={40} />}
+                          {isFile && <IconComponent size={40} />}
                         </div>
                       ) : (
-                        uploadedFile?.file?.type && <IconComponent size={40} className="text-primary" />
+                        isFile && <IconComponent size={40} className="text-primary" />
                       )}
                     </div>
 
                     <div className="me-3">
-                      {uploadedFile?.file?.type && <IconComponent size={24} className="text-primary" />}
+                      {isFile && <IconComponent size={24} className="text-primary" />}
                     </div>
                     <div>
                       
                       <div className="fw-bold">
                         <a
-                            href={
-                            uploadedFile?.file?.type
-                              ? URL.createObjectURL(uploadedFile.file)
-                              : uploadedFile?.file
-                            }
+                            href={fileUrl}
                             target="_blank"
                             rel="noopener noreferrer"
                             download
                         >
-                            {uploadedFile?.file?.name || t('VIEW_FILE')}
+                            {fileName || t('VIEW_FILE')}
                         </a>
                         </div>
-                      {uploadedFile?.file?.size && <div className="text-muted small">{formatFileSize(uploadedFile.file.size)}</div>}
+                      {isFile && <div className="text-muted small">{formatFileSize(fileSize)}</div>}
                     </div>
                   </div>
                   <div className="d-flex align-items-center gap-2">
                     {uploadedFile.status !== "uploading" && (
-                      <Progress value={uploadedFile.progress} variant="primary" height="4px" className="w-100" />
+                      <Progress value={uploadedFile.progress} variant="determinate" sx={{ height: '4px', width: '100%' }}  />
                     )}
 
                     {uploadedFile.status === "success" && (
@@ -302,8 +316,8 @@ const FileUpload: React.FC<FileUploadProps> = ({
                     )}
 
                     <Button
-                      variant="outline"
-                      size="sm"
+                      variantType="outline"
+                      size="small"
                       onClick={(e) => {
                         e.stopPropagation();
                         removeFile(index);
