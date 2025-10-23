@@ -28,18 +28,14 @@ import useCheckPermission from "../../hooks/useCheckPermission";
  * - isEditPerm: Whether editing is permitted
  * - isEditDisableDflt: Whether to disable edit mode by default
  * - oInitialValues: Default values for fields
- * - isSmartField: Enable SmartField rendering
  * - isNotMainForm: Whether it’s a nested form
  */
 
 const GenericMaster = ({
-  pageTitle,
   schema,
   onSubmit,
-  isEditPerm = false,
   isEditDisableDflt = false,
   oInitialValues,
-  isSmartField,
   isNotMainForm = false
 }) => {
   // === Local States ===
@@ -123,8 +119,6 @@ const GenericMaster = ({
     onSubmit: (values) => onSubmit(values)
   });
 
-  console.log("formik", formik);
-
   return (
     <div>
       <form onSubmit={formik.handleSubmit} onReset={formik.handleReset}>
@@ -135,7 +129,7 @@ const GenericMaster = ({
               {sectionName && <SectionHeader sectionName={sectionName} />}
 
               <div className="fields-row">
-                {fields.map((field, index) => {
+                {(fields ?? []).map((field, index) => {
                   // Conditional field rendering logic
                   const shouldShow =
                     !field.showWhen ||
@@ -151,18 +145,12 @@ const GenericMaster = ({
                   return (
                     <div className="field-wrapper" key={index}>
                       {/* Label */}
-                      {!field.removeHeader && !isSmartField && (
+                      {!field.removeHeader && (
                         <Label labelName={field.label} required={field.isRequired} />
                       )}
 
                       {/* Field Renderer */}
-                      {isSmartField ? (
-                        <SmartField
-                          field={field}
-                          formik={formik}
-                          editPerm={isEditEnabled}
-                        />
-                      ) : (
+                      (
                         <InputFields
                           field={field}
                           formik={formik}
@@ -172,7 +160,7 @@ const GenericMaster = ({
                           oInitialValues={oInitialValues}
                           instDtls={instituteDetails}
                         />
-                      )}
+                      )
                     </div>
                   );
                 })}

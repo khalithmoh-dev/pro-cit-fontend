@@ -144,7 +144,7 @@ export const SidebarGroup: React.FC<SidebarGroupProps> = ({
             transform: `translateY(${isOpen ? '0' : '-10px'})`
           }}
         >
-          {(!collapsible || isOpen) && (
+          {((!collapsible || isOpen) && React.isValidElement(childrenArray[0]) && childrenArray[0].props?.children) && (
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               {childrenArray[0].props.children.map((child, index) => (
                 <div key={index} style={{ position: 'relative' }}>

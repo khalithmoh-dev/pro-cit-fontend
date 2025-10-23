@@ -15,6 +15,24 @@ export interface MainMenuItem {
   }[];
 }
 
+interface Permission {
+  read: boolean;
+  write: boolean;
+  update: boolean;
+  delete: boolean;
+}
+
+export interface Modules {
+  permissions: Permission;
+  deleted: boolean;
+  menuType: string;
+  mainMenu?: string;
+  key: string;
+  icon: string;
+  name: string;
+  path: string;
+}
+
 // Define the types for the auth state
 interface User {
   user: {
@@ -33,6 +51,7 @@ interface User {
       departmentCode: string;
     };
     insId: string;
+    modules: Modules[];
   };
   role: {
     modules: ModuleIF[];

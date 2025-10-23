@@ -419,7 +419,6 @@ console.log('baseData?.departments',baseData?.departments)
         onSubmit={handleFormSubmit}
         isEditPerm={true}
         oInitialValues={id ? editValues : ""}
-        // isSmartField={true}
       />
     </>
   );

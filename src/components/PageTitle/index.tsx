@@ -17,11 +17,9 @@
 // export default PageTitle;
 
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Card, CardContent } from "@mui/material";
 import Icon from "../Icons";
-import useAuthStore from '../../store/authStore'
-import { useLocation } from 'react-router-dom';
 
 interface PageTitleI {
   color?: string

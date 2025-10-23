@@ -51,11 +51,9 @@ import React from 'react';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-// import { TextField } from '@mui/material';
+import { TextField } from '@mui/material';
 
 const Datepicker = (props) => {
-  // const [selectedDate, setSelectedDate] = React.useState(null);
-
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <div>
@@ -64,12 +62,20 @@ const Datepicker = (props) => {
           label={props.label}
           value={props.value}
           onChange={props.onChange}
-          renderInput={props.renderInput}
+          slots={{
+            textField: TextField,
+          }}
+          slotProps={{
+            textField: {
+              fullWidth: true,
+              variant: 'outlined',
+              size: 'small',
+            },
+          }}
         />
-        {/* <p>Selected: {selectedDate ? selectedDate.toLocaleDateString() : 'None'}</p> */}
       </div>
     </LocalizationProvider>
   );
-}
+};
 
 export default Datepicker;

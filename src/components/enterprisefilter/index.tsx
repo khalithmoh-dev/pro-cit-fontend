@@ -27,6 +27,8 @@ import SmartField from "../SmartField";
 import { useLocation } from "react-router-dom";
 import { useLayout } from '../../modules/layout/LayoutContext'
 import { useTranslation } from "react-i18next";
+import Variant from '../Button'
+import { Size } from '../Button'
 
 /** The generic form component to generate form dynamically using a JSON
     The working json can be referred from institute config
@@ -36,19 +38,58 @@ import { useTranslation } from "react-i18next";
       - schema: Json schema with inputs
       - onSubmit: onSubmit function
 */
+export interface FormField {
+  name: string;
+  type: 'text' | 'email' | 'select' | 'checkbox' 
+  label: string;
+  removeHeader?: boolean;
+  isRequired?: boolean;
+  options?: Array<{ value: string; label: string }>;
+  showWhen?: ShowWhen
+}
+
+interface ShowWhen {
+  field: string,
+  value: string
+}
+interface ButtonI {
+  name?: string;
+  variant?: string;
+  nature?: string;
+  onClick?: Function;
+  type?: typeof Variant;
+  size?: Size;
+  isDisabled?: boolean;
+}
+
+export interface FormSchema {
+  fields: {
+    [sectionName: string]: FormField[];
+  };
+  buttons: ButtonI[]
+}
 
 interface EnterpriseFilterProps {
-  schema: any; 
+  schema: FormSchema; 
   onSubmit: (values: Record<string, any>) => void; 
   isEditPerm?: boolean; 
   isEditDisableDflt?: boolean; 
   oInitialValues?: Record<string, any>; 
-  isSmartField?: boolean; 
   setIsEditPerm?: React.Dispatch<React.SetStateAction<boolean>>; 
 }
 
-const EnterpriseFilter: React.FC<EnterpriseFilterProps> = ({ schema, onSubmit, isEditPerm = false, isEditDisableDflt = false, oInitialValues, isSmartField, setIsEditPerm }) => {
-  const [editPerm, setEditPerm] = useState(isEditDisableDflt ? false : true);
+interface Field {
+  name: string;
+  type: string;
+  isNullable?: boolean;
+  isMulti?: boolean;
+  isDisabled?: boolean;
+  validation?: Yup.AnySchema;
+  [key: string]: any;
+}
+
+const EnterpriseFilter: React.FC<EnterpriseFilterProps> = ({ schema, onSubmit, isEditPerm = false, isEditDisableDflt = false, oInitialValues, setIsEditPerm }) => {
+  const [editPerm, setEditPerm] = useState(!isEditDisableDflt);
   const [instDtls, setInstDtls] = useState({ _id: '', insname: '' });
   const [aMultiSelectVal, setAMultiSelectVal] = useState([]);
   const instituteStore = useInstituteStore();
@@ -82,27 +123,24 @@ const EnterpriseFilter: React.FC<EnterpriseFilterProps> = ({ schema, onSubmit, i
 
   // Build validation schema
   const validationSchema = Yup.object(
-    Object.values(schema.fields).flat().reduce((acc, field) => {
-      if (field.isNullable) {
-
-      } else if (field.name && field.validation) {
+    (Object.values(schema.fields).flat() as Field[]).reduce((acc, field) => {
+      if (!field.isNullable && field.name && field.validation) {
         acc[field.name] = field.validation;
       }
       return acc;
-    }, {})
+    }, {} as Record<string, Yup.AnySchema>)
   );
+
   const formik = useFormik({
-    initialValues: Object.values(schema.fields)
-      .flat()
-      .reduce((acc, field) => {
+    initialValues: (Object.values(schema.fields).flat() as Field[]).reduce(
+      (acc, field) => {
         if (field.name === "insId" && instDtls?._id && instDtls?.insname) {
           acc[field.name] = instDtls?._id;
         } else if (oInitialValues && oInitialValues.hasOwnProperty(field.name)) {
-          // Use value from oInitialValues if available
           acc[field.name] = oInitialValues[field.name];
         } else if (field.isNullable) {
           acc[field.name] = null;
-        } else if (field.isMulti || field.type === 'file') {
+        } else if (field.isMulti || field.type === "file") {
           acc[field.name] = [];
         } else if (field.type === "checkbox") {
           acc[field.name] = false;
@@ -112,7 +150,9 @@ const EnterpriseFilter: React.FC<EnterpriseFilterProps> = ({ schema, onSubmit, i
           acc[field.name] = "";
         }
         return acc;
-      }, {}),
+      },
+      {} as Record<string, any>
+    ),
     enableReinitialize: true,
     onSubmit: (values) => {
       onSubmit(values);
@@ -134,7 +174,7 @@ const EnterpriseFilter: React.FC<EnterpriseFilterProps> = ({ schema, onSubmit, i
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             error={formik.touched[field.name] && Boolean(formik.errors[field.name])}
-            helperText={formik.touched[field.name] && formik.errors[field.name]}
+            helperText={formik.touched[field.name] ? formik.errors[field.name] as string : ""}
             disabled={!editPerm || field.isDisabled}
           />
         );
@@ -218,7 +258,7 @@ const EnterpriseFilter: React.FC<EnterpriseFilterProps> = ({ schema, onSubmit, i
                     }
                     helperText={
                       formik.touched[field.name] && formik.errors[field.name]
-                        ? formik.errors[field.name]
+                        ? formik.errors[field.name] as string
                         : ""
                     }
                     sx={{
@@ -250,7 +290,7 @@ const EnterpriseFilter: React.FC<EnterpriseFilterProps> = ({ schema, onSubmit, i
 
               {formik.touched[field.name] && formik.errors[field.name] && (
                 <Typography variant="caption" color="error">
-                  {formik.errors[field.name]}
+                  {formik.errors[field.name] as string}
                 </Typography>
               )}
             </FormControl>
@@ -296,7 +336,7 @@ const EnterpriseFilter: React.FC<EnterpriseFilterProps> = ({ schema, onSubmit, i
 
             {formik.touched[field.name] && formik.errors[field.name] && (
               <Typography variant="caption" color="error">
-                {formik.errors[field.name]}
+                {formik.errors[field.name] as string}
               </Typography>
             )}
           </FormControl>
@@ -377,11 +417,21 @@ const EnterpriseFilter: React.FC<EnterpriseFilterProps> = ({ schema, onSubmit, i
               value={formik.values[field.name]}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.touched[field.name] && Boolean(formik.errors[field.name])}
-              helperText={formik.touched[field.name] && formik.errors[field.name]}
               disabled={!editPerm || field.isDisabled}
+              sx={{
+                borderColor:
+                  formik.touched[field.name] && formik.errors[field.name]
+                    ? 'var(--joy-palette-danger-outlinedBorder)'
+                    : undefined,
+              }}
             />
-            {formik.touched[field.name] && Boolean(formik.errors[field.name]) && <FormHelperText className="error-text">{formik.errors[field.name]}</FormHelperText>}
+            {formik.touched[field.name] &&
+              typeof formik.errors[field.name] === 'string' &&
+              formik.errors[field.name] && (
+                <FormHelperText color="danger">
+                  {formik.errors[field.name] as string}
+                </FormHelperText>
+              )}
           </>
         );
       default:
@@ -395,21 +445,21 @@ const EnterpriseFilter: React.FC<EnterpriseFilterProps> = ({ schema, onSubmit, i
         onSubmit={formik.handleSubmit}
         onReset={formik.handleReset}
       >
-        {Object.entries(schema.fields).map(([sectionName, fields]) => (
+        {Object.entries(schema.fields).map(([sectionName, fields = []]) => (
           <Box key={sectionName} mb={4}>
             {/* Section Heading */}
             <div className="generic-master-card">
               <SectionHeader sectionName={t(sectionName)} />
               <div className="fields-row">
-                {fields.map((field, index) => {
+                {(fields ?? []).map((field, index) => {
                   const shouldShow = !field.showWhen || formik.values[field.showWhen.field] === field.showWhen.value;
                   if (!shouldShow) return null;
                   return (
                     <div className="field-wrapper" key={index}>
-                      {!field.removeHeader && !isSmartField && (
+                      {!field.removeHeader && (
                         <Label labelName={field.label} required={field.isRequired} />
                       )}
-                      {isSmartField ? <SmartField field={field} formik={formik} editPerm={editPerm} /> : renderField(field)}
+                      {renderField(field)}
                     </div>
                   );
                 })}
@@ -421,7 +471,7 @@ const EnterpriseFilter: React.FC<EnterpriseFilterProps> = ({ schema, onSubmit, i
                     <Button
                       key={idx}
                       className={`btn-${btn?.nature?.toLowerCase()} btn-small`}
-                      size={btn.size || "medium"}
+                      size={btn.size || "md"}
                       onClick={(e) => {
                         if (btn.name === "Reset") {
                           formik.handleReset(e);

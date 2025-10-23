@@ -172,7 +172,6 @@ const CourseSchedulePage: React.FC = () => {
       <EnterpriseFilterForm
         schema={schema}
         onSubmit={handleCrsSchlSrch}
-        isSmartField={false}
       />
       {isDataFetched &&
         <>
