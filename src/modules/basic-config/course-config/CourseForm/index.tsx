@@ -343,7 +343,7 @@ console.log('baseData?.departments',baseData?.departments)
 
   return (
     <>
-      <Popup
+      {/* <Popup
         open={isCatPopOpen}
         onClose={() => setIsCatPopOpen(false)}
         title={oCourseCat?._id ? t('EDIT_CATEGORY') : t('ADD_CATEGORY')}
@@ -412,7 +412,7 @@ console.log('baseData?.departments',baseData?.departments)
             />
           </div>
         </div>
-      </Popup>
+      </Popup> */}
       <DynamicForm
         schema={schema}
         pageTitle={t("COURSE")}

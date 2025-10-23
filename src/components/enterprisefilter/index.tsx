@@ -127,7 +127,7 @@ const EnterpriseFilter: React.FC<EnterpriseFilterPropsAny> = ({ schema, onSubmit
   );
 
   const formik = useFormik({
-    initialValues: (Object.values(schema.fields).flat() as Field[]).reduce(
+    initialValues: (Object.values(schema.fields).flat() as FormFieldAny[]).reduce(
       (acc, field) => {
         if (field.name === "insId" && instDtls?._id && instDtls?.insname) {
           acc[field.name] = instDtls?._id;
