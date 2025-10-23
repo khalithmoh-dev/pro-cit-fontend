@@ -18,7 +18,7 @@ import {
 import { Search } from 'lucide-react';
 import { useLayout } from '../../../modules/layout/LayoutContext';
 import { useNavigate } from 'react-router-dom';
-import Button from '../../../components/Button';
+import Button from '../../../components/ButtonMui';
 import { useTranslation } from 'react-i18next';
 import useAuthStore from '../../../store/authStore';
 import CustomPagination from './customPagination';

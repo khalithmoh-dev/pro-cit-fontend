@@ -6,7 +6,7 @@ import {
     DialogActions,
     IconButton
 } from '@mui/material';
-import Button from '../../components/Button';
+import Button from '../ButtonMui';
 import { Close } from '@mui/icons-material';
 import './style.css';
 

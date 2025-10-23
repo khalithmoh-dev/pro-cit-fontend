@@ -15,7 +15,7 @@ import PageTitle from '../PageTitle';
 import SectionHeader from '../SectionHeader'
 import Label from '../Label';
 import Switch from '../switch'
-import Button from '../Button';
+import Button from '../ButtonMui';
 import FileUpload from '../fileupload';
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -27,8 +27,8 @@ import SmartField from "../SmartField";
 import { useLocation } from "react-router-dom";
 import { useLayout } from '../../modules/layout/LayoutContext'
 import { useTranslation } from "react-i18next";
-import Variant from '../Button'
-import { Size } from '../Button'
+import Variant from '../ButtonMui'
+import { Size } from '../ButtonMui'
 import { Schema } from 'yup';
 
 /** The generic form component to generate form dynamically using a JSON
@@ -118,7 +118,7 @@ const EnterpriseFilter: React.FC<EnterpriseFilterPropsAny> = ({ schema, onSubmit
 
   // Build validation schema
   const validationSchema = Yup.object(
-    (Object.values(schema.fields).flat() as Field[]).reduce((acc, field) => {
+    (Object.values(schema.fields).flat() as FormFieldAny[]).reduce((acc, field) => {
       if (!field.isNullable && field.name && field.validation) {
         acc[field.name] = field.validation;
       }
@@ -473,7 +473,7 @@ const EnterpriseFilter: React.FC<EnterpriseFilterPropsAny> = ({ schema, onSubmit
                         }
                         if (btn.onClick) { btn.onClick() }
                       }}
-                      type={typeof btn.type === "string" ? btn.type : "button"}
+                      type={btn.type || 'button'}
                       disabled={btn.isDisabled || (btn.name !== "Cancel" && (!editPerm || btn.isDisabled))}
                       variantType={
                         typeof btn.type === "string" ? btn.type === "submit"

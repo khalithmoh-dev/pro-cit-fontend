@@ -1,4 +1,4 @@
-import Button from "../Button"
+import Button from "../ButtonMui"
 const TitleButton = ({variant= "primary", onClick=()=>{}, Btnname=""}) => {
     const oColorPicker= {
         primary: ['var(--logout-button)',"white"]

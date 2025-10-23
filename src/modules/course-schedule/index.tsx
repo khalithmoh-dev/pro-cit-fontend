@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
 import useBaseStore, { BaseData } from '../../store/baseStore';
 import { Box } from '@mui/material';
-import Button from '../../components/Button';
+import Button from '../../components/ButtonMui';
 import { useLayout } from '../../modules/layout/LayoutContext'
 import Switch from '../../components/switch';
 

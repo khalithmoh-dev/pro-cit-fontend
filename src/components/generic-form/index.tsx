@@ -4,7 +4,7 @@ import { Box } from "@mui/material";
 import SectionHeader from "../SectionHeader";
 import Label from "../Label";
 import Switch from "../switch";
-import Button from "../../components/Button";
+import Button from "../ButtonMui";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import useInstituteStore from "../../store/instituteStore";

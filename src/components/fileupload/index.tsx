@@ -1,6 +1,6 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
 import { Upload, X, Check, AlertCircle, Image, FileText, Music, Video } from "lucide-react";
-import Button from "../Button";
+import Button from "../ButtonMui";
 import { Badge } from "../badge";
 import { Progress } from "../progress";
 import { useTranslation } from "react-i18next";
