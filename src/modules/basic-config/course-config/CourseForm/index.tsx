@@ -67,7 +67,7 @@ const CourseForm: React.FC = () => {
       setSubCatList([]);
     }
   }
-console.log('baseData?.departments',baseData?.departments)
+
   // Course form schema design
   const schema = {
     fields: {
@@ -305,39 +305,39 @@ console.log('baseData?.departments',baseData?.departments)
   }
 
   // Popup action for course sub category model
-  const popupActionsSubCat = [
-    {
-      label: oCourseCat?._id ? t("UPDATE") : t('CREATE'),
-      onClick: () => handleSubmitSubCat(),
-      disabled: !oCourseSubCat?.subCatId || !oCourseSubCat?.subCatNm
-    },
-    {
-      label: t("CANCEL"),
-      onClick: () => setIsSubCatPopOpen(false),
-      secondary: true
-    }
-  ]
+  // const popupActionsSubCat = [
+  //   {
+  //     label: oCourseCat?._id ? t("UPDATE") : t('CREATE'),
+  //     onClick: () => handleSubmitSubCat(),
+  //     disabled: !oCourseSubCat?.subCatId || !oCourseSubCat?.subCatNm
+  //   },
+  //   {
+  //     label: t("CANCEL"),
+  //     onClick: () => setIsSubCatPopOpen(false),
+  //     secondary: true
+  //   }
+  // ]
 
-  // Function for submit course sub category form
-  const handleSubmitSubCat = async () => {
-    try {
-      if (!oCourseSubCat?._id) {
-        const oNewSubCat = { ...oCourseSubCat };
-        delete oNewSubCat['_id'];
-        await courseStore.createCourseSubCat(oNewSubCat);
-      } else {
-        await courseStore.updateCourseSubCat(oCourseSubCat);
-      }
-      const aReq = ['courseSubCat'];
-      const oBaseData = await baseStore.getBaseData(aReq);
-      setBaseData({...baseData, courseSubCat: oBaseData.courseSubCat})
-      const filterByCatId = oCourseSubCat?.catId ? oBaseData.courseSubCat.filter(sc => sc.catId === oCourseSubCat.catId) : oBaseData.courseSubCat;
-      setSubCatList(filterByCatId);
-      setIsSubCatPopOpen(false);
-    } catch (error) {
-      console.error(error)
-    }
-  }
+  // // Function for submit course sub category form
+  // const handleSubmitSubCat = async () => {
+  //   try {
+  //     if (!oCourseSubCat?._id) {
+  //       const oNewSubCat = { ...oCourseSubCat };
+  //       delete oNewSubCat['_id'];
+  //       await courseStore.createCourseSubCat(oNewSubCat);
+  //     } else {
+  //       await courseStore.updateCourseSubCat(oCourseSubCat);
+  //     }
+  //     const aReq = ['courseSubCat'];
+  //     const oBaseData = await baseStore.getBaseData(aReq);
+  //     setBaseData({...baseData, courseSubCat: oBaseData.courseSubCat})
+  //     const filterByCatId = oCourseSubCat?.catId ? oBaseData.courseSubCat.filter(sc => sc.catId === oCourseSubCat.catId) : oBaseData.courseSubCat;
+  //     setSubCatList(filterByCatId);
+  //     setIsSubCatPopOpen(false);
+  //   } catch (error) {
+  //     console.error(error)
+  //   }
+  // }
 
   return (
     <>
