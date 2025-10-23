@@ -9,30 +9,31 @@ import {
 import Button from '../ButtonMui';
 import { Close } from '@mui/icons-material';
 import './style.css';
+import { Variant } from '../ButtonMui'
 
 
-export type ButtonVariant = 'text' | 'outlined' | 'contained';
-export type ButtonColor = 'inherit' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning';
-export type VariantType = 'button' | 'submit' | 'reset' | 'cancel';
-export type ButtonSize = 'small' | 'medium' | 'large';
+// export type ButtonVariant = 'text' | 'outlined' | 'contained';
+// export type ButtonColor = 'inherit' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning';
+// export type VariantType = 'button' | 'submit' | 'reset' | 'cancel';
+// export type ButtonSize = 'small' | 'medium' | 'large';
 
-interface ActionButton {
-    label: string;
-    onClick: () => void;
-    variant: ButtonVariant;
-    color?: ButtonColor;
-    size?: ButtonSize;
-    type?: VariantType;
-    disabled?: boolean;
-    secondary?: boolean;
-}
+// interface ActionButton {
+//     label: string;
+//     onClick: () => void;
+//     variant: Variant;
+//     color?: ButtonColor;
+//     size?: ButtonSize;
+//     type?: VariantType;
+//     disabled?: boolean;
+//     secondary?: boolean;
+// }
 
 interface PopupProps {
     open: boolean;
     onClose: () => void;
     title: string;
     children?: React.ReactNode;
-    actions?: ActionButton[];
+    actions?: any[];
     maxWidth?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
     fullWidth?: boolean;
 }
@@ -83,7 +84,6 @@ const Popup: React.FC<PopupProps> = ({
                                 variantType={
                                     action.variant
                                 }
-                                secondary={action.secondary}
                             >
                                 {action.label}
                             </Button>
