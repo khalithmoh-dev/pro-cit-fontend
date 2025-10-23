@@ -60,7 +60,7 @@ const InputFields: FC<InputFieldsProps> = ({
     }
   };
 
-  const handleEventChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleEventChange = (e: any) => {
     const { name, value, type } = e.target;
 
     let finalValue: any = value;
