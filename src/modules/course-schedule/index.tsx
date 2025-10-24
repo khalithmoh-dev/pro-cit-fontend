@@ -125,7 +125,7 @@ const CourseSchedulePage: React.FC = () => {
     },
     buttons: [
       {
-        name: t("RESET"), variant: "outlined", nature: "warning", onClick: handleReset
+        name: t("RESET"), variant: "outlined", nature: "reset", onClick: handleReset
       }, {
         name: t("SEARCH"), variant: "contained", nature: "primary", type: "submit"
       }
