@@ -41,7 +41,8 @@ interface createInstitutePayload{
 
 interface InstituteDetails {
   _id: string,
-  insname: string
+  insname: string,
+  insCode: string
 }
 interface InstituteState {
     insData: object,
@@ -55,7 +56,11 @@ const useInstituteStore = create<InstituteState>((set,get) => ({
     insData: {},
     getInstitute: async(id = '') => {
        try{
-         return (await httpRequest('GET',`${import.meta.env.VITE_API_URL}/institute/get-by-id/${'68c2d50407f3ff56fed55b21'}`))?.data;
+           const instData = await httpRequest('GET', `${import.meta.env.VITE_API_URL}/institute/get-by-id/${'68c2d50407f3ff56fed55b21'}`);
+           if(instData?.data){
+            useAuthStore.setState({instituteDtls: {_id:instData?.data?._id, insname: instData?.data?.insname, insCode: instData?.data?.insCode}});
+           }
+           return instData?.data;
        }catch(err){
         return false
        }

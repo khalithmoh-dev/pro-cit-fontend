@@ -77,7 +77,8 @@ interface RouteDetails {
 
 interface InstituteDetails {
   _id: string,
-  insname: string
+  insname: string,
+  insCode: string
 }
 
 interface AuthState {
