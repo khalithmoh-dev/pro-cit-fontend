@@ -99,7 +99,6 @@ const useDegreeStore = create<SemesterState>((set,get) => ({
     getSemesterGroup: async() => {
        try{
          const aSemesterGroupList = await httpRequest('GET',`${import.meta.env.VITE_API_URL}/semester/get-all-semester-group`);
-         console.log('aSemesterGroupList?.data',aSemesterGroupList?.data)
          set({semesterGroupList: aSemesterGroupList?.data});
          return aSemesterGroupList?.data;
        }catch(err){
