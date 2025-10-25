@@ -1,6 +1,6 @@
 import React from 'react'
 import Typography from '@mui/material/Typography'
-import './index.css'
+import './index.css';
 import { useTranslation } from 'react-i18next';
 interface SectionHeaderProps {
   sectionName: string;

@@ -14,7 +14,7 @@ import { Autocomplete } from "@mui/material";
 import Textarea from "@mui/joy/Textarea";
 import FileUpload from "../fileupload";
 import Button from "../ButtonMui";
-import "./index.css"
+import "./index.css";
 import { useTranslation } from "react-i18next";
 
 interface InputFieldsProps {
