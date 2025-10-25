@@ -46,7 +46,7 @@ export default defineConfig({
     modulePreload: false,
     target: 'esnext',
     minify: false,
-    cssCodeSplit: false,
+    cssCodeSplit: true,
   },
   resolve: {
     alias: {
