@@ -62,6 +62,12 @@
   text-transform: none !important;
 }
 
+.css-98ra8i{
+  border-radius: 25px;
+}
+.css-1toxriw-MuiList-root-MuiMenu-list{
+  max-height: 25rem;
+}
 .error-text{
   color: red !important;
 }
