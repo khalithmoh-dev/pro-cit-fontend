@@ -2,6 +2,7 @@ import { create } from "zustand";
 import httpUploadRequest from "../utils/functions/http-upload-request";
 import useInstituteStore from "./instituteStore";
 import httpRequest from '../utils/functions/http-request';
+import { getTranslatedLabel } from "../utils/functions/translation-helper";
 
 interface UploadedFile {
   fileName: string;
@@ -20,6 +21,7 @@ interface BaseState {
   parseFormDataAndUpload: (files: File[]) => Promise<{url?: string}>;
   getBaseData: (arr: string[]) => Promise<BaseData>;
   upldedRec: UploadedFile | UploadedFile[] | null;
+  downloadSampleExcel: (fileName: string) => Promise<void>;
 }
 
 
@@ -64,6 +66,38 @@ const useBaseStore = create<BaseState>((set, get) => ({
         formData
       );
       return uploadedDtl.data;
+    } catch (err) {
+      throw err;
+    }
+  },
+  downloadSampleExcel: async(fileName: string): Promise<void> => {
+    try {
+      const res = await httpRequest(
+        "POST",
+        `${import.meta.env.VITE_API_URL}/basedata/download-sample-format`,
+        { fileName },
+        {
+          responseType: "blob",
+          headers: {
+            Accept: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          }
+        }
+      );
+      const blob = new Blob([res], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+      const blobUrl = window.URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      const translatedLabel = getTranslatedLabel(fileName);
+      link.download = `${translatedLabel}.xlsx`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      // release memory
+      window.URL.revokeObjectURL(blobUrl);
     } catch (err) {
       throw err;
     }

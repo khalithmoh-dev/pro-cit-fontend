@@ -248,6 +248,39 @@ html, body, #root {
 /* Focus State */
 .btn-base:focus { outline: 2px solid #3b82f6 !important; outline-offset: 2px !important; }
 
+/* Text Link Button */
+.btn-text {
+  background: none !important;
+  border: none !important;
+  color: #2563eb !important; /* link color */
+  padding: 0 !important;
+  font-weight: 500 !important;
+  height: auto !important;
+  min-height: auto !important;
+  text-transform: none !important;
+  box-shadow: none !important;
+  cursor: pointer;
+  outline: none !important;
+}
+
+.btn-text:hover {
+  text-decoration: underline !important;
+  background: transparent !important;
+  color: #1d4ed8 !important;
+}
+
+.btn-text:disabled {
+  color: #9ca3af !important;
+  text-decoration: none !important;
+  cursor: not-allowed;
+}
+
+.btn-text:focus,
+.btn-text:active {
+  outline: none !important;             
+  box-shadow: none !important;           
+  border: none !important;
+}
 /* ==========================
    Card & Form Styles
 ========================== */

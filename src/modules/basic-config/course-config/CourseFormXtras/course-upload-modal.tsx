@@ -3,9 +3,12 @@ import Popup from "../../../../components/modal";
 import { useTranslation } from "react-i18next";
 import FileUpload from '../../../../components/fileupload';
 import useCourseStore from "../../../../store/courseStores";
+import Button from '../../../../components/ButtonMui';
+import useBaseStore from "../../../../store/baseStore";
 const CourseUploadModal = ({ isModalOpen, setIsModalOpen }) => {
     const { t } = useTranslation();
     const [uploadedFile, setUploadedFile] = useState({});
+    const { downloadSampleExcel } = useBaseStore();
     // const { uploadCourses } = useCourseStore();
 
     // // to save the uploaded file
@@ -51,6 +54,9 @@ const CourseUploadModal = ({ isModalOpen, setIsModalOpen }) => {
                     setUploadedFile({})
                 }}
             />
+            <div style={{ marginTop: '1rem' }}>
+                <Button variantType="text" onClick={(e)=>downloadSampleExcel('COURSE_UPLOAD')}>Click to download sample format</Button>
+            </div>
         </Popup>
     )
 }
