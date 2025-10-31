@@ -22,6 +22,7 @@ import Button from '../../../components/ButtonMui';
 import { useTranslation } from 'react-i18next';
 import useAuthStore from '../../../store/authStore';
 import CustomPagination from './customPagination';
+import UploadProgressNotice from '../../../components/InfoMesssage'
 
 /**
  * DataTable Component
@@ -68,6 +69,8 @@ const DataTable = ({
   addRoute = '',
   apiService = (page =0 , limit = 0, searchTerm = ''):ApiServiceI => { return {data: [],total: 0}},
   serverSide = false,
+  showKey=false,
+  infoMessage=''
 }) => {
   // === State variables ===
   const [page, setPage] = useState(0);
@@ -250,186 +253,188 @@ const DataTable = ({
     setFilters({});
     setSearchTerm('');
   };
-
+console.log('showKey',showKey)
   // === Render ===
   return (
-    <Box
-      sx={{
-        width: '100%',
-        mt: 2,
-        mb: 2,
-        px: 2,
-        border: '1px solid rgba(224, 224, 224, 1)',
-        borderRadius: 3,
-      }}
-    >
-      {/* ==== Header Section ==== */}
+    <>
+      {showKey && <UploadProgressNotice message={t(infoMessage)} showKey={showKey} />}
       <Box
         sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          backgroundColor: 'white',
-          borderBottom: '1px solid rgba(224, 224, 224, 1)',
-          borderRadius: '16px 16px 0 0',
-        }}
-      >
-        <div className="mt-3 mx-2">
-          <p className="fw-semibold fsd-0">{title}</p>
-          <p style={{ color: 'slategrey' }}>
-            {`Showing ${paginatedData?.length} of ${totalRecords}`}
-          </p>
-        </div>
-
-        {searchable && (
-          <TextField
-            placeholder="Search..."
-            value={searchTerm}
-            onChange={(e) => {
-              setSearchTerm(e.target.value);
-              setPage(0);
-            }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Search size={20} />
-                </InputAdornment>
-              ),
-            }}
-            sx={{ width: 300, marginRight: '12px' }}
-            size="small"
-          />
-        )}
-      </Box>
-
-      {/* ==== Table ==== */}
-      <TableContainer
-        component={Paper}
-        elevation={0}
-        sx={{
-          overflow: 'auto',
-          border: '1px solid rgba(224, 224, 224, 1)',
+          width: '100%',
           mt: 2,
-          borderRadius: 4,
+          mb: 2,
+          px: 2,
+          border: '1px solid rgba(224, 224, 224, 1)',
+          borderRadius: 3,
         }}
       >
-        <Table sx={{ minWidth: 650, borderCollapse: 'collapse' }}>
-          {/* ==== Table Header ==== */}
-          <TableHead
-            style={{ background: 'aliceblue' }}
-            sx={{ '& .MuiTableCell-root': { py: 1.5, px: 1.5 } }}
-          >
-            <TableRow>
-              {selectable && (
-                <TableCell padding="checkbox">
-                  <Checkbox
-                    indeterminate={
-                      selectedRows.length > 0 &&
-                      selectedRows.length < filteredData.length
-                    }
-                    checked={
-                      selectedRows.length === filteredData.length &&
-                      filteredData.length > 0
-                    }
-                    onChange={handleSelectAllRows}
-                  />
-                </TableCell>
-              )}
+        {/* ==== Header Section ==== */}
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            backgroundColor: 'white',
+            borderBottom: '1px solid rgba(224, 224, 224, 1)',
+            borderRadius: '16px 16px 0 0',
+          }}
+        >
+          <div className="mt-3 mx-2">
+            <p className="fw-semibold fsd-0">{title}</p>
+            <p style={{ color: 'slategrey' }}>
+              {`Showing ${paginatedData?.length} of ${totalRecords}`}
+            </p>
+          </div>
 
-              {columns.map((col) => (
-                <TableCell key={col.field} className="fwd-1">
-                  {col.headerName}
-                </TableCell>
-              ))}
+          {searchable && (
+            <TextField
+              placeholder="Search..."
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setPage(0);
+              }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Search size={20} />
+                  </InputAdornment>
+                ),
+              }}
+              sx={{ width: 300, marginRight: '12px' }}
+              size="small"
+            />
+          )}
+        </Box>
 
-              {actions.length > 0 && (
-                <TableCell align="center" className="fwd-1">
-                  Actions
-                </TableCell>
-              )}
-            </TableRow>
-          </TableHead>
-
-          {/* ==== Table Body ==== */}
-          <TableBody>
-            {paginatedData.length > 0 ? (
-              paginatedData.map((row, index) => (
-                <TableRow
-                  key={index}
-                  hover
-                  selected={selectedRows.includes(row.id)}
-                  onClick={() => handleSelectRow(row.id)}
-                  sx={{
-                    cursor: selectable ? 'pointer' : 'default',
-                    '& .MuiTableCell-root': {
-                      textTransform: 'none',
-                    },
-                  }}
-                >
-                  {selectable && (
-                    <TableCell padding="checkbox">
-                      <Checkbox checked={selectedRows.includes(row.id)} />
-                    </TableCell>
-                  )}
-
-                  {columns.map((col) => (
-                    <TableCell key={col.field}>
-                      {col.renderCell ? col.renderCell(row) : row[col.field]}
-                    </TableCell>
-                  ))}
-
-                  {actions.length > 0 && (
-                    <TableCell align="center">
-                      <Box
-                        sx={{
-                          display: 'flex',
-                          justifyContent: 'center',
-                          gap: 1,
-                        }}
-                      >
-                        {actions.map((action) => (
-                          <Tooltip key={action.label} title={action.label}>
-                            <IconButton
-                              size="small"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                action.onClick(row);
-                              }}
-                              color={action.color || 'default'}
-                            >
-                              {action.icon}
-                            </IconButton>
-                          </Tooltip>
-                        ))}
-                      </Box>
-                    </TableCell>
-                  )}
-                </TableRow>
-              ))
-            ) : (
+        {/* ==== Table ==== */}
+        <TableContainer
+          component={Paper}
+          elevation={0}
+          sx={{
+            overflow: 'auto',
+            border: '1px solid rgba(224, 224, 224, 1)',
+            mt: 2,
+            borderRadius: 4,
+          }}
+        >
+          <Table sx={{ minWidth: 650, borderCollapse: 'collapse' }}>
+            {/* ==== Table Header ==== */}
+            <TableHead
+              style={{ background: 'aliceblue' }}
+              sx={{ '& .MuiTableCell-root': { py: 1.5, px: 1.5 } }}
+            >
               <TableRow>
-                <TableCell
-                  colSpan={
-                    columns.length +
-                    (selectable ? 1 : 0) +
-                    (actions.length > 0 ? 1 : 0)
-                  }
-                  align="center"
-                >
-                  <Box sx={{ py: 4 }}>
-                    <Typography variant="body2" color="textSecondary">
-                      No data found
-                    </Typography>
-                  </Box>
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
+                {selectable && (
+                  <TableCell padding="checkbox">
+                    <Checkbox
+                      indeterminate={
+                        selectedRows.length > 0 &&
+                        selectedRows.length < filteredData.length
+                      }
+                      checked={
+                        selectedRows.length === filteredData.length &&
+                        filteredData.length > 0
+                      }
+                      onChange={handleSelectAllRows}
+                    />
+                  </TableCell>
+                )}
 
-      {/* ==== Pagination ==== */}
-      {/* {pagination && (
+                {columns.map((col) => (
+                  <TableCell key={col.field} className="fwd-1">
+                    {col.headerName}
+                  </TableCell>
+                ))}
+
+                {actions.length > 0 && (
+                  <TableCell align="center" className="fwd-1">
+                    Actions
+                  </TableCell>
+                )}
+              </TableRow>
+            </TableHead>
+
+            {/* ==== Table Body ==== */}
+            <TableBody>
+              {paginatedData.length > 0 ? (
+                paginatedData.map((row, index) => (
+                  <TableRow
+                    key={index}
+                    hover
+                    selected={selectedRows.includes(row.id)}
+                    onClick={() => handleSelectRow(row.id)}
+                    sx={{
+                      cursor: selectable ? 'pointer' : 'default',
+                      '& .MuiTableCell-root': {
+                        textTransform: 'none',
+                      },
+                    }}
+                  >
+                    {selectable && (
+                      <TableCell padding="checkbox">
+                        <Checkbox checked={selectedRows.includes(row.id)} />
+                      </TableCell>
+                    )}
+
+                    {columns.map((col) => (
+                      <TableCell key={col.field}>
+                        {col.renderCell ? col.renderCell(row) : row[col.field]}
+                      </TableCell>
+                    ))}
+
+                    {actions.length > 0 && (
+                      <TableCell align="center">
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            gap: 1,
+                          }}
+                        >
+                          {actions.map((action) => (
+                            <Tooltip key={action.label} title={action.label}>
+                              <IconButton
+                                size="small"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  action.onClick(row);
+                                }}
+                                color={action.color || 'default'}
+                              >
+                                {action.icon}
+                              </IconButton>
+                            </Tooltip>
+                          ))}
+                        </Box>
+                      </TableCell>
+                    )}
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell
+                    colSpan={
+                      columns.length +
+                      (selectable ? 1 : 0) +
+                      (actions.length > 0 ? 1 : 0)
+                    }
+                    align="center"
+                  >
+                    <Box sx={{ py: 4 }}>
+                      <Typography variant="body2" color="textSecondary">
+                        No data found
+                      </Typography>
+                    </Box>
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+
+        {/* ==== Pagination ==== */}
+        {/* {pagination && (
         <Box
           sx={{
             display: 'flex',
@@ -478,34 +483,35 @@ const DataTable = ({
         </Box>
       )} */}
 
-      {pagination && (
-        <Box
-          sx={{
-            
-            bottom: 0,
-            backgroundColor: '#fff',
-            zIndex: 10,
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            py: 1,
-          }}
+        {pagination && (
+          <Box
+            sx={{
 
-        >
-          <CustomPagination
-            page={page + 1} // 1-based
-            totalPages={Math.ceil(totalRecords / rowsPerPage)}
-            rowsPerPage={rowsPerPage}
-            onPageChange={(newPage) => setPage(newPage - 1)} // convert to 0-based
-            onRowsPerPageChange={(newRows) => {
-              setRowsPerPage(newRows);
-              setPage(0); // reset to first page
+              bottom: 0,
+              backgroundColor: '#fff',
+              zIndex: 10,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              py: 1,
             }}
-          />
-        </Box>
-      )}
 
-    </Box>
+          >
+            <CustomPagination
+              page={page + 1} // 1-based
+              totalPages={Math.ceil(totalRecords / rowsPerPage)}
+              rowsPerPage={rowsPerPage}
+              onPageChange={(newPage) => setPage(newPage - 1)} // convert to 0-based
+              onRowsPerPageChange={(newRows) => {
+                setRowsPerPage(newRows);
+                setPage(0); // reset to first page
+              }}
+            />
+          </Box>
+        )}
+
+      </Box>
+    </>
   );
 };
 

@@ -22,6 +22,7 @@
   "FAILED_TO_UPLOAD": "Failed to upload",
   "UNKNOWN_ERROR_OCCURRED": "Unknown error occurred",
   "ALREADY_EXISTS": "Already exists",
+  "THE_FILE_UPLOAD_IS_IN_PROGRESS":"The file upload is in progress",
 
   "INSTITUTION": "Institution",
   "ENTERPRISE": "Enterprise",

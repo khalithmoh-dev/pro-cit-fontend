@@ -13,6 +13,7 @@ const CourseList: React.FC = () => {
     const { getCourses } = useCourseStore();
     const [courseList, setCourseList] = useState([]);
     const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+    const [canShowUploadPenMsg, setCanShowUploadPenMsg] = useState(false);
 
     // Column configuration
     const columns = [
@@ -32,7 +33,6 @@ const CourseList: React.FC = () => {
             sortable: true,
         }
     ];
-
     // Action buttons
     const actions = [
         {
@@ -49,9 +49,10 @@ const CourseList: React.FC = () => {
           (async () => {
             try {
               const aCourseRes = await getCourses();
-              if (Array.isArray(aCourseRes) && aCourseRes.length) {
-                setCourseList(aCourseRes)
-              }
+              if (Array.isArray(aCourseRes?.data) && aCourseRes?.data?.length) {
+                setCourseList(aCourseRes?.data)
+            }
+            setCanShowUploadPenMsg(aCourseRes?.isUpldPen)
             } catch (error) {
               console.error("Failed to fetch degrees:", error);
             }
@@ -78,6 +79,8 @@ const CourseList: React.FC = () => {
                 headerAction={aHeaderActn}
                 title={t("COURSES")}
                 actions={actions}
+                showKey={canShowUploadPenMsg}
+                infoMessage='THE_FILE_UPLOAD_IS_IN_PROGRESS'
             />
         </Box>
         <CourseUploadModal 

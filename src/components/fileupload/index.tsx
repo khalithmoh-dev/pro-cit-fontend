@@ -1,5 +1,5 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
-import { Upload, X, Check, AlertCircle, Image, FileText, Music, Video } from "lucide-react";
+import { Upload, X, Check, AlertCircle, Image, FileText, Music, Video, File as FileIcon } from "lucide-react";
 import Button from "../ButtonMui";
 import { Badge } from "../badge";
 import { Progress } from "../progress";
@@ -31,12 +31,14 @@ const getFileIcon = (file: File) => {
   if (type.startsWith("video/")) return Video;
   if (type.startsWith("audio/")) return Music;
   if (type.includes("pdf") || type.includes("document") || type.includes("text")) return FileText;
-  return File;
+  return FileIcon;
 };
+
 
 const formatFileSize = (bytes: number): string => {
   if (bytes === 0) return "0 Bytes";
   const k = 1024;
+
   const sizes = ["Bytes", "KB", "MB", "GB"];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
@@ -73,7 +75,6 @@ const FileUpload: React.FC<FileUploadProps> = ({
     if (maxSize && file.size > maxSize) {
       return `File size exceeds ${formatFileSize(maxSize)}`;
     }
-
     if (accept) {
       const acceptedTypes = accept.split(",").map((type) => type.trim());
       const isValidType = acceptedTypes.some((type) => {
@@ -87,7 +88,6 @@ const FileUpload: React.FC<FileUploadProps> = ({
         return `File type not supported. Accepted: ${accept}`;
       }
     }
-
     return null;
   };
 
@@ -111,7 +111,8 @@ const FileUpload: React.FC<FileUploadProps> = ({
 
   const handleFiles = useCallback(
     (files: File[]) => {
-      const newFiles: UploadedFile[] = [];
+      try{
+        const newFiles: UploadedFile[] = [];
 
       for (const file of files) {
         const error = validateFile(file);
@@ -144,6 +145,9 @@ const FileUpload: React.FC<FileUploadProps> = ({
 
       const validFiles = newFiles.filter((f) => f.status !== "error").map((f) => f.file as File);
       onFileSelect?.(validFiles);
+      }catch(err){
+        console.error('caught error----',err)
+      }
     },
     [accept, maxSize, multiple, onFileSelect]
   );

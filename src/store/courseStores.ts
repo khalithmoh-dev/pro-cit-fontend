@@ -44,16 +44,22 @@ interface courseSubCatPayload{
     _id?: string
 }
 
+interface courseList {
+    data: [];
+    isUpldPen:boolean;
+}
+
 interface CourseState {
     courseList: CourseIF[];
     createCourse: (payload: createCoursePayload) => Promise<boolean>,
     getCourseById: (id: string) => Promise<boolean>,
-    getCourses: (firstRender?: boolean) => Promise<object[] | boolean >;
+    getCourses: (firstRender?: boolean) => Promise<courseList >;
     updateCourse: (payload: createCoursePayload) => Promise<boolean>;
     createCourseCat: (payload: courseCatPayload) => Promise<boolean>,
     updateCourseCat: (payload: courseCatPayload) => Promise<boolean>,
     createCourseSubCat: (payload: courseSubCatPayload) => Promise<boolean>,
     updateCourseSubCat: (payload: courseSubCatPayload) => Promise<boolean>,
+    uploadCourses: (payload: File | object) => Promise<boolean>
 }
 
 // Course Store to handle Degree create update get functionalities
@@ -126,11 +132,10 @@ const useCourseStore = create<CourseState>((set,get) => ({
         }
     },
 
-    uploadCourses: async (file: File, departmentId: string) => {
+    uploadCourses: async (file: File) => {
         try {
         const formData = new FormData();
             formData.append("files",file)
-console.log([...formData.entries()]);
             await httpUploadRequest("POST", `${import.meta.env.VITE_API_URL}/course/upload`, formData);
 
             return true;

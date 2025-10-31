@@ -9,30 +9,29 @@ const CourseUploadModal = ({ isModalOpen, setIsModalOpen }) => {
     const { t } = useTranslation();
     const [uploadedFile, setUploadedFile] = useState({});
     const { downloadSampleExcel } = useBaseStore();
-    // const { uploadCourses } = useCourseStore();
+    const { uploadCourses } = useCourseStore();
 
-    // // to save the uploaded file
-    // const handleModalUpload = () => {
-    //     try {
-    //         uploadCourses(uploadedFile)
-    //     } catch (err) {
-    //         console.error(err)
-    //     }
-    // }
+    // to save the uploaded file
+    const handleModalUpload = () => {
+        try {
+            uploadCourses(uploadedFile)
+        } catch (err) {
+            console.error(err)
+        }
+    }
 
     // model file actions
     const popupActions = [
         {
             label: t('CANCEL'),
             onClick: () => setIsModalOpen(false),
-            variant: 'outlined',
+            variant: 'cancel',
             color: 'primary',
         },
         {
             label: t('UPLOAD'),
-            // onClick: handleModalUpload,
-            onClick:()=>{},
-            variant: 'contained',
+            onClick: handleModalUpload,
+            variant: 'primary',
             color: 'primary',
         }
     ];
