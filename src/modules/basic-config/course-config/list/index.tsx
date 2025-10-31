@@ -63,6 +63,7 @@ const CourseList: React.FC = () => {
       const aHeaderActn = [
         {
             actionName: 'upload',
+            disabled: canShowUploadPenMsg,
             onClick: () => {
                 setIsUploadModalOpen(true);
             }
