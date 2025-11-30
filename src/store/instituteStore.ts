@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import httpRequest from '../utils/functions/http-request';
 import useAuthStore from './authStore';
 interface createInstitutePayload{
-    insname: string,
+    insName: string,
     insCode: string,
     _id?: string,
     insLogo?: [],
@@ -41,7 +41,7 @@ interface createInstitutePayload{
 
 interface InstituteDetails {
   _id: string,
-  insname: string,
+  insName: string,
   insCode: string
 }
 interface InstituteState {
@@ -58,7 +58,7 @@ const useInstituteStore = create<InstituteState>((set,get) => ({
        try{
            const instData = await httpRequest('GET', `${import.meta.env.VITE_API_URL}/institute/get-by-id/${'68c2d50407f3ff56fed55b21'}`);
            if(instData?.data){
-            useAuthStore.setState({instituteDtls: {_id:instData?.data?._id, insname: instData?.data?.insname, insCode: instData?.data?.insCode}});
+            useAuthStore.setState({instituteDtls: {_id:instData?.data?._id, insName: instData?.data?.insName, insCode: instData?.data?.insCode}});
            }
            return instData?.data;
        }catch(err){
@@ -69,7 +69,7 @@ const useInstituteStore = create<InstituteState>((set,get) => ({
         return useAuthStore.getState().instituteDtls;
     },
     updateInstitute: async(oPaylaod = {
-        insname: '',
+        insName: '',
         insCode: ''
     }) => {
         try{

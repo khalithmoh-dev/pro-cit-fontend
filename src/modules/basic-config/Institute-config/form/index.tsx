@@ -7,6 +7,8 @@ import useAuthStore from '../../../../store/authStore'
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useToastStore } from "../../../../store/toastStore";
+import Button from "../../../../components/ButtonMui";
+import ViewInstitutes from './ChildInstitutes';
 
 export default function InstiteConfig() {
 
@@ -23,13 +25,14 @@ export default function InstiteConfig() {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const showToast = useToastStore((state) => state.showToast);
+  const [showChildInsList, setShowChildInsList] = useState(false);
 
   //form schema
   const schema = {
     fields: {
       "GENERAL": [
         {
-          name: "insname",
+          name: "insName",
           label: t('INSTITUTION_NAME'),
           type: "text",
           validation: Yup.string().required(t('INSTITUTION_NAME_REQUIRED')),
@@ -41,6 +44,13 @@ export default function InstiteConfig() {
           type: "text",
           validation: Yup.string().required(t('INSTITUTION_CODE_IS_REQUIRED')),
           isRequired: true
+        },
+        {
+          name: 'isOrg',
+          validation: Yup.boolean(),
+          label: `${t('IS_ORGANISATION')}?`,
+          type: "checkbox",
+          removeHeader: true,
         },
         {
           name: "acrtdBy",
@@ -285,13 +295,21 @@ export default function InstiteConfig() {
     }
   }
 
+  const aHeaderAction = [...(instDtls.isOrg ? [<Button variantType="primary" sizeType='sm' onClick={() => {setShowChildInsList(true)}}>{t('VIEW_INSTITUTES')}</Button>] : [])]
+
   return (
-    <DynamicForm
-      schema={schema}
-      pageTitle="Institute config"
-      onSubmit={async (values) => { await handleFormSubmit(values) }}
-      isEditPerm={permissions?.['institute-config']?.create}
-      oInitialValues={instDtls}
-    />
+    <>
+      <DynamicForm
+        schema={schema}
+        pageTitle="Institute config"
+        onSubmit={async (values) => { await handleFormSubmit(values) }}
+        isEditPerm={permissions?.['institute-config']?.create}
+        aHeaderAction={aHeaderAction}
+        oInitialValues={instDtls}
+      />
+      {
+        showChildInsList && <ViewInstitutes isModalOpen={showChildInsList} aChildIns={[]} setIsModalOpen={setShowChildInsList} />
+      }
+    </>
   );
 }

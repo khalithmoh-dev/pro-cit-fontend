@@ -11,25 +11,19 @@ import {
   Autocomplete
 } from "@mui/material";
 import Typography from '@mui/material/Typography'
-import PageTitle from '../PageTitle';
 import SectionHeader from '../SectionHeader'
 import Label from '../Label';
-import Switch from '../switch'
 import Button from '../ButtonMui';
 import FileUpload from '../fileupload';
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import Textarea from '@mui/joy/Textarea';
-import FormHelperText from '@mui/joy/FormHelperText';
+import { Textarea } from '@mui/joy';
+import { FormHelperText } from '@mui/joy';
 import useInstituteStore from "../../store/instituteStore";
 import useAuthStore from '../../store/authStore'
-import SmartField from "../SmartField";
-import { useLocation } from "react-router-dom";
 import { useLayout } from '../../modules/layout/LayoutContext'
 import { useTranslation } from "react-i18next";
-import Variant from '../ButtonMui'
-import { Size } from '../ButtonMui'
-import { Schema } from 'yup';
+import { useLocation } from "react-router-dom";
 
 /** The generic form component to generate form dynamically using a JSON
     The working json can be referred from institute config
@@ -39,8 +33,6 @@ import { Schema } from 'yup';
       - schema: Json schema with inputs
       - onSubmit: onSubmit function
 */
-
-
 
 interface FormFieldAny {
   name: string;
@@ -85,7 +77,7 @@ interface EnterpriseFilterPropsAny {
 
 const EnterpriseFilter: React.FC<EnterpriseFilterPropsAny> = ({ schema, onSubmit, isEditPerm = false, isEditDisableDflt = false, oInitialValues, setIsEditPerm }) => {
   const [editPerm, setEditPerm] = useState(!isEditDisableDflt);
-  const [instDtls, setInstDtls] = useState({ _id: '', insname: '' });
+  const [instDtls, setInstDtls] = useState({ _id: '', insName: '' });
   const [aMultiSelectVal, setAMultiSelectVal] = useState([]);
   const instituteStore = useInstituteStore();
   const { setRouteNm, setActionFields } = useLayout();
@@ -129,7 +121,7 @@ const EnterpriseFilter: React.FC<EnterpriseFilterPropsAny> = ({ schema, onSubmit
   const formik = useFormik({
     initialValues: (Object.values(schema.fields).flat() as FormFieldAny[]).reduce(
       (acc, field) => {
-        if (field.name === "insId" && instDtls?._id && instDtls?.insname) {
+        if (field.name === "insId" && instDtls?._id && instDtls?.insName) {
           acc[field.name] = instDtls?._id;
         } else if (oInitialValues && oInitialValues.hasOwnProperty(field.name)) {
           acc[field.name] = oInitialValues[field.name];
@@ -177,8 +169,8 @@ const EnterpriseFilter: React.FC<EnterpriseFilterPropsAny> = ({ schema, onSubmit
         const labelKey = field.labelKey || "label";
         const valueKey = field.valueKey || "value";
         let options =
-          field.name === "insId"
-            ? [{ [valueKey]: instDtls._id, [labelKey]: instDtls.insname }]
+          field.name === "insId" && !field.multiOptn
+            ? [{ [valueKey]: instDtls._id, [labelKey]: instDtls.insName }]
             : field.options || [];
         const isMulti = !!field?.isMulti;
         if (isMulti) {

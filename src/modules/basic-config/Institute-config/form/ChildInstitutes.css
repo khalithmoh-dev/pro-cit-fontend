@@ -1,0 +1,51 @@
+.institution-table-wrapper {
+    margin-top: 10px;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+}
+
+.institution-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #ffffff;
+    font-size: 0.95rem;
+}
+
+.institution-table thead {
+    background: #f9fafb;
+}
+
+.institution-table th {
+    text-align: left;
+    padding: 14px 16px;
+    font-weight: 600;
+    color: #374151;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.institution-table td {
+    padding: 12px 16px;
+    color: #4b5563;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+/* Hover effect */
+.institution-table tbody tr:hover {
+    background-color: #f8fafc;
+    transition: background 0.15s ease;
+}
+
+/* Zebra rows */
+.institution-table tbody tr:nth-child(even) {
+    background-color: #fcfcfc;
+}
+
+/* Mobile responsive */
+@media (max-width: 600px) {
+    .institution-table th,
+    .institution-table td {
+        padding: 10px 12px;
+        font-size: 0.85rem;
+    }
+}

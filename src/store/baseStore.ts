@@ -10,10 +10,11 @@ interface UploadedFile {
 }
 
 export interface BaseData {
-  degree: string[];
-  program: string[];
+  degree?: string[];
+  program?: string[];
   department?: string[];
   semester?: string[];
+  institutes?: string[];
 }
 
 interface BaseState {

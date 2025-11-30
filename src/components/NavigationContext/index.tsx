@@ -114,7 +114,7 @@ export const NavigationProvider: React.FC<{ children: React.ReactNode }> = ({ ch
  * 
  * @example
  * const { oNavBar, userDtls } = useNavigationData();
- * const instituteName = userDtls?.institutes?.insname?.[0];
+ * const instituteName = userDtls?.institutes?.insName?.[0];
  */
 export const useNavigationData = () => {
   const context = useContext(NavigationContext);

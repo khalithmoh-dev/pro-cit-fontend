@@ -23,7 +23,7 @@
   "UNKNOWN_ERROR_OCCURRED": "Unknown error occurred",
   "ALREADY_EXISTS": "Already exists",
   "THE_FILE_UPLOAD_IS_IN_PROGRESS":"The file upload is in progress",
-
+  "VIEW_INSTITUTES": "View Institutes",
   "INSTITUTION": "Institution",
   "ENTERPRISE": "Enterprise",
   "INSTITUTION_NAME": "Institution Name",
@@ -35,7 +35,7 @@
   "INSTITUTION_CONTACT": "Institution Contact",
   "INSTITUTION_LOGO": "Institution Logo",
   "INSTITUTE_LOGO": "Institute Logo",
-  "ADDRESS_LINE": "Address Line 1",
+  "ADDRESS_LINE": "Address Line",
   "PINCODE": "Pincode",
   "CITY": "City",
   "STATE": "State",
@@ -179,5 +179,8 @@
   "WORKING_DAYS": "Working days",
   "SMS_CONFIGURATION": "SMS Configuration",
   "ABSENT_NOTIFICATION": "Absent notification",
-  "BIRTHDAY_MESSAGE": "Birthday message"
+  "BIRTHDAY_MESSAGE": "Birthday message",
+  "INSTITUTION_TYPE": "Institution Type",
+  "IS_ORGANISATION": "Is organisation",
+  "NO_CHILD_INSTITUTES": "No child institutes"
 }

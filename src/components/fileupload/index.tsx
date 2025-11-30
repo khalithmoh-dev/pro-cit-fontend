@@ -227,8 +227,6 @@ const FileUpload: React.FC<FileUploadProps> = ({
 
       {/* File List */}
       {uploadedFiles.length > 0 && (
-        <div className="mt-4">
-          <h6>Uploaded Files ({uploadedFiles.length})</h6>
           <div className="list-group mt-2">
             {uploadedFiles.map((uploadedFile, index) => {
               let IconComponent;
@@ -334,7 +332,6 @@ const FileUpload: React.FC<FileUploadProps> = ({
               );
             })}
           </div>
-        </div>
       )}
     </div>
   );

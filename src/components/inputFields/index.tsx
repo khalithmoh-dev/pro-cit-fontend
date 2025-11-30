@@ -11,7 +11,7 @@ import {
   FormHelperText,
 } from "@mui/material";
 import { Autocomplete } from "@mui/material";
-import Textarea from "@mui/joy/Textarea";
+import { Textarea } from "@mui/joy";
 import FileUpload from "../fileupload";
 import Button from "../ButtonMui";
 import "./index.css";
@@ -112,7 +112,7 @@ const InputFields: FC<InputFieldsProps> = ({
       const valueKey = field.valueKey || "value";
       let options =
         field.name === "insId"
-          ? [{ [valueKey]: instDtls._id, [labelKey]: instDtls.insname }]
+          ? [{ [valueKey]: instDtls._id, [labelKey]: instDtls.insName }]
           : field.options || [];
 
       const isMulti = !!field?.isMulti;

@@ -253,7 +253,6 @@ const DataTable = ({
     setFilters({});
     setSearchTerm('');
   };
-console.log('showKey',showKey)
   // === Render ===
   return (
     <>

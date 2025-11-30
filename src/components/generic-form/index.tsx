@@ -53,11 +53,12 @@ const GenericMaster = ({
   isEditPerm=false,
   isEditDisableDflt = false,
   oInitialValues = {},
+  aHeaderAction = [],
   isNotMainForm = false
 }) => {
   // === Local States ===
   const [isEditEnabled, setIsEditEnabled] = useState(isEditDisableDflt ? false : true);
-  const [instituteDetails, setInstituteDetails] = useState({ _id: "", insname: "" });
+  const [instituteDetails, setInstituteDetails] = useState({ _id: "", insName: "" });
   const [multiSelectValues, setMultiSelectValues] = useState([]);
 
   // === Store Hooks ===
@@ -82,16 +83,15 @@ const GenericMaster = ({
   useEffect(() => {
     if (location.pathname) {
       setRouteNm(location.pathname);
-      setActionFields([
-        <Switch
+      aHeaderAction.push(<Switch
           key="editSwitch"
           checked={isEditEnabled}
           onChange={() => setIsEditEnabled((prev) => !prev)}
           label="Edit mode"
-        />
-      ]);
+        />);
+      setActionFields(aHeaderAction);
     }
-  }, [location.pathname]);
+  }, [location.pathname, aHeaderAction]);
 
   // === Build Yup validation schema dynamically from JSON ===
   const validationSchema = Yup.object(

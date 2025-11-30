@@ -40,7 +40,7 @@ const SemesterList = () => {
   // Column configuration
   const columns = [
     { 
-      field: 'insname', 
+      field: 'insName', 
       headerName: 'Institution Name', 
       sortable: false
     },

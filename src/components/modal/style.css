@@ -1,104 +1,111 @@
-/* Popup.css */
+/* Position dialog at the top instead of center */
+.custom-popup .MuiDialog-container {
+    align-items: flex-start !important;
+}
+
 .custom-popup .MuiPaper-root {
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    margin-top: 40px; /* pushes popup from very top */
+    border-radius: 14px;
+    box-shadow: 0 12px 34px rgba(0, 0, 0, 0.18);
+    animation: popupSlideDown 0.25s ease-out;
+    background: #ffffff;
     overflow: hidden;
 }
 
+/* Title section */
 .popup-title {
-    background-color: #f8f9fa;
-    border-bottom: 1px solid #e9ecef;
-    padding: 16px 24px;
+    background-color: #f9fafb;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 18px 24px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    position: relative;
 }
 
 .title-text {
-    font-size: 1.25rem;
+    font-size: 1.3rem;
     font-weight: 600;
-    color: #2d3748;
-    flex-grow: 1;
+    color: #1f2937;
 }
 
+/* Close button */
 .close-button {
-    position: absolute;
-    right: 10px; 
-    color: #718096;
-    padding: 4px;
+    color: #6b7280;
+    transition: all 0.2s ease;
 }
 
 .close-button:hover {
-    background-color: #e2e8f0;
-    color: #4a5568;
+    background-color: #edf2f7;
+    color: #374151;
 }
 
+/* Content */
 .popup-content {
-    padding: 24px;
-    color: #4a5568;
-    margin: 20px !important;
+    padding: 24px 28px;
+    color: #4b5563;
 }
 
+/* Divider */
 .popup-divider {
     height: 1px;
-    background-color: #e2e8f0;
+    background-color: #e5e7eb;
     width: 100%;
 }
 
+/* Actions */
 .popup-actions {
     padding: 16px 24px;
     gap: 12px;
+    display: flex;
+    justify-content: flex-end;
 }
 
-/* Action button styles */
 .action-button {
-    border-radius: 6px;
-    padding: 8px 16px;
-    text-transform: none;
+    border-radius: 8px;
+    padding: 8px 18px;
     font-weight: 500;
-    transition: all 0.2s ease;
-    min-width: 80px;
+    text-transform: none;
+    transition: background 0.2s ease, box-shadow 0.2s ease;
 }
 
+/* Contained button */
 .action-button.MuiButton-contained {
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
 }
 
 .action-button.MuiButton-contained:hover {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
+/* Outlined */
 .action-button.MuiButton-outlined {
-    border: 1px solid #cbd5e0;
+    border-color: #d1d5db;
 }
 
 .action-button.MuiButton-outlined:hover {
-    background-color: #f7fafc;
-    border-color: #a0aec0;
+    background-color: #f9fafb;
 }
 
-/* Animation for popup entrance */
-@keyframes popupEnter {
+/* Animation: slide from top */
+@keyframes popupSlideDown {
     from {
         opacity: 0;
-        transform: scale(0.95) translateY(-10px);
+        transform: translateY(-16px);
     }
-
     to {
         opacity: 1;
-        transform: scale(1) translateY(0);
+        transform: translateY(0);
     }
 }
 
-.custom-popup .MuiPaper-root {
-    animation: popupEnter 0.2s ease-out;
-}
-
-/* Responsive adjustments */
+/* Mobile adjustments */
 @media (max-width: 600px) {
+    .custom-popup .MuiPaper-root {
+        margin-top: 16px;
+    }
+
     .popup-title {
-        padding: 14px 20px;
+        padding: 16px 20px;
     }
 
     .popup-content {
@@ -112,6 +119,5 @@
 
     .action-button {
         width: 100%;
-        margin: 4px 0;
     }
 }

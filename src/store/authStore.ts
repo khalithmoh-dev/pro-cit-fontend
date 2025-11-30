@@ -35,7 +35,7 @@ export interface Modules {
 
 interface Institute {
   _id: string;
-  insname: string[];
+  insName: string[];
   insCode: string
 }
 export interface User {
@@ -77,7 +77,7 @@ interface RouteDetails {
 
 interface InstituteDetails {
   _id: string,
-  insname: string,
+  insName: string,
   insCode: string
 }
 
@@ -111,7 +111,7 @@ const useAuthStore = create<AuthState>()(
       academicYear: '2024-2025',
       instituteDtls: {
         _id: '',
-        insname: '',
+        insName: '',
         insCode: '',
       },
       routeInfo: {},

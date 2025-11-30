@@ -136,7 +136,7 @@ const SmartField = ({
         const valueKey = field.valueKey || "value";
         const options =
           field.name === "insId"
-            ? [{ [valueKey]: instDtls._id, [labelKey]: instDtls.insname }]
+            ? [{ [valueKey]: instDtls._id, [labelKey]: instDtls.insName }]
             : field.options?.map((opt)=> {return {label:opt[labelKey], value: opt[valueKey]}}) || [];
         const selectedValue = field.isMulti 
           ? options.filter(option => (value || []).includes(option.value))

@@ -34,7 +34,7 @@ const SectionList = () => {
   // Column configuration
   const columns = [
     {
-      field: 'insname',
+      field: 'insName',
       headerName: t("INSTITUTION_NAME"),
       sortable: false
     },

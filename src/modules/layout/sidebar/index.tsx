@@ -57,7 +57,7 @@ export const AppSidebar: React.FC = () => {
             boxShadow: '0 2px 4px rgba(59, 130, 246, 0.3)'
           }}
         >
-          {userDtls?.institutes?.insname?.[0]}
+          {userDtls?.institutes?.insName?.[0]}
         </div>
         <div 
           className='d-flex flex-column'
@@ -90,7 +90,7 @@ export const AppSidebar: React.FC = () => {
             color: '#6b7280',
             textTransform: 'none'
           }}>
-            {userDtls?.institutes?.insname || ""}
+            {userDtls?.institutes?.insName || ""}
           </span>
         </div>
       </div>

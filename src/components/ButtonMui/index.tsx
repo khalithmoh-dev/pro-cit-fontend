@@ -23,7 +23,6 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       const baseClass = "btn-base"
       const sizeClass = `btn-${sizeType}`
       const variantClass = `btn-${variantType}`
-      
       return `${baseClass} ${sizeClass} ${variantClass} ${className}`.trim()
     }
 
