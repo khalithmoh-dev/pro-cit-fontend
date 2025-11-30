@@ -65,7 +65,7 @@ const DataTable = ({
   searchable = true,
   title = 'Data Table',
   actions = [],
-  headerAction = [{ actionName: '', onClick: () => { } }],
+  headerAction = [{ actionName: '', onClick: () => { }, disabled: false }],
   addRoute = '',
   apiService = (page =0 , limit = 0, searchTerm = ''):ApiServiceI => { return {data: [],total: 0}},
   serverSide = false,
@@ -109,6 +109,7 @@ const DataTable = ({
           key={action.actionName}
           variantType="primary"
           size="medium"
+          disabled={action.disabled}
           onClick={action.onClick}
         >
           {action.actionName}
@@ -130,7 +131,7 @@ const DataTable = ({
     }
 
     setActionFields(headerButtons);
-  }, [addRoute, navigate, t, authStore?.permissions]);
+  }, [addRoute, navigate, t, authStore?.permissions, headerAction]);
 
   // === Fetch or set table data ===
   useEffect(() => {
