@@ -14,6 +14,10 @@
   "SUBMIT": "Submit",
   "CANCEL": "Cancel",
   "NEXT": "Next",
+  "EDIT": "Edit",
+  "NEW": "New",
+  "READ": "Read",
+  "DELETE": "Delete",
   "CREATED_SUCCESSFULLY": "Created successfully",
   "UPDATED_SUCCESSFULLY": "Updated successfully",
   "FAILED_TO_FETCH": "Failed to fetch",
@@ -180,7 +184,17 @@
   "SMS_CONFIGURATION": "SMS Configuration",
   "ABSENT_NOTIFICATION": "Absent notification",
   "BIRTHDAY_MESSAGE": "Birthday message",
+  
   "INSTITUTION_TYPE": "Institution Type",
   "IS_ORGANISATION": "Is organisation",
-  "NO_CHILD_INSTITUTES": "No child institutes"
+  "NO_CHILD_INSTITUTES": "No child institutes",
+
+  "PERMISSIONS": "Permissions",
+  "ROLE_MANAGEMENT": "Role Management",
+  "DEFINE_ROLES_WITH_PRESET_PERMISSION": "Define roles with preset permissions",
+  "ROLE": "Role",
+  "MORE": "More",
+  "ROLE_NAME": "Role Name",
+  "SELECT_PERMISSIONS_THAT_WILL_BE_ASSIGNED_TO_ALL_USERS_WITH_THIS_ROLE": "Select permissions that will be assigned to all users with this role",
+  "SCREEN_PERMISSIONS": "Screen Permissions"
 }

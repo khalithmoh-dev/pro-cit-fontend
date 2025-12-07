@@ -53,6 +53,7 @@ import CreateQuestionPaperV2 from '../../modules/question-paper/create-question-
 import MarksUploadForm from '../../modules/question-paper/marks-upload-form';
 import Attainment from '../../modules/attainment';
 import CreateCoConfig from '../../modules/attainment/co-config/create-co-config';
+import RolesPage from '../../modules/role-management';
 
 const AuthenticatedRoutes = () => {
   return (
@@ -127,6 +128,9 @@ const AuthenticatedRoutes = () => {
           {/* Attainment */}
           <Route path="attainment" element={<Attainment />} />
           <Route path="attainment/config/:subjectId" element={<CreateCoConfig />} />
+
+          {/* Roles Management */}
+          <Route path="roles-management" element={<RolesPage />} />
         </Route>
       </Routes>
     </Suspense>

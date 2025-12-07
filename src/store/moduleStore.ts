@@ -78,7 +78,7 @@ const useModuleStore = create<ModuleState>((set, get) => ({
   getModules: async (query = {}) => {
     set({ loading: true });
     try {
-      const res = await httpRequest('POST', `${import.meta.env.VITE_API_URL}/module/`, query);
+      const res = await httpRequest('POST', `${import.meta.env.VITE_API_URL}/module/`, query,{skipLoader: true});
       set({ modules: res.data });
       return true;
     } catch (error) {

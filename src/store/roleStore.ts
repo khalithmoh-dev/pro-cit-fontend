@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import httpRequest from '../utils/functions/http-request';
 import { ModuleIF, ModulePermissions } from './moduleStore';
 import { SelectOptionIF } from '../interface/component.interface';
-import { MainMenuItem } from './authStore';
+import { useToastStore } from './toastStore';
 // import { transformNavData } from '../modules/layout/sidebar';
 
 export interface roleIF {
@@ -39,7 +39,7 @@ interface RoleState {
   getUserRole: (id: string) => Promise<boolean>;
   deleteRole: (id: string) => Promise<boolean>;
   setPermissions: (modules: { [key: string]: ModulePermissions }) => void;
-
+  getRolesByInstId: () => Promise<{ roles: roleIF[]; roleOptions: SelectOptionIF[] } | boolean>;
 }
 
 const useRoleStore = create<RoleState>((set) => ({
@@ -140,6 +140,22 @@ const useRoleStore = create<RoleState>((set) => ({
       set({ deleting: id });
     }
   },
+  getRolesByInstId: async () => {
+    try {
+      const res = await httpRequest('POST', `${import.meta.env.VITE_API_URL}/role/all-roles`);
+      if (!res.data.length) return true;
+      const options = res.data.map((role: roleIF) => {
+        return {
+          label: role.name,
+          value: role._id,
+        };
+      });
+      return ({ roles: res.data, roleOptions: options });
+    } catch (error) {
+      useToastStore.getState().showToast('error', "Unknown error occurred");
+      return error;
+    }
+  }
 }));
 
 
