@@ -118,7 +118,7 @@ const ElectiveGroup: React.FC<ElectiveGroupProps> = ({
                 setCourseOptions([]);
             }
         } catch (err) {
-            console.error("Error fetching courses:", err);
+            // Error fetching courses
         } finally {
             setIsLoading(false);
         }

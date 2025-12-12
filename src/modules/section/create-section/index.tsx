@@ -6,6 +6,20 @@ import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useToastStore } from "../../../store/toastStore";
 
+/**
+ * CreateSection Component
+ *
+ * Manages creation and updating of section records.
+ * Sections are used to organize students within a program/semester.
+ *
+ * Features:
+ * - Create new section with unique section code
+ * - Update existing section details
+ * - Section code validation and duplicate detection
+ * - Multi-language support via i18next
+ *
+ * @component
+ */
 export default function CreateSection() {
   const navigate = useNavigate();
   const sectionStore = useSectionStore();
@@ -14,6 +28,10 @@ export default function CreateSection() {
   const { t } = useTranslation();
   const showToast = useToastStore((state) => state.showToast);
 
+  /**
+   * Form schema configuration with validation rules
+   * Section code is disabled during edit to prevent changes
+   */
   const schema = useMemo(() => {
     return (
       {
@@ -62,8 +80,9 @@ export default function CreateSection() {
     )
   }, [t, navigate, id]);
 
-
-  //to get section data by id for update
+  /**
+   * Fetch section data by ID when editing existing section
+   */
   useEffect(() => {
     try {
       (async () => {
@@ -77,6 +96,10 @@ export default function CreateSection() {
     }
   }, [id])
 
+  /**
+   * Handles section form submission for create/update operations
+   * Removes temporary sectionCode field before submission
+   */
   const handleSectionSubmit = async (values: createSectionPayload) => {
     try {
       delete values.sectionCode;

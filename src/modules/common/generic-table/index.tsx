@@ -67,10 +67,10 @@ const DataTable = ({
   actions = [],
   headerAction = [{ actionName: '', onClick: () => { }, disabled: false }],
   addRoute = '',
-  apiService = (page =0 , limit = 0, searchTerm = ''):ApiServiceI => { return {data: [],total: 0}},
+  apiService = (page = 0, limit = 0, searchTerm = ''): ApiServiceI => { return { data: [], total: 0 } },
   serverSide = false,
-  showKey=false,
-  infoMessage=''
+  showKey = false,
+  infoMessage = ''
 }) => {
   // === State variables ===
   const [page, setPage] = useState(0);
@@ -83,6 +83,7 @@ const DataTable = ({
   const [filteredData, setFilteredData] = useState(tableData);
   const [paginatedData, setPaginatedData] = useState(tableData);
   const [totalRecords, setTotalRecords] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   // === Hooks ===
   const { setRouteNm, setActionFields } = useLayout();
@@ -97,30 +98,27 @@ const DataTable = ({
 
   // === Build header actions and "Add New" button ===
   useEffect(() => {
-    if (!addRoute) {
-      setActionFields([]);
-      return;
-    }
+    const headerButtons = [];
 
-    const headerButtons = (headerAction ?? [])
+    (headerAction ?? [])
       .filter((action) => action.actionName)
-      .map((action) => (
-        <Button
-          key={action.actionName}
-          variantType="primary"
-          size="medium"
-          disabled={action.disabled}
-          onClick={action.onClick}
-        >
-          {action.actionName}
-        </Button>
-      ));
+      .forEach((action) => {
+        headerButtons.push(
+          <Button
+            key={action.actionName}
+            variantType="primary"
+            size="medium"
+            disabled={action.disabled}
+            onClick={action.onClick}
+          >
+            {action.actionName}
+          </Button>
+        );
+      });
 
-    // Add “Add New” button if user has permission
-    if (authStore?.permissions?.[location.pathname]?.create) {
+    if (addRoute && authStore?.permissions?.[location.pathname]?.create) {
       headerButtons.push(
         <Button
-          className="btn-primary btn-small"
           key="add-new"
           variantType="submit"
           onClick={() => navigate(addRoute)}
@@ -130,19 +128,26 @@ const DataTable = ({
       );
     }
 
-    setActionFields(headerButtons);
-  }, [addRoute, navigate, t, authStore?.permissions, headerAction]);
+    if (setActionFields) {
+      setActionFields(headerButtons);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [addRoute, location.pathname, authStore?.permissions?.[location.pathname]?.create]);
+
 
   // === Fetch or set table data ===
   useEffect(() => {
     if (serverSide && apiService) {
       const fetchServerData = async () => {
+        setIsLoading(true);
         try {
           const response = await apiService(page, rowsPerPage, searchTerm);
           setTableData(response?.data || []);
           setTotalRecords(response?.total || 0);
         } catch (err) {
-          console.error('Error fetching data:', err);
+          // Error fetching data
+        } finally {
+          setIsLoading(false);
         }
       };
 
@@ -153,7 +158,8 @@ const DataTable = ({
       setTableData(data);
       setTotalRecords(data.length);
     }
-  }, [page, rowsPerPage, searchTerm, apiService, serverSide, data?.length]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, rowsPerPage, searchTerm, serverSide, data?.length]);
 
   // === Sorting handler ===
   const handleSort = (key) => {
@@ -226,7 +232,6 @@ const DataTable = ({
 
     setFilteredData(updatedData);
   }, [tableData, searchTerm, filters, sortConfig]);
-
   // === Pagination logic (client-side only) ===
   useEffect(() => {
     if (pagination && !serverSide) {
@@ -260,14 +265,64 @@ const DataTable = ({
       {showKey && <UploadProgressNotice message={t(infoMessage)} showKey={showKey} />}
       <Box
         sx={{
-          width: '100%',
+          width: 'calc(100% - 40px)',
           mt: 2,
           mb: 2,
+          marginLeft: '30px',
+          marginRight: '10px',
           px: 2,
           border: '1px solid rgba(224, 224, 224, 1)',
           borderRadius: 3,
+          position: 'relative',
         }}
       >
+        {/* Loading Overlay with Blur */}
+        {isLoading && (
+          <Box
+            sx={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: 'rgba(255, 255, 255, 0.7)',
+              backdropFilter: 'blur(4px)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              zIndex: 10,
+              borderRadius: 3,
+            }}
+          >
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: 2,
+              }}
+            >
+              <Box
+                sx={{
+                  width: 50,
+                  height: 50,
+                  border: '4px solid rgba(25, 118, 210, 0.2)',
+                  borderTop: '4px solid #1976d2',
+                  borderRadius: '50%',
+                  animation: 'spin 1s linear infinite',
+                  '@keyframes spin': {
+                    '0%': { transform: 'rotate(0deg)' },
+                    '100%': { transform: 'rotate(360deg)' },
+                  },
+                }}
+              />
+              <Typography variant="body2" color="primary" fontWeight={500}>
+                {t('LOADING') || 'Loading...'}
+              </Typography>
+            </Box>
+          </Box>
+        )}
+
         {/* ==== Header Section ==== */}
         <Box
           sx={{

@@ -25,7 +25,7 @@ const SemesterList = () => {
             setSemesterData(aSemesterList);
           }
         } catch (error) {
-          console.error("Failed to fetch degrees:", error);
+          // Error handled silently
         }
       })();
     }
@@ -50,7 +50,7 @@ const SemesterList = () => {
       sortable: true,
     },
     { 
-      field: 'semId', 
+      field: 'semCd', 
       headerName: 'Semester Id', 
       sortable: true,
     },

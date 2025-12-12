@@ -16,7 +16,7 @@ export interface srchCrsSchdlPyldIF {
   degId: String;
   prgId: String;
   deptId: String;
-  semId: String;
+  semCd: String;
   mandatoryCourses?: [];
   electiveCourses?: [];
 }
@@ -26,7 +26,7 @@ export interface saveCrsSchdlPyldIF {
   degId: String;
   prgId: String;
   deptId: String;
-  semId: String;
+  semCd: String;
   mandatoryCrs: object[];
   electiveCrs: object[];
 }

@@ -35,7 +35,7 @@ export interface DepartmentI {
   hod: string
 }
 
-interface GetDepartmentI {
+export interface GetDepartmentI {
   data: any[];
   total: number;
   [key: string]: any;  

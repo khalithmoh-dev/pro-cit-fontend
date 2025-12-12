@@ -3,6 +3,11 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 import { useToastStore } from './toastStore';
 import { ModuleIF, ModulePermissions } from './moduleStore';
 import httpRequest from '../utils/functions/http-request';
+import { DegreeIF } from './degreeStore';
+import { ProgramIF } from './programStore';
+import { GetDepartmentI } from './departmentStore';
+import { SemesterIF } from './semesterStore';
+import { InstituteDetails } from './instituteStore';
 
 export interface MainMenuItem {
   key: string;
@@ -43,6 +48,7 @@ export interface User {
     _id: string;
     firstName: string;
     lastName: string;
+    instituteId: string;
     role: {
       name: string;
       _id: string;
@@ -75,14 +81,17 @@ interface RouteDetails {
   name: string
 }
 
-interface InstituteDetails {
-  _id: string,
-  insName: string,
-  insCode: string
+export interface EnterpriseStruct {
+  aInstitutes: InstituteDetails[];
+  aDegrees: DegreeIF[];
+  aPrograms: ProgramIF[];
+  aDepartments: GetDepartmentI[];
+  aSemesters: SemesterIF[];
 }
 
 interface AuthState {
   isAuthenticated: boolean;
+  oEnterprises?: EnterpriseStruct;
   isLoading: boolean;
   error: string | null;
   permissions: { [key: string]: ModulePermissions } | null;
@@ -107,7 +116,6 @@ const useAuthStore = create<AuthState>()(
       permissions: null,
       error: null,
       user: null,
-      // sidebarNavItems: [],
       academicYear: '2024-2025',
       instituteDtls: {
         _id: '',
@@ -150,8 +158,8 @@ const useAuthStore = create<AuthState>()(
           set({
             isAuthenticated: true,
             user: data.data,
+            oEnterprises: data.data.oEnterpriseValues,
             permissions: permissionsObject,
-            // sidebarNavItems: transformedData,
             isLoading: false,
             routeInfo: pathDtls,
             instituteDtls: data.data?.user?.institutes

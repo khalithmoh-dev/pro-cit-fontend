@@ -5,17 +5,17 @@ export interface createSemesterPayload{
     insId: string,
     degId: string,
     prgCd: string,
-    semId: string,
+    semCd: string,
     semNm: string,
     desc:  string,
     _id?: string
 }
 
-interface SemesterIF {
+export interface SemesterIF {
     insId: string,
     degId: string,
     prgCd: string,
-    semId: string,
+    semCd: string,
     semNm: string,
     desc:  string
 }
@@ -41,7 +41,7 @@ const useDegreeStore = create<SemesterState>((set,get) => ({
         insId: '',
         degId: '',
         prgCd: '',
-        semId: '',
+        semCd: '',
         semNm: '',
         desc: ''
     }) => {
@@ -72,7 +72,7 @@ const useDegreeStore = create<SemesterState>((set,get) => ({
         insId: '',
         degId: '',
         prgCd: '',
-        semId: '',
+        semCd: '',
         semNm: '',
         desc: '',
         _id: ""

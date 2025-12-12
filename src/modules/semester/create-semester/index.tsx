@@ -8,6 +8,21 @@ import { useParams } from 'react-router-dom';
 import { t } from 'i18next';
 import { useToastStore } from '../../../store/toastStore';
 
+/**
+ * CreateSemester Component
+ *
+ * Handles creation and editing of semester records.
+ *
+ * Features:
+ * - Create new semester with institution, degree, program association
+ * - Update existing semester details
+ * - Semester group management with dynamic add functionality
+ * - Form validation using Yup schema
+ * - Duplicate detection and error handling
+ *
+ * @component
+ * @returns {JSX.Element} Semester creation/editing form
+ */
 export default function CreateSemester() {
   const navigate = useNavigate();
   const baseStore = useBaseStore();
@@ -17,7 +32,10 @@ export default function CreateSemester() {
   const [editValues, setEditValues] = useState({});
   const [aSemGroup, setSemGroup] = useState([{}])
   const { showToast } = useToastStore();
-  //to get the initial base data eg: program data and degree data
+
+  /**
+   * Fetch initial base data (degree and program options) on component mount
+   */
   useEffect(() => {
     try {
       if (baseStore) {
@@ -28,11 +46,13 @@ export default function CreateSemester() {
         })();
       }
     } catch (err) {
-      console.error(err)
+      // Error handled silently
     }
   }, [baseStore]);
 
-  //to get semester group data for select with add field
+  /**
+   * Fetch semester group data for dropdown options
+   */
   useEffect(() => {
     (async () => {
       const aSemGroupBase = await semesterStore.getSemesterGroup();
@@ -42,7 +62,9 @@ export default function CreateSemester() {
     })()
   }, []);
 
-  //to get semester data by id for update
+  /**
+   * Fetch semester data by ID when editing existing semester
+   */
   useEffect(() => {
     (async () => {
       if (id) {
@@ -56,6 +78,10 @@ export default function CreateSemester() {
     })()
   }, [id])
 
+  /**
+   * Handles adding a new semester group dynamically
+   * @param {string} value - The new semester group name
+   */
   const handleAddSemesterGroup = async (value) => {
     try {
       await semesterStore.createSemesterGroup({ value });
@@ -64,7 +90,10 @@ export default function CreateSemester() {
     }
   }
 
-  //form schema
+  /**
+   * Dynamic form schema configuration
+   * Defines form fields, validation rules, and action buttons
+   */
   const schema = useMemo(() => {
     return {
       fields: {
@@ -98,7 +127,7 @@ export default function CreateSemester() {
             isRequired: true,
           },
           {
-            name: "semId",
+            name: "semCd",
             label: t("SEMESTER_ID"),
             type: "text",
             validation: Yup.string().required(t("SEMESTER_ID_IS_REQUIRED")),
@@ -157,7 +186,11 @@ export default function CreateSemester() {
     };
   },[baseData, navigate, id, aSemGroup]);
 
-  //To handle submission of semester for both create and update
+  /**
+   * Handles semester form submission for both create and update operations
+   * @param {createSemesterPayload} values - Form values containing semester data
+   * @throws {Error} When duplicate semester ID is found or operation fails
+   */
   const handleSemesterSubmit = async (values: createSemesterPayload) => {
     if (!id) {
       try {

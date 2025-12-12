@@ -111,7 +111,7 @@ const InputFields: FC<InputFieldsProps> = ({
       const labelKey = field.labelKey || "label";
       const valueKey = field.valueKey || "value";
       let options =
-        field.name === "insId"
+        !field.isDynamicFields && field.name === "insId"
           ? [{ [valueKey]: instDtls._id, [labelKey]: instDtls.insName }]
           : field.options || [];
 
@@ -242,7 +242,7 @@ const InputFields: FC<InputFieldsProps> = ({
             name={field.name}
             multiple={field.isMulti}
             value={getValue(field.name) || (field.isMulti ? [] : "")}
-            onChange={handleEventChange}
+            onChange={field.onChange ? field.onChange : handleEventChange}
             onBlur={formik?.handleBlur} // Only for formik
             renderValue={(selected) => {
               if (field.isMulti) {

@@ -8,6 +8,20 @@ import { useTranslation } from "react-i18next";
 import useBaseStore from './../../../store/baseStore';
 import { useToastStore } from "../../../store/toastStore";
 
+/**
+ * CreateProgram Component
+ *
+ * Manages creation and updating of academic program records.
+ *
+ * Features:
+ * - Create new program with institution and degree association
+ * - Update existing program details
+ * - Program code and name validation
+ * - Duplicate detection for program IDs
+ * - Form validation with Yup schema
+ *
+ * @component
+ */
 export default function CreateProgram() {
   const navigate = useNavigate();
   const programStore = useProgramStore();
@@ -18,7 +32,9 @@ export default function CreateProgram() {
   const [baseData, setBaseData] = useState({ degree: [] });
   const showToast = useToastStore((state) => state.showToast);
 
-  //to get the initial base data eg: program data and degree data
+  /**
+   * Fetch degree options for dropdown on component mount
+   */
   useEffect(() => {
     try {
       if (baseStore) {
@@ -33,6 +49,9 @@ export default function CreateProgram() {
     }
   }, [baseStore]);
 
+  /**
+   * Dynamic form schema defining fields, validation, and buttons
+   */
   const schema = useMemo(() => {
     return (
       {
@@ -92,7 +111,9 @@ export default function CreateProgram() {
     )
   }, [t, navigate, baseData, id]);
 
-  //to get degree data by id for update
+  /**
+   * Fetch program data by ID when in edit mode
+   */
   useEffect(() => {
     try {
       (async () => {
@@ -106,6 +127,10 @@ export default function CreateProgram() {
     }
   }, [id])
 
+  /**
+   * Handles program form submission for create/update operations
+   * Includes duplicate detection and error handling
+   */
   const handleProgramSubmit = async (values: createProgramPayload) => {
     try {
       if (!id) {

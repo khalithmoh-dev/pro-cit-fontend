@@ -20,7 +20,7 @@ const CourseSchedulePage: React.FC = () => {
     degId: '',
     prgId: '',
     deptId: '',
-    semId: '', mandatoryCourses: [], electiveCourses: []
+    semCd: '', mandatoryCourses: [], electiveCourses: []
   });
   const [mandatoryCourses, setMandatoryCourses] = useState([]);
   const [electiveCourses, setElectiveCourses] = useState([]);
@@ -42,7 +42,7 @@ const CourseSchedulePage: React.FC = () => {
         })();
       }
     } catch (err) {
-      console.error(err);
+      // Error loading base data
     }
   }, [baseStore]);
 
@@ -64,7 +64,7 @@ const CourseSchedulePage: React.FC = () => {
       degId: '',
       prgId: '',
       deptId: '',
-      semId: '', mandatoryCourses: [], electiveCourses: []
+      semCd: '', mandatoryCourses: [], electiveCourses: []
     });
     setMandatoryCourses([]);
     setElectiveCourses([]);
@@ -112,7 +112,7 @@ const CourseSchedulePage: React.FC = () => {
           options: baseData?.department ?? []
         },
         {
-          name: "semId",
+          name: "semCd",
           label: t("SEMESTER"),
           type: "select",
           labelKey: "semNm",
@@ -147,7 +147,7 @@ const CourseSchedulePage: React.FC = () => {
         setEditValues(values);
       }
     } catch (err) {
-      console.error(err);
+      // Error during course schedule search
     }
   };
 
@@ -161,7 +161,7 @@ const CourseSchedulePage: React.FC = () => {
       const res = update ? await updateCourseSchedule(payload, editValues?._id) : await createCourseSchedule(payload);
 
     } catch (err) {
-      console.error(err);
+      // Error during course schedule save/update
     }
   }
 

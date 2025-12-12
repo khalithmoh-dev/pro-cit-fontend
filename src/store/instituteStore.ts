@@ -39,8 +39,9 @@ interface createInstitutePayload{
     isBdayMsg?: string
 }
 
-interface InstituteDetails {
+export interface InstituteDetails {
   _id: string,
+  orgId?: string,
   insName: string,
   insCode: string
 }

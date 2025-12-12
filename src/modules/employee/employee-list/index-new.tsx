@@ -22,6 +22,8 @@ const EmployeeListPage = () => {
 
   const [filters, setFilters] = useState({
     insId: '',
+    prgId: '',
+    courseId: '',
     deptId: '',
     designation: '',
   });
@@ -52,6 +54,8 @@ const EmployeeListPage = () => {
   const handleEnterpriseFilterSearch = (values: any) => {
     setFilters({
       insId: values.insId || '',
+      prgId: values.prgId || '',
+      courseId: values.courseId || '',
       deptId: values.deptId || '',
       designation: filters.designation, // Keep existing designation filter
     });
@@ -67,6 +71,8 @@ const EmployeeListPage = () => {
   const handleResetFilters = () => {
     setFilters({
       insId: '',
+      prgId: '',
+      courseId: '',
       deptId: '',
       designation: '',
     });
@@ -78,13 +84,24 @@ const EmployeeListPage = () => {
     setRefreshKey((prev) => prev + 1);
   };
 
-  // Enterprise filter schema (only institute and department for employees)
+  // Enterprise filter schema
   const enterpriseFilterSchema = {
     fields: {
       institutes: {
         label: t('INSTITUTION') || 'Institution',
         type: 'select',
         required: false,
+      },
+      program: {
+        label: t('PROGRAM') || 'Program',
+        type: 'select',
+        required: false,
+      },
+      course: {
+        label: t('COURSE') || 'Course',
+        type: 'select',
+        required: false,
+        options: courseOptions, // Pass course options externally
       },
       department: {
         label: t('DEPARTMENT') || 'Department',
@@ -104,9 +121,6 @@ const EmployeeListPage = () => {
         variant: 'contained',
         nature: 'primary',
         type: 'submit',
-        onClick: (formik) => {
-          handleEnterpriseFilterSearch(formik.values);
-        }
       },
     ],
   };
@@ -208,10 +222,12 @@ const EmployeeListPage = () => {
           searchText: searchTerm,
         };
 
-        // Add enterprise filters if they have values (using backend field names)
-        if (filters.insId) query.insId = filters.insId;
-        if (filters.deptId) query.deptId = filters.deptId;
+        // Add filters if they have values
+        if (filters.deptId) query.department = filters.deptId;
         if (filters.designation) query.designation = filters.designation;
+        if (filters.insId) query.institute = filters.insId;
+        if (filters.prgId) query.program = filters.prgId;
+        if (filters.courseId) query.course = filters.courseId;
 
         const response = await getEmployees(query);
 
@@ -231,13 +247,14 @@ const EmployeeListPage = () => {
           total: currentTotal,
         };
       } catch (error) {
+        console.error('Error fetching employees:', error);
         return {
           data: [],
           total: 0,
         };
       }
     },
-    [getEmployees, filters.insId, filters.deptId, filters.designation, refreshKey]
+    [getEmployees, filters.deptId, filters.designation, filters.insId, filters.prgId, filters.courseId, refreshKey]
   );
 
   return (
@@ -250,9 +267,43 @@ const EmployeeListPage = () => {
         isAutoGen={true}
       />
 
+      {/* Additional Designation Filter */}
+      <Box mb={3} className="generic-master-card" sx={{ p: 2, border: '1px solid rgba(224, 224, 224, 1)', borderRadius: 3 }}>
+        <SectionHeader sectionName={t('ADDITIONAL_FILTERS') || 'Additional Filters'} />
+        <Box sx={{ display: 'flex', gap: 2, mt: 2, flexWrap: 'wrap', alignItems: 'flex-end' }}>
+          {/* Designation Filter */}
+          <FormControl size="small" sx={{ minWidth: 200 }}>
+            <InputLabel>{t('DESIGNATION') || 'Designation'}</InputLabel>
+            <Select
+              value={filters.designation}
+              label={t('DESIGNATION') || 'Designation'}
+              onChange={(e) => handleDesignationChange(e.target.value)}
+            >
+              <MenuItem value="">
+                <em>{t('ALL') || 'All'}</em>
+              </MenuItem>
+              {designationOptions.map((opt) => (
+                <MenuItem key={opt.value} value={opt.value}>
+                  {opt.label}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          {/* Filter Buttons */}
+          <Box sx={{ display: 'flex', gap: 1 }}>
+            <Button variantType="outlined" size="small" onClick={handleResetFilters}>
+              {t('RESET') || 'Reset'}
+            </Button>
+            <Button variantType="submit" size="small" onClick={handleApplyFilters}>
+              {t('APPLY') || 'Apply'}
+            </Button>
+          </Box>
+        </Box>
+      </Box>
+
       {/* Data Table */}
       <DataTable
-        key={refreshKey}
         title={t('EMPLOYEES') || 'Employees'}
         columns={columns}
         actions={actions}
