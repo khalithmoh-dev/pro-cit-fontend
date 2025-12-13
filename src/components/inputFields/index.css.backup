@@ -1,0 +1,77 @@
+.css-1miy0lu-MuiTypography-root{
+  font-family: var(--font-family-1) !important;
+  --fs-2: var(--fsd-1);
+  text-transform: none !important;
+}
+.css-rizt0-MuiTypography-root{
+  font-family: var(--font-family-1) !important;
+  font-weight: 600 !important;
+  height: 38px;
+  text-transform: none !important;
+}
+
+.css-1pzfmz2-MuiInputBase-input-MuiOutlinedInput-input{
+  font-family: var(--font-family-1) !important;
+  height: 38px;
+  text-transform: none !important;
+}
+
+.css-1blp12k-MuiInputBase-root-MuiOutlinedInput-root{
+  border-radius: var(--input-radius, 15px) !important;
+  height: 38px;
+  text-transform: none !important;
+}
+
+.css-1pzfmz2-MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled{
+  border-radius: var(--input-radius, 15px) !important;
+  color: #000 !important;
+  height: 38px;
+  text-transform: none !important;
+}
+
+.css-trm6af-MuiNativeSelect-root-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled{
+  border-radius: var(--input-radius, 15px) !important;
+  display: flex !important;
+  align-items: center !important;
+  text-transform: none !important;
+}
+
+.css-sc8y68-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root{
+    border-radius: var(--input-radius, 15px) !important;
+    height: 38px;
+    text-transform: none !important;
+}
+
+.css-1qcqxfl-MuiFormControl-root-MuiTextField-root .MuiOutlinedInput-root.MuiInputBase-sizeSmall{
+    padding: 0;
+    height: 38px;
+    text-transform: none !important;
+}
+.css-1qcqxfl-MuiFormControl-root-MuiTextField-root .MuiOutlinedInput-root{
+    align-items: center ;   
+    height: 38px;
+    text-transform: none !important;
+}
+
+.css-1tktgsa-MuiPaper-root-MuiPopover-paper-MuiMenu-paper{
+  border-radius: var(--input-radius, 10px) !important;
+  text-transform: none !important;
+}
+.css-1rju2q6-MuiButtonBase-root-MuiMenuItem-root{
+  min-height: 10px;
+  text-transform: none !important;
+}
+
+.css-98ra8i{
+  border-radius: 25px;
+}
+.css-xhkvgb{
+  border-radius: 25px;
+}
+
+.css-1toxriw-MuiList-root-MuiMenu-list{
+  max-height: 25rem;
+}
+.error-text{
+  color: red !important;
+}

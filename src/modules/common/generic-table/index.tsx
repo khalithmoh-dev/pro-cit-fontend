@@ -8,7 +8,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  TextField,
   InputAdornment,
   IconButton,
   Typography,
@@ -22,7 +21,8 @@ import Button from '../../../components/ButtonMui';
 import { useTranslation } from 'react-i18next';
 import useAuthStore from '../../../store/authStore';
 import CustomPagination from './customPagination';
-import UploadProgressNotice from '../../../components/InfoMesssage'
+import UploadProgressNotice from '../../../components/InfoMesssage';
+import InputFields from '../../../components/inputFields';
 
 /**
  * DataTable Component
@@ -342,23 +342,21 @@ const DataTable = ({
           </div>
 
           {searchable && (
-            <TextField
-              placeholder="Search..."
-              value={searchTerm}
-              onChange={(e) => {
-                setSearchTerm(e.target.value);
-                setPage(0);
-              }}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Search size={20} />
-                  </InputAdornment>
-                ),
-              }}
-              sx={{ width: 300, marginRight: '12px' }}
-              size="small"
-            />
+            <Box sx={{ width: '220px', marginRight: '12px' }}>
+              <InputFields
+                field={{
+                  name: 'search',
+                  type: 'text',
+                  placeholder: 'Search...',
+                }}
+                value={searchTerm}
+                onChange={(name, value) => {
+                  setSearchTerm(value);
+                  setPage(0);
+                }}
+                editPerm={true}
+              />
+            </Box>
           )}
         </Box>
 

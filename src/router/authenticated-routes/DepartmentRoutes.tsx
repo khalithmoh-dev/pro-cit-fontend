@@ -3,8 +3,8 @@ import { Route, Routes } from 'react-router-dom';
 import PageLoader from '../../components/page-loader';
 
 // Lazy-loaded components for DepartmentRoutes
-const DepartmentListPage = lazy(() => import('../../modules/department/department-list'));
-const CreateDepartment = lazy(() => import('../../modules/department/create-department'));
+const DepartmentListPage = lazy(() => import('../../modules/enterprise/department/department-list'));
+const CreateDepartment = lazy(() => import('../../modules/enterprise/department/create-department'));
 
 const DepartmentRoutes = () => {
   return (

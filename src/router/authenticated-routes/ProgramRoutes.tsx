@@ -3,8 +3,8 @@ import { Route, Routes } from 'react-router-dom';
 import PageLoader from '../../components/page-loader';
 import ProtectedRoute from './ProtectedRoute';
 
-const CreateProgramPage = lazy(() => import('../../modules/program/create-program'));
-const ProgramListPage = lazy(() => import('../../modules/program/program-list'));
+const CreateProgramPage = lazy(() => import('../../modules/enterprise/program/create-program'));
+const ProgramListPage = lazy(() => import('../../modules/enterprise/program/program-list'));
 
 const ProgramRoutes = () => {
   return (

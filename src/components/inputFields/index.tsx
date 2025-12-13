@@ -93,6 +93,7 @@ const InputFields: FC<InputFieldsProps> = ({
           size="small"
           type={field.type}
           name={field.name}
+          placeholder={field.placeholder}
           value={getValue(field.name)}
           onChange={handleEventChange}
           onKeyDown={(e) => {
@@ -228,22 +229,27 @@ const InputFields: FC<InputFieldsProps> = ({
               disabled={!editPerm || field.isDisabled}
             />
             {formik && isFormikTouched(field.name) && getFormikError(field.name) && (
-              <Typography variant="caption" color="error">
+              <FormHelperText error>
                 {getFormikError(field.name)}
-              </Typography>
+              </FormHelperText>
             )}
           </FormControl>
         );
       }
 
       return (
-        <FormControl fullWidth size="small">
+        <FormControl
+          fullWidth
+          size="small"
+          error={isFormikTouched(field.name) && Boolean(getFormikError(field.name))}
+        >
           <Select
             name={field.name}
             multiple={field.isMulti}
             value={getValue(field.name) || (field.isMulti ? [] : "")}
             onChange={field.onChange ? field.onChange : handleEventChange}
             onBlur={formik?.handleBlur} // Only for formik
+            error={isFormikTouched(field.name) && Boolean(getFormikError(field.name))}
             renderValue={(selected) => {
               if (field.isMulti) {
                 return selected
@@ -273,9 +279,9 @@ const InputFields: FC<InputFieldsProps> = ({
             ))}
           </Select>
           {formik && isFormikTouched(field.name) && getFormikError(field.name) && (
-            <Typography variant="caption" color="error">
+            <FormHelperText error>
               {getFormikError(field.name)}
-            </Typography>
+            </FormHelperText>
           )}
         </FormControl>
       );
@@ -433,13 +439,18 @@ const InputFields: FC<InputFieldsProps> = ({
             </div>
           ) : (
             <>
-              <FormControl fullWidth size="small">
+              <FormControl
+                fullWidth
+                size="small"
+                error={isFormikTouched(field.name) && Boolean(getFormikError(field.name))}
+              >
                 <Select
                   name={field.name}
                   multiple={field.isMulti}
                   value={getValue(field.name) || (field.isMulti ? [] : "")}
                   onChange={handleEventChange}
                   onBlur={formik?.handleBlur} // Only for formik
+                  error={isFormikTouched(field.name) && Boolean(getFormikError(field.name))}
                   renderValue={(selected) => {
                     if (field.isMulti) {
                       return selected
@@ -469,9 +480,9 @@ const InputFields: FC<InputFieldsProps> = ({
                   ))}
                 </Select>
                 {formik && isFormikTouched(field.name) && getFormikError(field.name) && (
-                  <Typography variant="caption" color="error">
+                  <FormHelperText error>
                     {getFormikError(field.name)}
-                  </Typography>
+                  </FormHelperText>
                 )}
               </FormControl>
               {editPerm && !field.isDisabled && (

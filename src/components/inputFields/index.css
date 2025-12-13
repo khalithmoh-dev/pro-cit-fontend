@@ -1,77 +1,548 @@
-.css-1miy0lu-MuiTypography-root{
-  font-family: var(--font-family-1) !important;
-  --fs-2: var(--fsd-1);
-  text-transform: none !important;
-}
-.css-rizt0-MuiTypography-root{
-  font-family: var(--font-family-1) !important;
-  font-weight: 600 !important;
-  height: 38px;
-  text-transform: none !important;
+/* ============================================
+   INPUT FIELDS ENHANCED STYLING
+   Matching Role Modal Aesthetic
+   Fixed all border and alignment issues
+   ============================================ */
+
+/* CSS Variables */
+:root {
+  --input-height: 36px;
+  --input-radius: 10px;
+  --input-border-color: #d1d5db;
+  --input-border-hover: var(--primary, #007bff);
+  --input-border-focus: var(--primary, #007bff);
+  --input-bg: #ffffff;
+  --input-bg-disabled: #f3f4f6;
+  --input-text-disabled: #6b7280;
+  --error-color: #dc2626;
+  --error-bg: #fef2f2;
+  --transition-speed: 200ms;
+  --box-shadow-focus: 0 0 0 4px rgba(0, 123, 255, 0.1);
 }
 
-.css-1pzfmz2-MuiInputBase-input-MuiOutlinedInput-input{
-  font-family: var(--font-family-1) !important;
-  height: 38px;
-  text-transform: none !important;
+/* ============================================
+   TEXT INPUTS & NUMBER INPUTS
+   ============================================ */
+
+/* TextField root */
+.MuiTextField-root,
+.MuiFormControl-root {
+  width: 100% !important;
 }
 
-.css-1blp12k-MuiInputBase-root-MuiOutlinedInput-root{
-  border-radius: var(--input-radius, 15px) !important;
-  height: 38px;
-  text-transform: none !important;
+/* Input container */
+.MuiOutlinedInput-root,
+.MuiInputBase-root.MuiOutlinedInput-root {
+  border-radius: var(--input-radius) !important;
+  background-color: var(--input-bg) !important;
+  transition: all var(--transition-speed) ease !important;
+  min-height: 36px !important;
+  height: 36px !important;
+  font-size: 14px !important;
 }
 
-.css-1pzfmz2-MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled{
-  border-radius: var(--input-radius, 15px) !important;
-  color: #000 !important;
-  height: 38px;
-  text-transform: none !important;
+/* Border styling */
+.MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline,
+.MuiInputBase-root.MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+  border-color: var(--grey-3, var(--input-border-color)) !important;
+  border-width: 1px !important;
+  transition: all var(--transition-speed) ease !important;
 }
 
-.css-trm6af-MuiNativeSelect-root-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled{
-  border-radius: var(--input-radius, 15px) !important;
+/* Hover state - NOT disabled, NOT focused */
+.MuiOutlinedInput-root:not(.Mui-disabled):not(.Mui-focused):hover .MuiOutlinedInput-notchedOutline,
+.MuiInputBase-root.MuiOutlinedInput-root:not(.Mui-disabled):not(.Mui-focused):hover .MuiOutlinedInput-notchedOutline {
+  border-color: var(--input-border-hover) !important;
+}
+
+/* Focus state - keep same border color as default */
+.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline,
+.MuiInputBase-root.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: var(--grey-3, var(--input-border-color)) !important;
+  border-width: 1px !important;
+}
+
+/* Input text */
+.MuiInputBase-input,
+.MuiOutlinedInput-input {
+  padding: 8px 12px !important;
+  line-height: 1.4 !important;
+  color: var(--dark, #111827) !important;
+  box-sizing: border-box !important;
+  font-size: 14px !important;
+}
+
+/* Small size variant */
+.MuiInputBase-sizeSmall .MuiInputBase-input,
+.MuiOutlinedInput-input.MuiInputBase-inputSizeSmall {
+  padding: 6px 10px !important;
+}
+
+/* Placeholder */
+.MuiInputBase-input::placeholder,
+.MuiOutlinedInput-input::placeholder {
+  color: var(--grey-4, #9ca3af) !important;
+  opacity: 1 !important;
+}
+
+/* Disabled state */
+.MuiOutlinedInput-root.Mui-disabled,
+.MuiInputBase-root.Mui-disabled {
+  background-color: var(--input-bg-disabled) !important;
+  cursor: not-allowed !important;
+}
+
+.MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline {
+  border-color: #e5e7eb !important;
+}
+
+.MuiInputBase-input.Mui-disabled {
+  color: var(--input-text-disabled) !important;
+  -webkit-text-fill-color: var(--input-text-disabled) !important;
+  cursor: not-allowed !important;
+}
+
+/* ============================================
+   SELECT DROPDOWNS
+   ============================================ */
+
+/* Select container */
+.MuiSelect-root,
+.MuiInputBase-root.MuiOutlinedInput-root.MuiSelect-root {
+  border-radius: var(--input-radius) !important;
+  min-height: 36px !important;
+  height: 36px !important;
+}
+
+/* Select display text */
+.MuiSelect-select,
+.MuiSelect-outlined {
+  padding: 8px 32px 8px 12px !important;
+  min-height: auto !important;
+  height: auto !important;
+  line-height: 1.4 !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  color: var(--dark, #111827) !important;
+  background-color: transparent !important;
+  background-image: none !important;
   display: flex !important;
   align-items: center !important;
+  box-sizing: border-box !important;
+}
+
+/* Select icon */
+.MuiSelect-icon,
+.MuiSvgIcon-root.MuiSelect-icon {
+  color: var(--grey-4, #6b7280) !important;
+  transition: transform var(--transition-speed) ease-in-out !important;
+  right: 14px !important;
+}
+
+/* Select icon when open */
+.MuiSelect-iconOpen {
+  transform: rotate(180deg) !important;
+}
+
+/* Select disabled state */
+.MuiSelect-select.Mui-disabled {
+  color: var(--input-text-disabled) !important;
+  cursor: not-allowed !important;
+}
+
+/* ============================================
+   DROPDOWN MENU (POPOVER)
+   ============================================ */
+
+/* Menu paper */
+.MuiPaper-root.MuiPopover-paper.MuiMenu-paper,
+.MuiPaper-root.MuiPaper-elevation.MuiMenu-paper {
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  margin-top: 4px !important;
+  border: 1px solid var(--input-border-color) !important;
+}
+
+/* Menu list */
+.MuiList-root.MuiMenu-list,
+.MuiList-root.MuiList-padding {
+  padding: 6px !important;
+  max-height: 320px !important;
+}
+
+/* Menu items */
+.MuiMenuItem-root,
+.MuiButtonBase-root.MuiMenuItem-root {
+  border-radius: 6px !important;
+  margin: 1px 0 !important;
+  padding: 8px 12px !important;
+  font-size: 14px !important;
+  transition: background-color var(--transition-speed) ease-in-out !important;
+  min-height: 32px !important;
+  height: 32px !important;
+  line-height: 1.4 !important;
+}
+
+/* Menu item hover */
+.MuiMenuItem-root:hover,
+.MuiButtonBase-root.MuiMenuItem-root:hover {
+  background-color: rgba(0, 123, 255, 0.05) !important;
+}
+
+/* Menu item selected */
+.MuiMenuItem-root.Mui-selected,
+.MuiButtonBase-root.MuiMenuItem-root.Mui-selected {
+  background-color: rgba(0, 123, 255, 0.1) !important;
+  font-weight: 500 !important;
+  color: var(--primary, #007bff) !important;
+}
+
+.MuiMenuItem-root.Mui-selected:hover,
+.MuiButtonBase-root.MuiMenuItem-root.Mui-selected:hover {
+  background-color: rgba(0, 123, 255, 0.15) !important;
+}
+
+/* ============================================
+   AUTOCOMPLETE
+   ============================================ */
+
+/* Autocomplete root */
+.MuiAutocomplete-root {
+  width: 100% !important;
+}
+
+/* Autocomplete input wrapper */
+.MuiAutocomplete-root .MuiOutlinedInput-root,
+.MuiAutocomplete-root .MuiInputBase-root {
+  padding: 2px 4px !important;
+  min-height: 36px !important;
+  height: auto !important;
+}
+
+/* Autocomplete input */
+.MuiAutocomplete-input,
+.MuiAutocomplete-input.MuiInputBase-input {
+  padding: 6px 8px !important;
+}
+
+/* Autocomplete tags container */
+.MuiAutocomplete-root .MuiOutlinedInput-root.MuiInputBase-sizeSmall {
+  padding: 4px !important;
+}
+
+/* Autocomplete tag chip */
+.MuiAutocomplete-tag,
+.MuiChip-root.MuiAutocomplete-tag {
+  margin: 2px !important;
+  height: 22px !important;
+  border-radius: 11px !important;
+  background-color: rgba(0, 123, 255, 0.1) !important;
+  border: 1px solid rgba(0, 123, 255, 0.24) !important;
+  font-size: 13px !important;
+}
+
+/* Autocomplete clear/dropdown indicators */
+.MuiAutocomplete-clearIndicator,
+.MuiAutocomplete-popupIndicator {
+  color: var(--grey-4, #6b7280) !important;
+  transition: color var(--transition-speed) ease-in-out !important;
+}
+
+.MuiAutocomplete-clearIndicator:hover,
+.MuiAutocomplete-popupIndicator:hover {
+  color: #374151 !important;
+  background-color: rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Autocomplete loading/no options */
+.MuiAutocomplete-loading,
+.MuiAutocomplete-noOptions {
+  padding: 12px !important;
+  text-align: center !important;
+  color: var(--grey-4, #6b7280) !important;
+  font-size: 14px !important;
+}
+
+/* ============================================
+   CHECKBOXES
+   ============================================ */
+
+/* Checkbox base */
+.MuiCheckbox-root,
+.MuiButtonBase-root.MuiCheckbox-root {
+  padding: 6px !important;
+  color: var(--input-border-color) !important;
+  transition: all var(--transition-speed) ease-in-out !important;
+}
+
+/* Checkbox hover */
+.MuiCheckbox-root:hover,
+.MuiButtonBase-root.MuiCheckbox-root:hover {
+  background-color: rgba(0, 123, 255, 0.04) !important;
+}
+
+/* Checkbox checked */
+.MuiCheckbox-root.Mui-checked,
+.MuiButtonBase-root.MuiCheckbox-root.Mui-checked {
+  color: var(--primary, #007bff) !important;
+}
+
+/* Checkbox disabled */
+.MuiCheckbox-root.Mui-disabled,
+.MuiButtonBase-root.MuiCheckbox-root.Mui-disabled {
+  color: #e5e7eb !important;
+  cursor: not-allowed !important;
+}
+
+/* Checkbox icon size */
+.MuiCheckbox-root .MuiSvgIcon-root,
+.MuiButtonBase-root.MuiCheckbox-root .MuiSvgIcon-root {
+  width: 18px !important;
+  height: 18px !important;
+}
+
+/* Form control label */
+.MuiFormControlLabel-root {
+  margin-left: 0 !important;
+  margin-right: 16px !important;
+}
+
+.MuiFormControlLabel-label,
+.MuiTypography-root.MuiFormControlLabel-label {
+  font-size: 14px !important;
+  color: var(--dark, #374151) !important;
+  margin-left: 4px !important;
+  font-weight: 500 !important;
+}
+
+.MuiFormControlLabel-label.Mui-disabled {
+  color: var(--input-text-disabled) !important;
+}
+
+/* ============================================
+   TEXTAREA
+   ============================================ */
+
+/* MUI Joy Textarea */
+.MuiTextarea-root,
+textarea.MuiTextarea-textarea {
+  border-radius: var(--input-radius) !important;
+  border: 1px solid var(--grey-3, var(--input-border-color)) !important;
+  transition: border-color var(--transition-speed) ease-in-out !important;
+  font-family: var(--font-family-1, inherit) !important;
+  font-size: 14px !important;
+  padding: 8px 12px !important;
+  line-height: 1.4 !important;
+}
+
+.MuiTextarea-root:hover {
+  border-color: var(--input-border-hover) !important;
+}
+
+.MuiTextarea-root:focus-within,
+textarea.MuiTextarea-textarea:focus {
+  border-color: var(--input-border-focus) !important;
+  border-width: 2px !important;
+  box-shadow: var(--box-shadow-focus) !important;
+  outline: none !important;
+}
+
+/* ============================================
+   ERROR STATES
+   ============================================ */
+
+/* Error input background - applies to all input types including select */
+.MuiOutlinedInput-root.Mui-error,
+.MuiInputBase-root.Mui-error,
+.MuiInputBase-root.MuiOutlinedInput-root.Mui-error {
+  background-color: var(--error-bg) !important;
+}
+
+/* Ensure select dropdown also gets red background on error */
+.MuiSelect-root.Mui-error,
+.MuiInputBase-root.MuiOutlinedInput-root.MuiSelect-root.Mui-error {
+  background-color: var(--error-bg) !important;
+}
+
+/* Error input border - overrides hover/focus */
+.MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline,
+.MuiInputBase-root.Mui-error .MuiOutlinedInput-notchedOutline {
+  border-color: var(--error, var(--error-color)) !important;
+  border-width: 2px !important;
+}
+
+/* Error hover state - keep error border */
+.MuiOutlinedInput-root.Mui-error:not(.Mui-focused):hover .MuiOutlinedInput-notchedOutline,
+.MuiInputBase-root.Mui-error:not(.Mui-focused):hover .MuiOutlinedInput-notchedOutline {
+  border-color: var(--error, var(--error-color)) !important;
+  border-width: 2px !important;
+}
+
+/* Error focus state - red shadow */
+.MuiOutlinedInput-root.Mui-error.Mui-focused .MuiOutlinedInput-notchedOutline,
+.MuiInputBase-root.Mui-error.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: var(--error, var(--error-color)) !important;
+  border-width: 2px !important;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1) !important;
+}
+
+/* Helper text base - alignment */
+.MuiFormHelperText-root {
+  font-size: 12px !important;
+  margin-top: 4px !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 0 !important;
+}
+
+/* Error helper text */
+.MuiFormHelperText-root.Mui-error,
+.error-text {
+  color: var(--error, var(--error-color)) !important;
+  font-weight: 500 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+}
+
+/* Ensure select text area stays transparent in error state to show red background */
+.MuiSelect-select.Mui-error,
+.MuiOutlinedInput-root.Mui-error .MuiSelect-select,
+.MuiInputBase-root.Mui-error .MuiSelect-select {
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+/* Error icon */
+.MuiFormHelperText-root.Mui-error::before {
+  content: '⚠' !important;
+  font-size: 14px !important;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+/* Tablets and smaller */
+@media (max-width: 768px) {
+  :root {
+    --input-height: 42px;
+  }
+
+  .MuiInputBase-input,
+  .MuiSelect-select,
+  .MuiMenuItem-root {
+    font-size: 16px !important;
+  }
+
+  .MuiFormControlLabel-label {
+    font-size: 15px !important;
+  }
+
+  .MuiCheckbox-root {
+    padding: 10px !important;
+  }
+
+  .MuiCheckbox-root .MuiSvgIcon-root {
+    width: 22px !important;
+    height: 22px !important;
+  }
+}
+
+/* Mobile phones */
+@media (max-width: 480px) {
+  :root {
+    --input-height: 44px;
+    --input-radius: 8px;
+  }
+
+  .MuiFormGroup-row {
+    flex-direction: column !important;
+  }
+
+  .MuiFormControlLabel-root {
+    width: 100% !important;
+    margin-bottom: 8px !important;
+  }
+
+  .MuiFormHelperText-root {
+    font-size: 13px !important;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+
+/* Remove default browser focus outline for mouse/click */
+.MuiOutlinedInput-root:focus,
+.MuiInputBase-root:focus,
+.MuiTextarea-root:focus,
+textarea:focus {
+  outline: none !important;
+}
+
+/* Keyboard navigation outline - using MUI focus-visible class */
+.MuiOutlinedInput-root.Mui-focusVisible,
+.MuiInputBase-root.Mui-focusVisible,
+.MuiButtonBase-root.Mui-focusVisible {
+  outline: 2px solid rgba(0, 123, 255, 0.3) !important;
+  outline-offset: 0px !important;
+  border-radius: var(--input-radius) !important;
+}
+
+/* Textarea keyboard navigation */
+.MuiTextarea-root:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid rgba(0, 123, 255, 0.3) !important;
+  outline-offset: 0px !important;
+  border-radius: var(--input-radius) !important;
+}
+
+/* Standard focus-visible for browsers that support it */
+.MuiOutlinedInput-root:focus-visible,
+.MuiInputBase-root:focus-visible {
+  outline: 2px solid rgba(0, 123, 255, 0.3) !important;
+  outline-offset: 0px !important;
+  border-radius: var(--input-radius) !important;
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+    border-width: 2px !important;
+  }
+
+  .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+    border-width: 3px !important;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* ============================================
+   TYPOGRAPHY
+   ============================================ */
+.MuiTypography-root,
+.MuiFormLabel-root,
+.MuiInputBase-input,
+.MuiMenuItem-root,
+.MuiFormControlLabel-label {
   text-transform: none !important;
+  font-family: var(--font-family-1, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif) !important;
 }
 
-.css-sc8y68-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root{
-    border-radius: var(--input-radius, 15px) !important;
-    height: 38px;
-    text-transform: none !important;
-}
-
-.css-1qcqxfl-MuiFormControl-root-MuiTextField-root .MuiOutlinedInput-root.MuiInputBase-sizeSmall{
-    padding: 0;
-    height: 38px;
-    text-transform: none !important;
-}
-.css-1qcqxfl-MuiFormControl-root-MuiTextField-root .MuiOutlinedInput-root{
-    align-items: center ;   
-    height: 38px;
-    text-transform: none !important;
-}
-
-.css-1tktgsa-MuiPaper-root-MuiPopover-paper-MuiMenu-paper{
-  border-radius: var(--input-radius, 10px) !important;
-  text-transform: none !important;
-}
-.css-1rju2q6-MuiButtonBase-root-MuiMenuItem-root{
-  min-height: 10px;
-  text-transform: none !important;
-}
-
-.css-98ra8i{
-  border-radius: 25px;
-}
-.css-xhkvgb{
-  border-radius: 25px;
-}
-
-.css-1toxriw-MuiList-root-MuiMenu-list{
-  max-height: 25rem;
-}
-.error-text{
-  color: red !important;
+/* Labels */
+.MuiFormLabel-root,
+.MuiInputLabel-root {
+  font-weight: 600 !important;
+  color: var(--dark, #374151) !important;
+  margin-bottom: 0.5rem !important;
+  font-size: 14px !important;
 }

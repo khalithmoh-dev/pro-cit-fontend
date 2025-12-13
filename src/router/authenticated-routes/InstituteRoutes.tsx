@@ -2,8 +2,8 @@ import React, { Suspense, lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import PageLoader from '../../components/page-loader';
 
-// const DegreeListPage = lazy(() => import('../../modules/basic-config/Institute-config/list'));
-const ManageInstitute = lazy(() => import('../../modules/basic-config/Institute-config/form'));
+// const DegreeListPage = lazy(() => import('../../modules/enterprise/institute/list'));
+const ManageInstitute = lazy(() => import('../../modules/enterprise/institute/form'));
 
 const InstituteRoutes = () => {
   return (

@@ -66,8 +66,6 @@ const AuthenticatedRoutes = () => {
           <Route path="admission/*" element={<AdmissionRoutes />} />
           <Route path="attendance/*" element={<AttendanceRoutes />} />
           <Route path="calendar/*" element={<CalendarRoutes />} />
-          <Route path="department/*" element={<DepartmentRoutes />} />
-          <Route path="degree/*" element={<DegreeRoutes />} />
           <Route path="institute/*" element={<InstituteRoutes /> } />
           <Route path="designation/*" element={<DesignationRoutes />} />
           <Route path="employee/*" element={<EmployeeRoutes />} />
@@ -90,6 +88,8 @@ const AuthenticatedRoutes = () => {
           <Route path="quick-collect/*" element={<QuickCollectRoutes />} />
           <Route path="quicksettings/*" element={<QuickCollectSettingRoutes />} />
           <Route path="report/*" element={<ReportRoutes />} />
+          <Route path="degree/*" element={<DegreeRoutes />} />
+          <Route path="department/*" element={<DepartmentRoutes />} />
           <Route path='semester/*' element={<SemesterRoutes/>} />
           <Route path="course/*" element={<CourseRoutes /> } />
           <Route path="program/*" element={<ProgramRoutes />} />

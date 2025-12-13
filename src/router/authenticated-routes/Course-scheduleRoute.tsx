@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import PageLoader from '../../components/page-loader';
 
 // Lazy-loaded components for CourseScheduleRoutes
-const CourseSchedulePage = lazy(() => import('../../modules/course-schedule'));
+const CourseSchedulePage = lazy(() => import('../../modules/enterprise/course-schedule'));
 
 const CourseScheduleRoutes = () => {
   return (
