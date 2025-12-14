@@ -196,5 +196,45 @@
   "MORE": "More",
   "ROLE_NAME": "Role Name",
   "SELECT_PERMISSIONS_THAT_WILL_BE_ASSIGNED_TO_ALL_USERS_WITH_THIS_ROLE": "Select permissions that will be assigned to all users with this role",
-  "SCREEN_PERMISSIONS": "Screen Permissions"
+  "SCREEN_PERMISSIONS": "Screen Permissions",
+
+  "LOCATION": "Location",
+  "LOCATIONS": "Locations",
+  "LOCATION_CODE": "Location Code",
+  "LOCATION_CODE_IS_REQUIRED": "Location Code is required",
+  "LOCATION_NAME": "Location Name",
+  "LOCATION_NAME_IS_REQUIRED": "Location Name is required",
+  "LOCATION_TYPE": "Location Type",
+  "LOCATION_EXISTS": "Location already exists",
+
+  "CAMPUS": "Campus",
+  "CAMPUSES": "Campuses",
+  "CAMPUS_IS_REQUIRED": "Campus is required",
+  "CAMPUS_CODE": "Campus Code",
+  "CAMPUS_CODE_IS_REQUIRED": "Campus Code is required",
+  "CAMPUS_NAME": "Campus Name",
+  "CAMPUS_NAME_IS_REQUIRED": "Campus Name is required",
+  "CAMPUS_EXISTS": "Campus already exists",
+  "ADD_CAMPUS": "Add Campus",
+  "EDIT_CAMPUS": "Edit Campus",
+
+  "FACILITY": "Facility",
+  "FACILITIES": "Facilities",
+  "FACILITY_IS_REQUIRED": "Facility is required",
+  "FACILITY_CODE": "Facility Code",
+  "FACILITY_CODE_IS_REQUIRED": "Facility Code is required",
+  "FACILITY_NAME": "Facility Name",
+  "FACILITY_NAME_IS_REQUIRED": "Facility Name is required",
+  "FACILITY_EXISTS": "Facility already exists",
+  "ADD_FACILITY": "Add Facility",
+  "EDIT_FACILITY": "Edit Facility",
+
+  "CLASSROOM": "Classroom",
+  "LAB": "Lab",
+  "OFFICE": "Office",
+  "LIBRARY": "Library",
+  "AUDITORIUM": "Auditorium",
+  "OTHER": "Other",
+
+  "CAPACITY": "Capacity"
 }

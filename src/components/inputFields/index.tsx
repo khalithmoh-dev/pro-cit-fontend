@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import {
   TextField,
   FormControl,
@@ -9,11 +9,14 @@ import {
   FormControlLabel,
   Typography,
   FormHelperText,
+  IconButton,
+  Box,
 } from "@mui/material";
 import { Autocomplete } from "@mui/material";
 import { Textarea } from "@mui/joy";
 import FileUpload from "../fileupload";
 import Button from "../ButtonMui";
+import { Add as AddIcon, Check as CheckIcon, Close as CloseIcon, Edit as EditIcon } from "@mui/icons-material";
 import "./index.css";
 import { useTranslation } from "react-i18next";
 
@@ -43,6 +46,31 @@ const InputFields: FC<InputFieldsProps> = ({
   onChange,
 }) => {
   const { t } = useTranslation();
+
+  // Inline add/edit state for select fields - field-specific using field.name as key
+  const [inlineState, setInlineState] = useState<{
+    [fieldName: string]: {
+      isAdding: boolean;
+      isEditing: boolean;
+      newItemValue: string;
+    };
+  }>({});
+
+  // Helper to get inline state for a specific field
+  const getInlineState = (fieldName: string) => {
+    return inlineState[fieldName] || { isAdding: false, isEditing: false, newItemValue: "" };
+  };
+
+  // Helper to update inline state for a specific field
+  const updateInlineState = (fieldName: string, updates: Partial<typeof inlineState[string]>) => {
+    setInlineState(prev => ({
+      ...prev,
+      [fieldName]: {
+        ...getInlineState(fieldName),
+        ...updates
+      }
+    }));
+  };
 
   // Helper functions to handle formik vs non-formik scenarios
   const getValue = (fieldName: string) => {
@@ -84,6 +112,13 @@ const InputFields: FC<InputFieldsProps> = ({
   const isFormikTouched = (fieldName: string) => {
     return formik ? formik.touched[fieldName] : false;
   };
+
+  // State for selectWithAdd type - must be outside switch case
+  const [selectWithAddState, setSelectWithAddState] = useState<{
+    adding: boolean;
+    newOption: string;
+  }>({ adding: false, newOption: "" });
+
   switch (field.type) {
     case "text":
     case "number":
@@ -112,19 +147,66 @@ const InputFields: FC<InputFieldsProps> = ({
       const labelKey = field.labelKey || "label";
       const valueKey = field.valueKey || "value";
       let options =
-        !field.isDynamicFields && field.name === "insId"
+        !field.isDynamicFields && field.name === "insId" && instDtls
           ? [{ [valueKey]: instDtls._id, [labelKey]: instDtls.insName }]
-          : field.options || [];
+          : Array.isArray(field.options) ? field.options : [];
 
       const isMulti = !!field?.isMulti;
 
-      if (isMulti && setAMultiSelectVal) {
+      if (isMulti && setAMultiSelectVal && Array.isArray(aMultiSelectVal)) {
         const optionMap = new Map();
         [...aMultiSelectVal, ...options].forEach((option) => {
-          optionMap.set(option._id, option);
+          if (option && option._id) {
+            optionMap.set(option._id, option);
+          }
         });
         options = Array.from(optionMap.values());
       }
+
+      // Inline add/edit handlers - field-specific
+      const fieldState = getInlineState(field.name);
+      const { isAdding, isEditing, newItemValue } = fieldState;
+
+      const handleAddClick = () => {
+        updateInlineState(field.name, { isAdding: true, newItemValue: "" });
+      };
+
+      const handleEditClick = () => {
+        const currentValue = getValue(field.name);
+        const selectedOption = options.find(opt => opt[valueKey] === currentValue);
+        if (selectedOption) {
+          updateInlineState(field.name, {
+            isEditing: true,
+            newItemValue: selectedOption[labelKey]
+          });
+        }
+      };
+
+      const handleSaveAdd = () => {
+        if (newItemValue.trim() && field.addClick) {
+          field.addClick({ ...formik?.values, newValue: newItemValue });
+        }
+        updateInlineState(field.name, { isAdding: false, newItemValue: "" });
+      };
+
+      const handleSaveEdit = () => {
+        if (newItemValue.trim() && field.editClick) {
+          field.editClick({ ...formik?.values, newValue: newItemValue });
+        }
+        updateInlineState(field.name, { isEditing: false, newItemValue: "" });
+      };
+
+      const handleCancel = () => {
+        updateInlineState(field.name, { isAdding: false, isEditing: false, newItemValue: "" });
+      };
+
+      const isAddDisabled = typeof field.addDisabled === "function"
+        ? field.addDisabled(formik?.values || {})
+        : field.addDisabled;
+
+      const isEditDisabled = typeof field.editDisabled === "function"
+        ? field.editDisabled(formik?.values || {})
+        : field.editDisabled;
 
       if (field.isApi) {
         return (
@@ -144,21 +226,25 @@ const InputFields: FC<InputFieldsProps> = ({
                   ) || null
               }
               onChange={(_, newValue) => {
-                if (isMulti && setAMultiSelectVal) {
-                  setAMultiSelectVal((pre) => [...newValue, ...pre]);
+                const extractedValue = isMulti
+                  ? Array.isArray(newValue) ? newValue.map((opt) => opt[valueKey]) : []
+                  : newValue
+                    ? newValue[valueKey]
+                    : "";
+
+                if (isMulti && setAMultiSelectVal && Array.isArray(newValue)) {
+                  setAMultiSelectVal((pre) => [...newValue, ...(Array.isArray(pre) ? pre : [])]);
                   if (field.setInputValue) field.setInputValue("");
                 } else if (field.setInputValue) {
                   field.setInputValue(newValue ? newValue[labelKey] : "");
-                  field.onChange && field.onChange(newValue, formik);
                 }
-                handleChange(
-                  field.name,
-                  isMulti
-                    ? newValue.map((opt) => opt[valueKey])
-                    : newValue
-                      ? newValue[valueKey]
-                      : ""
-                );
+
+                // Call custom onChange with consistent signature (fieldname, value, formik)
+                if (field.onChange) {
+                  field.onChange(field.name, extractedValue, formik);
+                }
+
+                handleChange(field.name, extractedValue);
               }}
               inputValue={field?.inputValue || ""}
               onInputChange={(_, newInputValue, reason) => {
@@ -237,53 +323,187 @@ const InputFields: FC<InputFieldsProps> = ({
         );
       }
 
-      return (
-        <FormControl
-          fullWidth
-          size="small"
-          error={isFormikTouched(field.name) && Boolean(getFormikError(field.name))}
-        >
-          <Select
-            name={field.name}
-            multiple={field.isMulti}
-            value={getValue(field.name) || (field.isMulti ? [] : "")}
-            onChange={field.onChange ? field.onChange : handleEventChange}
-            onBlur={formik?.handleBlur} // Only for formik
+      // Check if this field has inline add/edit
+      const hasInlineFeatures = field.showAdd || field.showEdit;
+
+      if (!hasInlineFeatures) {
+        // Regular select without inline add/edit
+        return (
+          <FormControl
+            fullWidth
+            size="small"
             error={isFormikTouched(field.name) && Boolean(getFormikError(field.name))}
-            renderValue={(selected) => {
-              if (field.isMulti) {
-                return selected
-                  .map((val: any) => {
-                    const opt = options.find((o) => o[valueKey] === val);
-                    return opt ? opt[labelKey] : val;
-                  })
-                  .join(", ");
-              }
-              const selectedOption = options.find(
-                (opt) => opt[valueKey] === selected
-              );
-              return selectedOption ? selectedOption[labelKey] : "";
-            }}
-            disabled={!editPerm || field.isDisabled}
           >
-            {options.map((opt: any) => (
-              <MenuItem key={opt[valueKey]} value={opt[valueKey]}>
-                {field.isMulti && (
-                  <Checkbox
-                    checked={getValue(field.name)?.includes(opt[valueKey])}
-                    disabled={!editPerm || field.isDisabled}
-                  />
-                )}
-                {opt[labelKey]}
-              </MenuItem>
-            ))}
-          </Select>
-          {formik && isFormikTouched(field.name) && getFormikError(field.name) && (
-            <FormHelperText error>
-              {getFormikError(field.name)}
-            </FormHelperText>
+            <Select
+              name={field.name}
+              multiple={field.isMulti}
+              value={getValue(field.name) || (field.isMulti ? [] : "")}
+              onChange={(e) => {
+                if (field.onChange) {
+                  // Call custom onChange with (fieldname, value, formik)
+                  field.onChange(field.name, e.target.value, formik);
+                }
+                handleEventChange(e);
+              }}
+              onBlur={formik?.handleBlur}
+              error={isFormikTouched(field.name) && Boolean(getFormikError(field.name))}
+              renderValue={(selected) => {
+                if (field.isMulti && Array.isArray(selected)) {
+                  return selected
+                    .map((val: any) => {
+                      const opt = options.find((o) => o && o[valueKey] === val);
+                      return opt ? opt[labelKey] : val;
+                    })
+                    .filter(Boolean)
+                    .join(", ");
+                }
+                const selectedOption = options.find(
+                  (opt) => opt && opt[valueKey] === selected
+                );
+                return selectedOption ? selectedOption[labelKey] : "";
+              }}
+              disabled={!editPerm || field.isDisabled}
+            >
+              {Array.isArray(options) && options.map((opt: any) => (
+                opt && opt[valueKey] && (
+                  <MenuItem key={opt[valueKey]} value={opt[valueKey]}>
+                    {field.isMulti && (
+                      <Checkbox
+                        checked={Array.isArray(getValue(field.name)) && getValue(field.name)?.includes(opt[valueKey])}
+                        disabled={!editPerm || field.isDisabled}
+                      />
+                    )}
+                    {opt[labelKey]}
+                  </MenuItem>
+                )
+              ))}
+            </Select>
+            {formik && isFormikTouched(field.name) && getFormikError(field.name) && (
+              <FormHelperText error>
+                {getFormikError(field.name)}
+              </FormHelperText>
+            )}
+          </FormControl>
+        );
+      }
+
+      // Select with inline add/edit features
+      return (
+        <Box display="flex" alignItems="flex-start" gap={1}>
+          <FormControl
+            fullWidth
+            size="small"
+            error={isFormikTouched(field.name) && Boolean(getFormikError(field.name))}
+          >
+            {isAdding || isEditing ? (
+              <TextField
+                fullWidth
+                size="small"
+                value={newItemValue}
+                onChange={(e) => updateInlineState(field.name, { newItemValue: e.target.value })}
+                placeholder={isAdding ? `Enter new ${field.label}` : `Edit ${field.label}`}
+                autoFocus
+              />
+            ) : (
+              <Select
+                name={field.name}
+                multiple={field.isMulti}
+                value={getValue(field.name) || (field.isMulti ? [] : "")}
+                onChange={(e) => {
+                  if (field.onChange) {
+                    // Call custom onChange with (fieldname, value, formik)
+                    field.onChange(field.name, e.target.value, formik);
+                  }
+                  handleEventChange(e);
+                }}
+                onBlur={formik?.handleBlur}
+                error={isFormikTouched(field.name) && Boolean(getFormikError(field.name))}
+                renderValue={(selected) => {
+                  if (field.isMulti && Array.isArray(selected)) {
+                    return selected
+                      .map((val: any) => {
+                        const opt = options.find((o) => o && o[valueKey] === val);
+                        return opt ? opt[labelKey] : val;
+                      })
+                      .filter(Boolean)
+                      .join(", ");
+                  }
+                  const selectedOption = options.find(
+                    (opt) => opt && opt[valueKey] === selected
+                  );
+                  return selectedOption ? selectedOption[labelKey] : "";
+                }}
+                disabled={!editPerm || field.isDisabled}
+              >
+                {Array.isArray(options) && options.map((opt: any) => (
+                  opt && opt[valueKey] && (
+                    <MenuItem key={opt[valueKey]} value={opt[valueKey]}>
+                      {field.isMulti && (
+                        <Checkbox
+                          checked={Array.isArray(getValue(field.name)) && getValue(field.name)?.includes(opt[valueKey])}
+                          disabled={!editPerm || field.isDisabled}
+                        />
+                      )}
+                      {opt[labelKey]}
+                    </MenuItem>
+                  )
+                ))}
+              </Select>
+            )}
+            {formik && isFormikTouched(field.name) && getFormikError(field.name) && !isAdding && !isEditing && (
+              <FormHelperText error>
+                {getFormikError(field.name)}
+              </FormHelperText>
+            )}
+          </FormControl>
+
+          {/* Add/Edit/Save/Cancel Buttons */}
+          {field.showAdd && !isAdding && !isEditing && (
+            <IconButton
+              size="small"
+              onClick={handleAddClick}
+              disabled={isAddDisabled || !editPerm}
+              color="primary"
+              sx={{ marginTop: '4px' }}
+            >
+              <AddIcon fontSize="small" />
+            </IconButton>
           )}
-        </FormControl>
+
+          {field.showEdit && !isAdding && !isEditing && getValue(field.name) && (
+            <IconButton
+              size="small"
+              onClick={handleEditClick}
+              disabled={isEditDisabled || !editPerm}
+              color="primary"
+              sx={{ marginTop: '4px' }}
+            >
+              <EditIcon fontSize="small" />
+            </IconButton>
+          )}
+
+          {(isAdding || isEditing) && (
+            <>
+              <IconButton
+                size="small"
+                onClick={isAdding ? handleSaveAdd : handleSaveEdit}
+                disabled={!newItemValue.trim()}
+                color="success"
+                sx={{ marginTop: '4px' }}
+              >
+                <CheckIcon fontSize="small" />
+              </IconButton>
+              <IconButton
+                size="small"
+                onClick={handleCancel}
+                color="error"
+                sx={{ marginTop: '4px' }}
+              >
+                <CloseIcon fontSize="small" />
+              </IconButton>
+            </>
+          )}
+        </Box>
       );
     }
 
@@ -314,7 +534,7 @@ const InputFields: FC<InputFieldsProps> = ({
       if (field.isMulti) {
         return (
           <FormGroup row>
-            {field.data?.map((option, idx) => (
+            {Array.isArray(field.data) && field.data.map((option, idx) => (
               <FormControlLabel
                 key={idx}
                 sx={{
@@ -325,9 +545,9 @@ const InputFields: FC<InputFieldsProps> = ({
                 control={
                   <Checkbox
                     name={field.name}
-                    checked={getValue(field.name)?.includes(option.value)}
+                    checked={Array.isArray(getValue(field.name)) && getValue(field.name)?.includes(option.value)}
                     onChange={(e) => {
-                      const currentValue = getValue(field.name) || [];
+                      const currentValue = Array.isArray(getValue(field.name)) ? getValue(field.name) : [];
                       const newValue = [...currentValue];
                       if (e.target.checked) newValue.push(option.value);
                       else {
@@ -389,27 +609,31 @@ const InputFields: FC<InputFieldsProps> = ({
     case "selectWithAdd": {
       const labelKey = field.labelKey || "label";
       const valueKey = field.valueKey || "value";
-      const [adding, setAdding] = React.useState(false);
-      const [newOption, setNewOption] = React.useState("");
 
       const handleAdd = () => {
-        setAdding(true);
+        setSelectWithAddState({ adding: true, newOption: "" });
       };
 
       const handleCancel = () => {
-        setNewOption("");
-        setAdding(false);
+        setSelectWithAddState({ adding: false, newOption: "" });
+      };
+
+      const handleSave = () => {
+        if (selectWithAddState.newOption.trim() && field.addOption) {
+          field.addOption(selectWithAddState.newOption);
+        }
+        setSelectWithAddState({ adding: false, newOption: "" });
       };
 
       return (
         <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-          {adding ? (
+          {selectWithAddState.adding ? (
             <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flex: 1 }}>
               <TextField
                 fullWidth
                 size="small"
-                value={newOption}
-                onChange={(e) => setNewOption(e.target.value)}
+                value={selectWithAddState.newOption}
+                onChange={(e) => setSelectWithAddState({ ...selectWithAddState, newOption: e.target.value })}
                 placeholder="Enter new option"
                 disabled={!editPerm || field.isDisabled}
               />
@@ -425,14 +649,10 @@ const InputFields: FC<InputFieldsProps> = ({
               <Button
                 className={`btn-save btn-small`}
                 size={"medium"}
-                onClick={() => {
-                  field.addOption(newOption);
-                  setNewOption("");
-                  setAdding(false);
-                }}
+                onClick={handleSave}
                 type={'button'}
                 variantType={"primary"}
-                disabled={!newOption.trim() || (!editPerm || field.isDisabled)}
+                disabled={!selectWithAddState.newOption.trim() || !editPerm || field.isDisabled}
               >
                 {t("ADD")}
               </Button>
@@ -448,35 +668,45 @@ const InputFields: FC<InputFieldsProps> = ({
                   name={field.name}
                   multiple={field.isMulti}
                   value={getValue(field.name) || (field.isMulti ? [] : "")}
-                  onChange={handleEventChange}
+                  onChange={(e) => {
+                    if (field.onChange) {
+                      // Call custom onChange with (fieldname, value, formik)
+                      field.onChange(field.name, e.target.value, formik);
+                    }
+                    handleEventChange(e);
+                  }}
                   onBlur={formik?.handleBlur} // Only for formik
                   error={isFormikTouched(field.name) && Boolean(getFormikError(field.name))}
                   renderValue={(selected) => {
-                    if (field.isMulti) {
+                    const fieldOptions = Array.isArray(field.options) ? field.options : [];
+                    if (field.isMulti && Array.isArray(selected)) {
                       return selected
                         .map((val: any) => {
-                          const opt = field.options.find((o) => o[valueKey] === val);
+                          const opt = fieldOptions.find((o) => o && o[valueKey] === val);
                           return opt ? opt[labelKey] : val;
                         })
+                        .filter(Boolean)
                         .join(", ");
                     }
-                    const selectedOption = field.options.find(
-                      (opt) => opt[valueKey] === selected
+                    const selectedOption = fieldOptions.find(
+                      (opt) => opt && opt[valueKey] === selected
                     );
                     return selectedOption ? selectedOption[labelKey] : "";
                   }}
                   disabled={!editPerm || field.isDisabled}
                 >
-                  {field.options.map((opt: any) => (
-                    <MenuItem key={opt[valueKey]} value={opt[valueKey]}>
-                      {field.isMulti && (
-                        <Checkbox
-                          checked={getValue(field.name)?.includes(opt[valueKey])}
-                          disabled={!editPerm || field.isDisabled}
-                        />
-                      )}
-                      {opt[labelKey]}
-                    </MenuItem>
+                  {Array.isArray(field.options) && field.options.map((opt: any) => (
+                    opt && opt[valueKey] && (
+                      <MenuItem key={opt[valueKey]} value={opt[valueKey]}>
+                        {field.isMulti && (
+                          <Checkbox
+                            checked={Array.isArray(getValue(field.name)) && getValue(field.name)?.includes(opt[valueKey])}
+                            disabled={!editPerm || field.isDisabled}
+                          />
+                        )}
+                        {opt[labelKey]}
+                      </MenuItem>
+                    )
                   ))}
                 </Select>
                 {formik && isFormikTouched(field.name) && getFormikError(field.name) && (
