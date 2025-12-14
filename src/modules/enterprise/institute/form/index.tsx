@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import DynamicForm from "../../../../components/generic-form";
 import * as Yup from "yup";
 import useInstituteStore from "../../../../store/instituteStore";
@@ -18,7 +18,7 @@ export default function InstiteConfig() {
   [key: string]: any; // optional, for dynamic form fields
 }
 
-  const { updateInstitute, getInstitute } = useInstituteStore();
+  const { updateInstitute, getInstitute, createChildInstitute, getChildInstitutes, switchInstitute } = useInstituteStore();
   const { user, permissions } = useAuthStore();
   const { parseFormDataAndUpload } = useBaseStore()
   const [instDtls, setInstDtls] = useState<InstituteDetails>({});
@@ -26,6 +26,8 @@ export default function InstiteConfig() {
   const { t } = useTranslation();
   const showToast = useToastStore((state) => state.showToast);
   const [showChildInsList, setShowChildInsList] = useState(false);
+  const [aChildInstitutes, setChildInstitutes] = useState<InstituteDetails[]>([]);
+  const [showAddInstitutionForm, setShowAddInstitutionForm] = useState(false);
 
   //form schema
   const schema = {
@@ -45,13 +47,13 @@ export default function InstiteConfig() {
           validation: Yup.string().required(t('INSTITUTION_CODE_IS_REQUIRED')),
           isRequired: true
         },
-        {
+        (!showAddInstitutionForm && !instDtls?.orgId ? {
           name: 'isOrg',
           validation: Yup.boolean(),
           label: `${t('IS_ORGANISATION')}?`,
           type: "checkbox",
           removeHeader: true,
-        },
+        } : {}),
         {
           name: "acrtdBy",
           label: t('ACCREDITED_BY'),
@@ -263,7 +265,7 @@ export default function InstiteConfig() {
     if (user && getInstitute) {
       (async () => {
         try {
-          const oInstituteDtls = await getInstitute(user?.user?.insId);
+          const oInstituteDtls = await getInstitute();
           if (oInstituteDtls && Object.keys(oInstituteDtls).length) {
             setInstDtls(oInstituteDtls);
           }
@@ -295,20 +297,93 @@ export default function InstiteConfig() {
     }
   }
 
-  const aHeaderAction = [...(instDtls.isOrg ? [<Button variantType="primary" sizeType='sm' onClick={() => {setShowChildInsList(true)}}>{t('VIEW_INSTITUTES')}</Button>] : [])]
+  const handleShowChildInsList = async () => {
+    try {
+      const oPayload = { orgId: instDtls?._id || '', isFromOrg : instDtls.isOrg ? true : false };
+      const aChildInstitutes = await getChildInstitutes(oPayload);
+      setChildInstitutes(aChildInstitutes);
+      setShowChildInsList(true);
+    } catch (err) {
+      showToast('error', `${t('FAILED_TO_FETCH')} ${t('INSTITUTION')}`);
+    }
+  };
+
+  const aHeaderAction = [...(instDtls.isOrg ? [<Button variantType="primary" sizeType='sm' onClick={() => {handleShowChildInsList()}}>{t('VIEW_INSTITUTES')}</Button>] : [])]
+
+  const handleAddInstitution = () => {
+    setShowChildInsList(false);
+    setShowAddInstitutionForm(true);
+  }
+
+  const handleAddInstitutionSubmit = async (values) => {
+    try {
+      const deepValues = { ...structuredClone(values) };
+      deepValues.orgId = instDtls?._id
+      if (values?.insLogo?.length) {
+        try {
+          const instLogo = await parseFormDataAndUpload(values?.insLogo);
+          if (instLogo?.url) {
+            deepValues.insLogo = [instLogo.url];
+          }
+        } catch (err) {
+          showToast('error', `${t("FAILED_TO_UPLOAD")} ${t('INSTITUTE_LOGO')}`);
+        }
+      }
+      await createChildInstitute(deepValues);
+      showToast('success', `${t('INSTITUTION')} ${t("CREATED_SUCCESSFULLY")}`);
+      setShowAddInstitutionForm(false);
+    } catch (err) {
+      showToast('error', `${t("FAILED_TO_ADD")} ${t('INSTITUTION')}`);
+    }
+  }
+
+  const handleSwitchInstitute = async(insId: string) => {
+    try{
+      const oPayload = { insId};
+      await switchInstitute(oPayload);
+      setShowChildInsList(false);
+    }catch(err){
+      showToast('error', `${t('FAILED_TO_SWITCH_INSTITUTION')}`);
+    }
+  }
+
+  // Dynamic schema, pageTitle, and handlers based on mode
+  const dynamicSchema = showAddInstitutionForm
+    ? {
+        ...schema,
+        buttons: [
+          {
+            name: "Cancel", variant: "outlined", nature: "secondary", onClick: () => { setShowAddInstitutionForm(false) }
+          }, {
+            name: "Create", variant: "contained", nature: "primary", type: 'submit'
+          }
+        ]
+      }
+    : schema;
+
+  const dynamicPageTitle = showAddInstitutionForm ? t('ADD_INSTITUTIONS') : t("INSTITUTE_CONFIGURATION");
+  const dynamicOnSubmit = showAddInstitutionForm ? handleAddInstitutionSubmit : handleFormSubmit;
+  const dynamicInitialValues = showAddInstitutionForm ? {} : instDtls;
+  const dynamicHeaderAction = showAddInstitutionForm ? [] : aHeaderAction;
 
   return (
     <>
       <DynamicForm
-        schema={schema}
-        pageTitle="Institute config"
-        onSubmit={async (values) => { await handleFormSubmit(values) }}
+        schema={dynamicSchema}
+        pageTitle={dynamicPageTitle}
+        onSubmit={async (values) => { await dynamicOnSubmit(values) }}
         isEditPerm={permissions?.['institute-config']?.create}
-        aHeaderAction={aHeaderAction}
-        oInitialValues={instDtls}
+        aHeaderAction={dynamicHeaderAction}
+        oInitialValues={dynamicInitialValues}
       />
       {
-        showChildInsList && <ViewInstitutes isModalOpen={showChildInsList} aChildIns={[]} setIsModalOpen={setShowChildInsList} />
+        showChildInsList && <ViewInstitutes
+          isModalOpen={showChildInsList}
+          aChildIns={aChildInstitutes}
+          setIsModalOpen={setShowChildInsList}
+          onAddInstitution={handleAddInstitution}
+          onSwitchInstitute={handleSwitchInstitute}
+        />
       }
     </>
   );

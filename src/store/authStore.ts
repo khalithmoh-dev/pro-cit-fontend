@@ -8,6 +8,7 @@ import { ProgramIF } from './programStore';
 import { GetDepartmentI } from './departmentStore';
 import { SemesterIF } from './semesterStore';
 import { InstituteDetails } from './instituteStore';
+import { setUserDetails } from '../utils/functions/helper';
 
 export interface MainMenuItem {
   key: string;
@@ -76,7 +77,7 @@ interface VaidateOtpPayloadIF {
   password: string;
 }
 
-interface RouteDetails {
+export interface RouteDetails {
   icon: string,
   name: string
 }
@@ -144,26 +145,8 @@ const useAuthStore = create<AuthState>()(
 
           const data: any = await response.json();
           useToastStore.getState().showToast('success', 'Logged in successfully');
-          window?.sessionStorage?.setItem('accessToken', JSON.stringify(data?.data?.accessToken));
-          // const transformedData = transformNavData(data.data.role.modules);
-          const permissionsObject: { [key: string]: ModulePermissions } = {};
-          const pathDtls: Record<string, RouteDetails> = {};
-          (data.data.user?.modules ?? []).forEach((module: ModuleIF) => {
-            if(!module.deleted){
-              const currentPath = module.path
-              permissionsObject[currentPath] = module.permissions;
-              pathDtls[currentPath]= {icon: module.icon, name: module.name};
-            }
-          });
-          set({
-            isAuthenticated: true,
-            user: data.data,
-            oEnterprises: data.data.oEnterpriseValues,
-            permissions: permissionsObject,
-            isLoading: false,
-            routeInfo: pathDtls,
-            instituteDtls: data.data?.user?.institutes
-          });
+          setUserDetails(data?.data, set);
+          
           return true;
         } catch (err: any) {
           set({ error: err.message, isLoading: false });

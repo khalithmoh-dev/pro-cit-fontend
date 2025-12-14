@@ -185,9 +185,13 @@
   "ABSENT_NOTIFICATION": "Absent notification",
   "BIRTHDAY_MESSAGE": "Birthday message",
   
+  "INSTITUTIONS": "Institutions",
+  "ADD_INSTITUTIONS": "Add Institutions",
   "INSTITUTION_TYPE": "Institution Type",
   "IS_ORGANISATION": "Is organisation",
+  "INSTITUTE_CONFIGURATION": "Institute Configuration",
   "NO_CHILD_INSTITUTES": "No child institutes",
+  "FAILED_TO_SWITCH_INSTITUTION": "Failed to switch institution",
 
   "PERMISSIONS": "Permissions",
   "ROLE_MANAGEMENT": "Role Management",
