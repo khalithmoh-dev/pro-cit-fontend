@@ -1,0 +1,48 @@
+.stepperContainer {
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  background: #ffffff;
+
+  
+  box-shadow: 0 4px 15px rgba(15, 23, 42, 0.08);
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.step {
+  border: none;
+  background: transparent;
+  border-radius: 12px;
+  padding: 10px 18px;
+  min-width: 90px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease;
+  color: #4b5563;
+  font-size: 12px;
+  outline: none;
+  white-space: nowrap;
+}
+
+.step:hover:not(.active) {
+  background: #f3f4f6;
+}
+
+.icon {
+  font-size: 18px; /* or whatever fits your icon set */
+  margin-bottom: 4px;
+}
+
+.label {
+  font-weight: 500;
+}
+
+.active {
+  background: #2563eb;        /* blue pill */
+  color: #ffffff;
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.4);
+}
