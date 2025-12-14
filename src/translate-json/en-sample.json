@@ -236,5 +236,21 @@
   "AUDITORIUM": "Auditorium",
   "OTHER": "Other",
 
-  "CAPACITY": "Capacity"
+  "CAPACITY": "Capacity",
+
+  "ACADEMIC_YEAR": "Academic Year",
+  "ACADEMIC_YEARS": "Academic Years",
+  "ACADEMIC_YEAR_CODE": "Academic Year Code",
+  "ACADEMIC_YEAR_CODE_IS_REQUIRED": "Academic Year Code is required",
+  "ACADEMIC_YEAR_NAME": "Academic Year Name",
+  "ACADEMIC_YEAR_NAME_IS_REQUIRED": "Academic Year Name is required",
+  "START_DATE": "Start Date",
+  "START_DATE_IS_REQUIRED": "Start Date is required",
+  "END_DATE": "End Date",
+  "END_DATE_IS_REQUIRED": "End Date is required",
+  "END_DATE_MUST_BE_AFTER_START_DATE": "End Date must be after Start Date",
+  "IS_CURRENT": "Is Current",
+  "ACADEMIC_YEAR_EXISTS": "Academic Year already exists",
+  "YES": "Yes",
+  "NO": "No"
 }

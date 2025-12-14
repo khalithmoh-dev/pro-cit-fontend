@@ -1,5 +1,5 @@
 // src/screens/CreateDegree/GenericMaster.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Box } from "@mui/material";
 import SectionHeader from "../SectionHeader";
 import Label from "../Label";
@@ -15,6 +15,7 @@ import { useLayout } from "../../modules/layout/LayoutContext";
 import InputFields from "../inputFields";
 import useCheckPermission from "../../hooks/useCheckPermission";
 import Field from '../enterprisefilter'
+import useGetEnterprises from "../../hooks/useGetEnterprises";
 
 /**
  * GenericMaster Component
@@ -66,6 +67,16 @@ const GenericMaster = ({
   const authStore = useAuthStore();
   const { setRouteNm, setActionFields } = useLayout();
   const location = useLocation();
+  const enterpriseApi = useGetEnterprises();
+
+  // === Auto-load institute options for insId fields ===
+  const instituteOptions = useMemo(() => {
+    const institutes = enterpriseApi.getInstitutesList();
+    return institutes.map((institute: any) => ({
+      value: institute._id,
+      label: institute.insName
+    }));
+  }, [authStore.oEnterprises]);
 
   // === Load logged-in institute details ===
   useEffect(() => {
@@ -159,6 +170,11 @@ const GenericMaster = ({
 
                   if (!shouldShow) return null;
 
+                  // Auto-populate options for insId field
+                  const fieldWithOptions = field.name === 'insId' && !field.options
+                    ? { ...field, options: instituteOptions, labelKey: 'label', valueKey: 'value', isDynamicFields: true }
+                    : field;
+
                   return (
                     <div className="field-wrapper" key={index}>
                       {/* Label */}
@@ -168,7 +184,7 @@ const GenericMaster = ({
 
                       {/* Field Renderer */}
                         <InputFields
-                          field={field}
+                          field={fieldWithOptions}
                           formik={formik}
                           editPerm={isEditEnabled}
                           aMultiSelectVal={multiSelectValues}

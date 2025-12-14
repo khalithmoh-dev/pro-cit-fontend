@@ -585,6 +585,32 @@ const InputFields: FC<InputFieldsProps> = ({
         );
       }
 
+    case "date":
+      return (
+        <TextField
+          fullWidth
+          size="small"
+          type="date"
+          name={field.name}
+          value={getValue(field.name) ? new Date(getValue(field.name)).toISOString().split('T')[0] : ""}
+          onChange={(e) => {
+            const dateValue = e.target.value;
+            handleChange(field.name, dateValue);
+          }}
+          onBlur={formik?.handleBlur}
+          error={isFormikTouched(field.name) && Boolean(getFormikError(field.name))}
+          helperText={isFormikTouched(field.name) && getFormikError(field.name)}
+          disabled={!editPerm || field.isDisabled}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          inputProps={{
+            min: field.minDate,
+            max: field.maxDate,
+          }}
+        />
+      );
+
     case "Textarea":
       return (
         <>
