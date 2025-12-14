@@ -94,7 +94,7 @@ const AuthenticatedRoutes = () => {
           <Route path='semester/*' element={<SemesterRoutes/>} />
           <Route path="course/*" element={<CourseRoutes /> } />
           <Route path="program/*" element={<ProgramRoutes />} />
-          <Route path="section/*" element={<LocationRoutes />} />
+          <Route path="section/*" element={<SectionRoutes />} />
           <Route path="course-schedule/*" element={<CourseScheduleRoutes />} />
           <Route path="location/*" element={<LocationRoutes />} />
 
