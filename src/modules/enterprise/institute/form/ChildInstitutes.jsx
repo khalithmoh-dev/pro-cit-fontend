@@ -2,8 +2,7 @@ import Popup from "../../../../components/modal";
 import { useTranslation } from "react-i18next";
 import './ChildInstitutes.css';
 import { List, ListItem, ListItemAvatar, Avatar, ListItemText, IconButton } from "@mui/material";
-import SchoolIcon from "@mui/icons-material/School";
-import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
+import { ArrowLeftRight, School } from "lucide-react";
 
 const ViewInstitutes = ({ isModalOpen, aChildIns, setIsModalOpen, onAddInstitution, onSwitchInstitute }) => {
     const { t } = useTranslation();
@@ -41,13 +40,13 @@ const ViewInstitutes = ({ isModalOpen, aChildIns, setIsModalOpen, onAddInstituti
                     onClick={() => onSwitchInstitute && onSwitchInstitute(inst?._id)}
                     color="primary"
                   >
-                    <SwapHorizIcon />
+                    <ArrowLeftRight />
                   </IconButton>
                 }
               >
                 <ListItemAvatar>
                   <Avatar>
-                    <SchoolIcon />
+                    <School />
                   </Avatar>
                 </ListItemAvatar>
                 <ListItemText primary={inst.insName} secondary={`Institute Code: ${inst.insCode}`} />
