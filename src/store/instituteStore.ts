@@ -55,7 +55,7 @@ export interface getInstitutePayload {
 
 interface InstituteState {
     insData: object,
-    getInstitute: (id: string) => Promise<createInstitutePayload>,
+    getInstitute: () => Promise<createInstitutePayload>,
     updateInstitute: (payload: createInstitutePayload) => Promise<boolean>
     getLogInIns: () => InstituteDetails
     createChildInstitute: (payload: createInstitutePayload) => Promise<boolean>

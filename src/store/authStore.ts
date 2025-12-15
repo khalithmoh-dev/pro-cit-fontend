@@ -64,6 +64,7 @@ export interface User {
     insId: string;
     modules: Modules[];
     institutes: Institute,
+    parentInstitute?: InstituteDetails;
   };
   role: {
     modules: ModuleIF[];

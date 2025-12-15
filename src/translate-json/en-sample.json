@@ -192,6 +192,7 @@
   "INSTITUTE_CONFIGURATION": "Institute Configuration",
   "NO_CHILD_INSTITUTES": "No child institutes",
   "FAILED_TO_SWITCH_INSTITUTION": "Failed to switch institution",
+  "BACT_TO_ORGANISATION": "Back to Organisation",
 
   "PERMISSIONS": "Permissions",
   "ROLE_MANAGEMENT": "Role Management",

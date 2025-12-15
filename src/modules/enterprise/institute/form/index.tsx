@@ -308,7 +308,7 @@ export default function InstiteConfig() {
     }
   };
 
-  const aHeaderAction = [...(instDtls.isOrg ? [<Button variantType="primary" sizeType='sm' onClick={() => {handleShowChildInsList()}}>{t('VIEW_INSTITUTES')}</Button>] : [])]
+
 
   const handleAddInstitution = () => {
     setShowChildInsList(false);
@@ -337,15 +337,17 @@ export default function InstiteConfig() {
     }
   }
 
-  const handleSwitchInstitute = async(insId: string) => {
+  const handleSwitchInstitute = async(insId: string, isFromOrg: boolean = false) => {
     try{
-      const oPayload = { insId};
+      const oPayload = { insId, isFromOrg };
       await switchInstitute(oPayload);
       setShowChildInsList(false);
     }catch(err){
       showToast('error', `${t('FAILED_TO_SWITCH_INSTITUTION')}`);
     }
   }
+
+  const aHeaderAction = [...(instDtls.isOrg ? [<Button variantType="primary" sizeType='sm' onClick={() => {handleShowChildInsList()}}>{t('VIEW_INSTITUTES')}</Button>] : user.user?.parentInstitute?._id ? [<Button variantType="primary" sizeType='sm' onClick={() => {handleSwitchInstitute(user.user?.parentInstitute?._id, true)}}>{t('BACT_TO_ORGANISATION')}</Button>] : [])]
 
   // Dynamic schema, pageTitle, and handlers based on mode
   const dynamicSchema = showAddInstitutionForm
