@@ -33,16 +33,6 @@ const ViewInstitutes = ({ isModalOpen, aChildIns, setIsModalOpen, onAddInstituti
               <ListItem
                 key={inst._id}
                 divider
-                secondaryAction={
-                  <IconButton
-                    edge="end"
-                    aria-label="switch"
-                    onClick={() => onSwitchInstitute && onSwitchInstitute(inst?._id)}
-                    color="primary"
-                  >
-                    <ArrowLeftRight />
-                  </IconButton>
-                }
               >
                 <ListItemAvatar>
                   <Avatar>

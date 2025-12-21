@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   Sidebar,
   SidebarContent,
@@ -10,12 +10,56 @@ import useAuthStore from '../../../store/authStore';
 import Icon from '../../../components/Icons';
 import {useNavigationData} from '../../../components/NavigationContext'
 import { useNavigate } from 'react-router-dom';
+import styles from './sidebar.module.css';
+import useInstituteStore from "../../../store/instituteStore";
+import { useToastStore } from "../../../store/toastStore";
+import { useTranslation } from "react-i18next";
 
 export const AppSidebar: React.FC = () => {
   const { collapsed } = useSidebar();
   const { oNavBar, userDtls } = useNavigationData();
-  const { user, logout } = useAuthStore();
+  const { user,oEnterprises, logout } = useAuthStore();
+  const { switchInstitute } = useInstituteStore();
   const navigate = useNavigate();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [aInstitutes, setInstitutes] = useState([]);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const showToast = useToastStore((state) => state.showToast);
+  const { t } = useTranslation();
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleInstituteSelect = async(institute: { _id: string; insCode: string; insName: string }) => {
+    // Handle institute selection - update context/state
+    setIsDropdownOpen(false);
+    try{
+      const oPayload = { insId: institute?._id, isFromOrg: false };
+      await switchInstitute(oPayload);
+    }catch(err){
+      showToast('error', `${t('FAILED_TO_SWITCH_INSTITUTION')}`);
+    }
+  };
+
+  const toggleDropdown = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  useEffect(()=>{
+    if(oEnterprises?.aInstitutes?.length){
+      setInstitutes(oEnterprises?.aInstitutes?.map(institute => userDtls?.institutes?._id !== institute?._id ? institute : null).filter(Boolean));
+    }
+  },[oEnterprises?.aInstitutes, userDtls?.institutes?._id])
 
   const handleLogout = () => {
     logout();
@@ -24,75 +68,60 @@ export const AppSidebar: React.FC = () => {
   return (
     <Sidebar>
       {/* Institute Section */}
-      <div 
-        style={{ 
-          padding: '1rem 0.75rem', 
-          borderBottom: '1px solid #e5e7eb', 
-          cursor: "pointer",
-          transition: 'all 0.3s ease-in-out',
-          display: 'flex',
-          alignItems: 'center',
-          minHeight: '73px',
-          margin: '0 0.5rem',
-          borderRadius: '0.5rem',
-          marginBottom: '0.5rem'
-        }} 
-        onClick={() => { navigate('/institute/form') }}
-      >
-        <div 
-          className="profileText"
-          style={{
-            transition: 'all 0.3s ease-in-out',
-            flexShrink: 0,
-            width: '40px',
-            height: '40px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            borderRadius: '8px',
-            backgroundColor: '#3b82f6',
-            color: 'white',
-            fontSize: '16px',
-            fontWeight: '600',
-            boxShadow: '0 2px 4px rgba(59, 130, 246, 0.3)'
-          }}
+      <div className={styles.instituteWrapper} ref={dropdownRef}>
+        <div
+          className={styles.instituteContainer}
+          onClick={toggleDropdown}
         >
-          {userDtls?.institutes?.insName?.[0]}
+          <div className={styles.instituteAvatar}  onClick={(e) => {
+                  e.stopPropagation();
+                  navigate('/institute/form');
+                }}>
+            {userDtls?.institutes?.insName?.[0]}
+          </div>
+          <div
+            className={`d-flex flex-column ${styles.instituteTextContainer} ${
+              collapsed ? styles.instituteTextContainerCollapsed : styles.instituteTextContainerExpanded
+            }`}
+          >
+            <span className={styles.instituteCode}>
+              {userDtls?.institutes?.insCode || ""}
+            </span>
+            <span className={styles.instituteName}>
+              {userDtls?.institutes?.insName || ""}
+            </span>
+          </div>
+          {!collapsed && (
+            <div className={styles.instituteActions}>
+              <div className={`${styles.dropdownIcon} ${isDropdownOpen ? styles.dropdownIconRotated : ''}`}>
+                <Icon name="ChevronDown" size={16} />
+              </div>
+            </div>
+          )}
         </div>
-        <div 
-          className='d-flex flex-column'
-          style={{
-            overflow: 'hidden',
-            transition: 'all 0.3s ease-in-out',
-            opacity: collapsed ? 0 : 1,
-            transform: `translateX(${collapsed ? '-8px' : '0'})`,
-            marginLeft: collapsed ? '0' : '0.75rem',
-            width: collapsed ? '0' : '100%',
-            flex: collapsed ? '0 1 0px' : '1 1 auto'
-          }}
-        >
-          <span style={{ 
-            fontSize: "14px", 
-            fontWeight: "600",
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            color: '#1f2937'
-          }}>
-            {userDtls?.institutes?.insCode || ""}
-          </span>
-          <span style={{ 
-            fontSize: "12px", 
-            fontWeight: "400",
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            color: '#6b7280',
-            textTransform: 'none'
-          }}>
-            {userDtls?.institutes?.insName || ""}
-          </span>
-        </div>
+
+        {/* Dropdown Menu */}
+        {!collapsed && (
+          <div className={`${styles.dropdownMenu} ${isDropdownOpen ? styles.dropdownMenuOpen : ''}`}>
+            {aInstitutes.map((institute) => (
+              <div
+                key={institute._id}
+                className={`${styles.dropdownItem} ${
+                  userDtls?.institutes?.insCode === institute.insCode ? styles.dropdownItemActive : ''
+                }`}
+                onClick={() => handleInstituteSelect(institute)}
+              >
+                <div className={styles.dropdownItemAvatar}>
+                  {institute.insName[0]}
+                </div>
+                <div className={styles.dropdownItemText}>
+                  <span className={styles.dropdownItemCode}>{institute.insCode}</span>
+                  <span className={styles.dropdownItemName}>{institute.insName}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       <SidebarContent >

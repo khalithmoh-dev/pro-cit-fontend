@@ -347,7 +347,7 @@ export default function InstiteConfig() {
     }
   }
 
-  const aHeaderAction = [...(instDtls.isOrg ? [<Button variantType="primary" sizeType='sm' onClick={() => {handleShowChildInsList()}}>{t('VIEW_INSTITUTES')}</Button>] : user.user?.parentInstitute?._id ? [<Button variantType="primary" sizeType='sm' onClick={() => {handleSwitchInstitute(user.user?.parentInstitute?._id, true)}}>{t('BACT_TO_ORGANISATION')}</Button>] : [])]
+  const aHeaderAction = [...(instDtls.isOrg ? [<Button variantType="primary" sizeType='sm' onClick={() => {handleShowChildInsList()}}>{t('VIEW_INSTITUTES')}</Button>] : [])]
 
   // Dynamic schema, pageTitle, and handlers based on mode
   const dynamicSchema = showAddInstitutionForm
