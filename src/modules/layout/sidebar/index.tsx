@@ -45,6 +45,7 @@ export const AppSidebar: React.FC = () => {
     try{
       const oPayload = { insId: institute?._id, isFromOrg: false };
       await switchInstitute(oPayload);
+      navigate('/dashboard');
     }catch(err){
       showToast('error', `${t('FAILED_TO_SWITCH_INSTITUTION')}`);
     }
