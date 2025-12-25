@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from "react-i18next";
+import { Box, IconButton } from '@mui/material';
 import CloseIcon from '../../../icon-components/CloseIcon';
 import ArrowDownIcon from '../../../icon-components/ArrowDownIcon';
 import { ModuleIF, ModulePermissions } from '../../../store/moduleStore';
 import Button from '../../ButtonMui';
+import FormLabel from '../../Label';
+import InputFields from '../../inputFields';
 import '../style.css';
 
 interface RoleModalProps {
@@ -119,132 +122,156 @@ const RoleModal: React.FC<RoleModalProps> = ({ isOpen, onClose, onSave, editRole
   if (!isOpen) return null;
 
   return (
-    <div className="rm-modal-overlay" onClick={handleClose}>
-      <div className="rm-modal" onClick={(e) => e.stopPropagation()}>
+    <Box className="rm-modal-overlay" onClick={handleClose}>
+      <Box className="rm-modal" onClick={(e) => e.stopPropagation()}>
         <div className="rm-modal-header">
           <h2 className="rm-modal-title">
             {editRole ? t('EDIT') + ' ' + t('ROLE') : t('CREATE') + ' ' + t('NEW') + ' ' + t('ROLE')}
           </h2>
-          <button className="rm-modal-close-button" onClick={handleClose}>
+          <IconButton className="rm-modal-close-button" onClick={handleClose}>
             <CloseIcon width={20} height={20} />
-          </button>
+          </IconButton>
         </div>
 
-        <div className="rm-modal-body">
-          {/* Role Name Input */}
+        <Box className="rm-modal-body">
           <div className="rm-modal-input-group">
-            <label className="rm-modal-label">{t('ROLE_NAME')}</label>
-            <input
-              type="text"
-              className="rm-modal-input"
-              placeholder="e.g. Teacher, Accountant"
+            <FormLabel labelName={t('ROLE_NAME')} className="rm-modal-label" />
+            <InputFields
+              field={{
+                type: 'text',
+                name: 'roleName',
+                placeholder: 'e.g. Teacher, Accountant'
+              }}
+              editPerm={true}
               value={roleName}
-              onChange={(e) => setRoleName(e.target.value)}
+              onChange={(name, value) => setRoleName(value)}
             />
           </div>
 
-          {/* Description Input */}
           <div className="rm-modal-input-group">
-            <label className="rm-modal-label">{t('DESCRIPTION')}</label>
-            <input
-              type="text"
-              className="rm-modal-input"
-              placeholder="Enter role description"
+            <FormLabel labelName={t('DESCRIPTION')} className="rm-modal-label" />
+            <InputFields
+              field={{
+                type: 'text',
+                name: 'description',
+                placeholder: 'Enter role description'
+              }}
+              editPerm={true}
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              onChange={(name, value) => setDescription(value)}
             />
           </div>
 
-          {/* Screen Permissions Section */}
-          <div className="rm-modal-permissions-section">
-            <label className="rm-modal-label">{t('PERMISSIONS')}</label>
+          <Box className="rm-modal-permissions-section">
+            <FormLabel labelName={t('PERMISSIONS')} className="rm-modal-label" />
             <p className="rm-modal-description">
               {t('SELECT_PERMISSIONS_THAT_WILL_BE_ASSIGNED_TO_ALL_USERS_WITH_THIS_ROLE')}
             </p>
 
-            {/* Screen Permissions */}
-            <div className="rm-modal-permission-category">
+            <Box className="rm-modal-permission-category">
               <div className="rm-modal-category-header">
                 <h3 className="rm-modal-category-title">{t('SCREEN_PERMISSIONS')}</h3>
-                <button
+                <IconButton
                   type="button"
                   className={`rm-modal-collapse-button ${collapsedCategories.screen ? 'collapsed' : 'expanded'}`}
                   onClick={() => toggleCategory('screen')}
                 >
                   <ArrowDownIcon width={16} height={16} />
-                </button>
+                </IconButton>
               </div>
-              <div className={`rm-modal-permission-grid-wrapper ${collapsedCategories.screen ? 'collapsed' : 'expanded'}`}>
-                {/* Select Dropdown */}
-                <div className="rm-modal-select-wrapper">
-                  <select
-                    className="rm-modal-select"
+              <Box className={`rm-modal-permission-grid-wrapper ${collapsedCategories.screen ? 'collapsed' : 'expanded'}`}>
+                <Box className="rm-modal-select-wrapper">
+                  <InputFields
+                    field={{
+                      type: 'select',
+                      name: 'moduleKey',
+                      options: availableModules.map(module => ({
+                        value: module.key,
+                        label: module.name
+                      })),
+                      labelKey: 'label',
+                      valueKey: 'value',
+                      MenuProps: {
+                        disablePortal: false,
+                        style: { zIndex: 10001 },
+                        PaperProps: {
+                          style: {
+                            maxHeight: 300,
+                          }
+                        }
+                      }
+                    }}
+                    editPerm={true}
                     value={currentModuleKey}
-                    onChange={(e) => handleModuleSelect(e.target.value)}
-                  >
-                    <option value="">Select a screen...</option>
-                    {availableModules.map((module) => (
-                      <option key={module.key} value={module.key}>
-                        {module.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                    onChange={(name, value) => handleModuleSelect(value)}
+                  />
+                </Box>
 
-                {/* Show CRUD permissions only for currently selected module */}
                 {currentModuleKey && selectedModules[currentModuleKey] && (
-                  <div className="rm-modal-module-item">
-                    <div className="rm-modal-module-header">
+                  <Box className="rm-modal-module-item">
+                    <Box className="rm-modal-module-header">
                       <span className="rm-modal-module-name">{selectedModules[currentModuleKey].name}</span>
-                    </div>
+                    </Box>
 
                     <div className="rm-modal-crud-permissions">
-                      <label className="rm-modal-crud-label">
-                        <input
-                          type="checkbox"
-                          checked={selectedModules[currentModuleKey].permissions.create}
+                      <Box className="rm-modal-crud-label">
+                        <InputFields
+                          field={{
+                            type: 'checkbox',
+                            name: 'create',
+                            label: t('CREATE')
+                          }}
+                          editPerm={true}
+                          value={selectedModules[currentModuleKey].permissions.create}
                           onChange={() => handlePermissionChange(currentModuleKey, 'create')}
-                          className="rm-modal-crud-checkbox"
                         />
-                        <span>{t('CREATE')}</span>
-                      </label>
-                      <label className="rm-modal-crud-label">
-                        <input
-                          type="checkbox"
-                          checked={selectedModules[currentModuleKey].permissions.read}
+                      </Box>
+                      <Box className="rm-modal-crud-label">
+                        <InputFields
+                          field={{
+                            type: 'checkbox',
+                            name: 'read',
+                            label: t('READ')
+                          }}
+                          editPerm={true}
+                          value={selectedModules[currentModuleKey].permissions.read}
                           onChange={() => handlePermissionChange(currentModuleKey, 'read')}
-                          className="rm-modal-crud-checkbox"
                         />
-                        <span>{t('READ')}</span>
-                      </label>
-                      <label className="rm-modal-crud-label">
-                        <input
-                          type="checkbox"
-                          checked={selectedModules[currentModuleKey].permissions.update}
+                      </Box>
+                      <Box className="rm-modal-crud-label">
+                        <InputFields
+                          field={{
+                            type: 'checkbox',
+                            name: 'update',
+                            label: t('UPDATE')
+                          }}
+                          editPerm={true}
+                          value={selectedModules[currentModuleKey].permissions.update}
                           onChange={() => handlePermissionChange(currentModuleKey, 'update')}
-                          className="rm-modal-crud-checkbox"
                         />
-                        <span>{t('UPDATE')}</span>
-                      </label>
-                      <label className="rm-modal-crud-label">
-                        <input
-                          type="checkbox"
-                          checked={selectedModules[currentModuleKey].permissions.delete}
+                      </Box>
+                      <Box className="rm-modal-crud-label">
+                        <InputFields
+                          field={{
+                            type: 'checkbox',
+                            name: 'delete',
+                            label: t('DELETE')
+                          }}
+                          editPerm={true}
+                          value={selectedModules[currentModuleKey].permissions.delete}
                           onChange={() => handlePermissionChange(currentModuleKey, 'delete')}
-                          className="rm-modal-crud-checkbox"
                         />
-                        <span>{t('DELETE')}</span>
-                      </label>
+                      </Box>
                     </div>
-                  </div>
+                  </Box>
                 )}
-              </div>
-            </div>
-          </div>
-        </div>
+              </Box>
+            </Box>
+          </Box>
+        </Box>
 
         <div className="rm-modal-footer">
-          <Button 
+          <Button
           sizeType="md"
           variantType="cancel"
           onClick={handleClose}>
@@ -259,8 +286,8 @@ const RoleModal: React.FC<RoleModalProps> = ({ isOpen, onClose, onSave, editRole
             {editRole ? t('UPDATE') + ' ' + t('ROLE') : t('CREATE') + ' ' + t('ROLE')}
           </Button>
         </div>
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 

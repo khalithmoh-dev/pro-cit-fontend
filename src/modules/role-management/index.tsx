@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from "react-i18next";
+import { Box, IconButton } from '@mui/material';
 import RichEditorIcon from '../../icon-components/RichEditor';
 import DeleteIcon from '../../icon-components/DeleteIcon';
 import useRoleStore, { roleIF } from '../../store/roleStore';
@@ -7,6 +8,7 @@ import PlusIcon from '../../icon-components/PlusIcon';
 import RoleModal from '../../components/modal/Role-Modal/RoleModal';
 import  useModuleStore, { ModuleIF } from '../../store/moduleStore';
 import { useToastStore } from '../../store/toastStore';
+import Button from '../../components/ButtonMui';
 
 const RolesPage: React.FC = () => {
   const { t } = useTranslation();
@@ -89,41 +91,44 @@ const RolesPage: React.FC = () => {
   };
 
   return (
-    <div className="rm-container">
+    <Box className="rm-container">
       <div className="rm-header">
         <div className="rm-header-text">
           <h1 className="rm-title">{t("ROLE_MANAGEMENT")}</h1>
           <p className="rm-subtitle">{t("DEFINE_ROLES_WITH_PRESET_PERMISSION")}</p>
         </div>
-        <button className="rm-create-button" onClick={handleCreateRole}>
+        <Button
+          sizeType="md"
+          variantType="primary"
+          className="rm-create-button"
+          onClick={handleCreateRole}
+        >
           <PlusIcon fill="white" width={18} height={18} />
           {t("CREATE") + " " + t("ROLE")}
-        </button>
+        </Button>
       </div>
 
-      <div className="rm-grid">
+      <Box className="rm-grid">
         {roles.map((role) => (
-          <div key={role._id} className="rm-card">
+          <Box key={role._id} className="rm-card">
             <div className="rm-card-header">
               <div className="rm-role-info">
                 <h3 className="rm-role-title">{role.name}</h3>
                 <p className="rm-permission-count">{role.modules.length} {t("PERMISSIONS")}</p>
               </div>
               <div className="rm-actions">
-                <button
+                <IconButton
                   className="rm-action-button"
                   onClick={() => handleEditRole(role._id)}
-                  title="Edit role"
                 >
                   <RichEditorIcon width={16} height={16} />
-                </button>
-                <button
+                </IconButton>
+                <IconButton
                   className={`rm-action-button ${deleteConfirmId === role._id ? 'rm-delete-confirm' : ''}`}
                   onClick={() => handleDeleteRole(role._id)}
-                  title={deleteConfirmId === role._id ? 'Click again to confirm' : 'Delete role'}
                 >
                   <DeleteIcon width={16} height={16} />
-                </button>
+                </IconButton>
               </div>
             </div>
 
@@ -137,9 +142,9 @@ const RolesPage: React.FC = () => {
                 <span className="rm-more-tag">+{role.modules.length - 5} {t("MORE")}</span>
               )}
             </div>
-          </div>
+          </Box>
         ))}
-      </div>
+      </Box>
 
       <RoleModal
         isOpen={isModalOpen}
@@ -151,7 +156,7 @@ const RolesPage: React.FC = () => {
         editRole={editingRole}
         availableModules={availableModules}
       />
-    </div>
+    </Box>
   );
 };
 

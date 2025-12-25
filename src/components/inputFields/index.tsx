@@ -363,6 +363,7 @@ const InputFields: FC<InputFieldsProps> = ({
                 return selectedOption ? selectedOption[labelKey] : "";
               }}
               disabled={!editPerm || field.isDisabled}
+              MenuProps={field.MenuProps}
             >
               {Array.isArray(options) && options.map((opt: any) => (
                 opt && opt[valueKey] && (
@@ -434,6 +435,7 @@ const InputFields: FC<InputFieldsProps> = ({
                   return selectedOption ? selectedOption[labelKey] : "";
                 }}
                 disabled={!editPerm || field.isDisabled}
+                MenuProps={field.MenuProps}
               >
                 {Array.isArray(options) && options.map((opt: any) => (
                   opt && opt[valueKey] && (
@@ -720,6 +722,7 @@ const InputFields: FC<InputFieldsProps> = ({
                     return selectedOption ? selectedOption[labelKey] : "";
                   }}
                   disabled={!editPerm || field.isDisabled}
+                  MenuProps={field.MenuProps}
                 >
                   {Array.isArray(field.options) && field.options.map((opt: any) => (
                     opt && opt[valueKey] && (

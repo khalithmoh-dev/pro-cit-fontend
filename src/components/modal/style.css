@@ -323,6 +323,7 @@
 
 .rm-modal-header {
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
   align-items: center;
   padding: 20px 24px;
@@ -359,6 +360,8 @@
 }
 
 .rm-modal-input-group {
+  display: flex;
+  flex-direction: column;
   margin-bottom: 24px;
 }
 
@@ -406,6 +409,7 @@
 
 .rm-modal-category-header {
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 12px;
@@ -464,11 +468,13 @@
 .rm-modal-permission-grid-wrapper.collapsed {
   max-height: 0;
   opacity: 0;
+  overflow: hidden;
 }
 
 .rm-modal-permission-grid-wrapper.expanded {
   max-height: 2000px;
   opacity: 1;
+  overflow: visible;
 }
 
 @media (max-width: 640px) {
@@ -528,17 +534,6 @@
   margin-bottom: 20px;
   position: relative;
   overflow: visible !important;
-}
-
-.rm-modal-select-wrapper::after {
-  content: '▼';
-  position: absolute;
-  right: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  pointer-events: none;
-  color: var(--grey-4);
-  font-size: 12px;
 }
 
 .rm-modal-select {
@@ -647,7 +642,7 @@
 .rm-modal-crud-permissions {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
+  gap: 16px;
   margin-top: 0;
   padding-top: 0;
   border-top: none;
@@ -685,6 +680,27 @@
   color: var(--primary);
 }
 
+.rm-modal-crud-label .MuiCheckbox-root {
+  padding: 6px;
+  transform: scale(1.3);
+}
+
+.rm-modal-crud-label .MuiCheckbox-root svg {
+  width: 28px;
+  height: 28px;
+}
+
+.rm-modal-crud-label .MuiFormControlLabel-root {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.rm-modal-crud-label .MuiFormControlLabel-label {
+  font-size: 14px;
+  font-weight: 500;
+  margin-left: 8px;
+}
+
 .rm-modal-crud-checkbox {
   cursor: pointer;
   width: 18px;
@@ -694,6 +710,7 @@
 
 .rm-modal-footer {
   display: flex;
+  flex-direction: row;
   justify-content: flex-end;
   gap: 12px;
   padding: 16px 24px;

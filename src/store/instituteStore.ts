@@ -87,7 +87,7 @@ const useInstituteStore = create<InstituteState>((set,get) => ({
     }) => {
         try{
             const {data} = await httpRequest('POST',`${import.meta.env.VITE_API_URL}/institute/update`,oPaylaod);
-            get().getInstitute(data?._id);
+            get().getInstitute();
             return true
         }catch(err){
             return false
@@ -98,7 +98,7 @@ const useInstituteStore = create<InstituteState>((set,get) => ({
         insCode: ''
     }) => {
         const {data} = await httpRequest('POST',`${import.meta.env.VITE_API_URL}/institute/create`,oPayload);
-        get().getInstitute(data?._id);
+        get().getInstitute();
         return true;
     },
 

@@ -29,7 +29,7 @@ export default function CreateProgram() {
   const [editValues, setEditValues] = useState({});
   const { t } = useTranslation();
   const baseStore = useBaseStore();
-  const [baseData, setBaseData] = useState({ degree: [] });
+  const [baseData, setBaseData] = useState<{degree?: any[]}>({ degree: [] });
   const showToast = useToastStore((state) => state.showToast);
 
   /**

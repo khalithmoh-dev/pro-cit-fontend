@@ -27,7 +27,7 @@ export default function CreateSemester() {
   const navigate = useNavigate();
   const baseStore = useBaseStore();
   const semesterStore = useSemesterStore();
-  const [baseData, setBaseData] = useState({ degree: [], program: [] });
+  const [baseData, setBaseData] = useState<{degree?: any[],program?: any[]}>({ degree: [], program: [] });
   const { id } = useParams();
   const [editValues, setEditValues] = useState({});
   const [aSemGroup, setSemGroup] = useState([{}])
