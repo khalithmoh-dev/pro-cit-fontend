@@ -98,6 +98,18 @@ const useInstituteStore = create<InstituteState>((set,get) => ({
         insCode: ''
     }) => {
         const {data} = await httpRequest('POST',`${import.meta.env.VITE_API_URL}/institute/create`,oPayload);
+        if (data) {
+            useAuthStore.setState(prev => ({
+                ...prev,
+                oEnterprises: {
+                    ...prev?.oEnterprises,
+                    aInstitutes: [
+                        ...(prev?.oEnterprises?.aInstitutes || []),
+                        data
+                    ]
+                }
+            }));
+        }
         get().getInstitute();
         return true;
     },

@@ -257,5 +257,9 @@
   "IS_CURRENT": "Is Current",
   "ACADEMIC_YEAR_EXISTS": "Academic Year already exists",
   "YES": "Yes",
-  "NO": "No"
+  "NO": "No",
+
+  "SEMESTER_CONFIGURATION": "Semester Configuration",
+  "UPDATE_SEMESTER_CONFIGURATION": "Update Semester Configuration",
+  "APPLY_TO_ALL_SEMESTERS": "Apply to all semesters"
 }

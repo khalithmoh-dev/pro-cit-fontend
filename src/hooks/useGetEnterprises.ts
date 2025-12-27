@@ -75,6 +75,9 @@ const useGetEnterprises = () => {
   const getDepartmentsList = (filters = {}) =>
     multiFilter(oEnterprises?.aDepartments ?? [], filters);
 
+  const getAcademicYearsList = (filters = {}) =>
+    multiFilter(oEnterprises?.aAcademicYears ?? [], filters);
+
   return {
     getInstitutesList,
 
@@ -90,6 +93,7 @@ const useGetEnterprises = () => {
     getProgramsList,
     getDegreesList,
     getDepartmentsList,
+    getAcademicYearsList,
   };
 };
 

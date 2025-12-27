@@ -9,6 +9,7 @@ import { GetDepartmentI } from './departmentStore';
 import { SemesterIF } from './semesterStore';
 import { InstituteDetails } from './instituteStore';
 import { setUserDetails } from '../utils/functions/helper';
+import { AcademicYearIF } from './academicYearStore';
 
 export interface MainMenuItem {
   key: string;
@@ -89,6 +90,7 @@ export interface EnterpriseStruct {
   aPrograms: ProgramIF[];
   aDepartments: GetDepartmentI[];
   aSemesters: SemesterIF[];
+  aAcademicYears: AcademicYearIF[];
 }
 
 interface AuthState {

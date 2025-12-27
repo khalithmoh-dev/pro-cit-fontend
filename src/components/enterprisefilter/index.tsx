@@ -64,6 +64,7 @@ const FIELD_DB_MAP: Record<string, string> = {
   department: "deptId",
   course: "courseId",
   semester: "semId",
+  academicyears: "acYr",
 };
 
 // Define parent dependencies for each field
@@ -74,6 +75,7 @@ const PARENT_MAP: Record<string, string | string[] | null> = {
   department: "insId",
   course: ["deptId"],
   semester: ["insId", "degId", "prgId"],
+  academicyears: "insId",
 };
 
 // Define how to fetch options for each field type
@@ -116,6 +118,13 @@ const OPTIONS_FETCHER: Record<string, (api: ReturnType<typeof useGetEnterprises>
   semester: (api, filters = {}) => {
     return api.getSemestersList(filters).map((i: any) => ({
       label: i.semNm,
+      value: i._id,
+    }));
+  },
+
+  academicyears: (api, filters = {}) => {
+    return api.getAcademicYearsList(filters).map((i: any) => ({
+      label: i.academicYearNm,
       value: i._id,
     }));
   }

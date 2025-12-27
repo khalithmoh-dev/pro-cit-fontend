@@ -64,7 +64,7 @@ const useCourseScheduleStore = create<CourseScheduleState>((set, get) => ({
       useToastStore.getState().showToast('success', createSuccessMessage('Course Schedule'));
       return res?.data || [];
     } catch (err) {
-      useToastStore.getState().showToast('success', createErrorMessage('Course Schedule'));
+      useToastStore.getState().showToast('error', createErrorMessage('Course Schedule'));
       console.error(err);
     }
   },
@@ -75,7 +75,7 @@ const useCourseScheduleStore = create<CourseScheduleState>((set, get) => ({
       useToastStore.getState().showToast('success', updateSuccessMessage('Course Schedule'));
       return res?.data || [];
     } catch (err) {
-      useToastStore.getState().showToast('success', updateErrorMessage('Course Schedule'));
+      useToastStore.getState().showToast('error', updateErrorMessage('Course Schedule'));
       console.error(err);
     }
   }

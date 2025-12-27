@@ -39,6 +39,7 @@ const SectionRoutes = lazy(() => import('./SectionRoutes'));
 const CourseScheduleRoutes = lazy(() => import('./Course-scheduleRoute'));
 const LocationRoutes = lazy(() => import('./LocationRoutes'));
 const AcademicYearRoutes = lazy(() => import('./AcademicYearRoutes'));
+const SemConfigRoutes = lazy(()=>import('./SemConfigRoutes'));
 
 // Direct imports (not lazy)
 import OutcomeListPage from '../../modules/outcomes/outcome-list';
@@ -95,10 +96,11 @@ const AuthenticatedRoutes = () => {
           <Route path='semester/*' element={<SemesterRoutes/>} />
           <Route path="course/*" element={<CourseRoutes /> } />
           <Route path="program/*" element={<ProgramRoutes />} />
-          <Route path="section/*" element={<AcademicYearRoutes />} />
+          <Route path="section/*" element={<SectionRoutes />} />
           <Route path="course-schedule/*" element={<CourseScheduleRoutes />} />
           <Route path="location/*" element={<LocationRoutes />} />
           <Route path="academic-year/*" element={<AcademicYearRoutes />} />
+          <Route path='semester-configuration/*' element={<SemConfigRoutes/>} />
 
           {/* Direct routes */}
           <Route index element={<DashboardRoutes />} />

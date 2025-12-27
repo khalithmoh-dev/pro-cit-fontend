@@ -11,7 +11,7 @@ export interface CreateAcademicYearPayload {
     _id?: string;
 }
 
-interface AcademicYearIF {
+export interface AcademicYearIF {
     _id: string;
     insId: string;
     academicYearCode: string;
