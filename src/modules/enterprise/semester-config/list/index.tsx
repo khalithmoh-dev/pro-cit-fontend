@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import DataTable from '../../../common/generic-table';
 import { Box } from '@mui/material';
 import { t } from 'i18next';
@@ -8,6 +8,7 @@ import useSemesterConfigStore, { SemesterConfigIF } from '../../../../store/seme
 import Popup from '../../../../components/modal';
 import InputFields from '../../../../components/inputFields';
 import FormLabel from '../../../../components/Label';
+import { useLayout } from '../../../layout/LayoutContext';
 
 interface SemesterConfigSearchIF {
   insId: string;
@@ -23,11 +24,20 @@ interface SemesterConfigFormData {
 }
 
 const SemesterConfigList: React.FC = () => {
-  const { getSemesterConfigurations, createSemesterConfig, updateSemesterConfig, createOrUpdateSemConfig } = useSemesterConfigStore();
+  const { getSemesterConfigurations, createSemesterConfig, updateSemesterConfig, createOrUpdateSemConfig } =
+    useSemesterConfigStore();
   const [semesterConfigList, setSemesterConfigList] = useState<SemesterConfigIF[]>([]);
   const [isDataFetched, setIsDataFetched] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState<SemesterConfigIF | null>(null);
+  const { setRouteNm } = useLayout();
+
+  useEffect(() => {
+    if (location?.pathname) {
+      setRouteNm(location?.pathname);
+    }
+  }, [location?.pathname]);
+
   const [formData, setFormData] = useState<SemesterConfigFormData>({
     startDate: '',
     endDate: '',
@@ -165,7 +175,7 @@ const SemesterConfigList: React.FC = () => {
         desc: selectedRow.desc,
       };
 
-      if(formData?.applyToAllSemesters){
+      if (formData?.applyToAllSemesters) {
         aplyAllPayload = semesterConfigList.map((item) => ({
           _id: item._id,
           insId: item.insId,
@@ -179,10 +189,12 @@ const SemesterConfigList: React.FC = () => {
         }));
       }
 
-      const result = formData?.applyToAllSemesters ? await createOrUpdateSemConfig(aplyAllPayload) : payload?._id
-        ? await updateSemesterConfig(payload)
-        : await createSemesterConfig(payload);
-        
+      const result = formData?.applyToAllSemesters
+        ? await createOrUpdateSemConfig(aplyAllPayload)
+        : payload?._id
+          ? await updateSemesterConfig(payload)
+          : await createSemesterConfig(payload);
+
       if (result.success) {
         // Refresh the list
         const response = await getSemesterConfigurations({
@@ -195,7 +207,7 @@ const SemesterConfigList: React.FC = () => {
           setSemesterConfigList(response.data);
         }
         handleModalClose();
-      } 
+      }
     } catch (err) {
       console.error('Failed to update semester configuration:', err);
     }
@@ -300,21 +312,23 @@ const SemesterConfigList: React.FC = () => {
               editPerm={true}
             />
           </Box>
-          <Box sx={{
-            '& .MuiFormControlLabel-root': {
-              marginLeft: 0,
-              marginTop: '8px',
-              alignItems: 'center',
-            },
-            '& .MuiCheckbox-root': {
-              transform: 'scale(1.3)',
-              marginRight: '1px',
-            },
-            '& .MuiTypography-root': {
-              fontSize: '16px',
-              height: 'auto',
-            },
-          }}>
+          <Box
+            sx={{
+              '& .MuiFormControlLabel-root': {
+                marginLeft: 0,
+                marginTop: '8px',
+                alignItems: 'center',
+              },
+              '& .MuiCheckbox-root': {
+                transform: 'scale(1.3)',
+                marginRight: '1px',
+              },
+              '& .MuiTypography-root': {
+                fontSize: '16px',
+                height: 'auto',
+              },
+            }}
+          >
             <InputFields
               field={{
                 name: 'applyToAllSemesters',
